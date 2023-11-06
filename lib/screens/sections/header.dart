@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
+  final IconData? customIcon;
+  final Function()? customOnPressed;
+
+  Header({this.customIcon, this.customOnPressed});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -9,13 +14,17 @@ class Header extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.menu_rounded,
+              customIcon ??
+                  Icons
+                      .menu_rounded, // Usa o ícone personalizado ou o ícone padrão
               color: Colors.black,
               size: 28,
             ),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+            onPressed: customOnPressed ??
+                () {
+                  Scaffold.of(context)
+                      .openDrawer(); // Usa a função personalizada ou a função padrão
+                },
           ),
           Expanded(
             child: Center(

@@ -9,7 +9,7 @@ import 'package:aurb/screens/notifications/public_transport_screen.dart';
 import 'package:aurb/screens/notifications/sidewalks_screen.dart';
 import 'package:aurb/screens/notifications/sinalization_screen.dart';
 import 'package:aurb/screens/notifications/streets_screen.dart';
-import 'package:aurb/screens/user_screen.dart';
+import 'package:aurb/authentication/screens/user_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -19,7 +19,13 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     const name = 'Nome do Usuário';
     const email = 'usuario@gmail.com';
-    const urlImage = 'lib/assets/perfil.png';
+    const urlImage = 'lib/assets/perfil2.png';
+    const cel = '(xx) x xxxx-xxxx';
+    const genero = 'Masculino';
+    const cep = 'xxxxxx-xxx';
+    const endereco = 'Rua ou avenida, número';
+    const bairro = 'Santa Terezinha';
+    const cidadeEstado = 'Manaus, Amazonas';
 
     return Drawer(
       child: Material(
@@ -31,9 +37,16 @@ class NavigationDrawerWidget extends StatelessWidget {
               name: name,
               email: email,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => UserScreen(
+                builder: (context) => const UserScreen(
                   name: name,
                   urlImage: urlImage,
+                  email: email,
+                  cel: cel,
+                  cep: cep,
+                  genero: genero,
+                  endereco: endereco,
+                  bairro: bairro,
+                  cidadeEstado: cidadeEstado,
                 ),
               )),
             ),
@@ -137,11 +150,11 @@ class NavigationDrawerWidget extends StatelessWidget {
     return InkWell(
       onTap: onClicked,
       child: Container(
-        padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
+        padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
         child: Row(
           children: [
             CircleAvatar(radius: 30, backgroundImage: AssetImage(urlImage)),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

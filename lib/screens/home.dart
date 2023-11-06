@@ -1,4 +1,4 @@
-import 'package:aurb/components/header.dart';
+import 'package:aurb/screens/sections/header.dart';
 import 'package:aurb/components/menuCard.dart';
 import 'package:aurb/components/navigation_drawer.dart';
 import 'package:aurb/screens/notifications/accessibility_screen.dart';

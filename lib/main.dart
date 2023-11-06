@@ -19,15 +19,15 @@ class MyApp extends StatelessWidget {
     0xFF666666, // Replace with your desired primary gray color
     <int, Color>{
       50: Color(0xFFE0E0E0), // Lightest shade
-      100: Color(0xFFCCCCCC),
+      100: Color(0xFFE0E0E0),
       200: Color(0xFFB3B3B3),
-      300: Color(0xFF999999),
-      400: Color(0xFF808080), // Primary gray color
-      500: Color(0xFF666666),
-      600: Color(0xFF4D4D4D),
-      700: Color(0xFF333333),
-      800: Color(0xFF1A1A1A),
-      900: Color(0xFF000000), // Darkest shade
+      300: Color(0xFFB3B3B3),
+      400: Color(0xFFB3B3B3), // Primary gray color
+      500: Color(0xFFB3B3B3),
+      600: Color(0xFFB3B3B3),
+      700: Color(0xFFB3B3B3),
+      800: Color(0xFFB3B3B3),
+      900: Color(0xFFB3B3B3), // Darkest shade
     },
   );
 
