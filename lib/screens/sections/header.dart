@@ -10,6 +10,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
+      height: 64,
       child: Row(
         children: <Widget>[
           IconButton(

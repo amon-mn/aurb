@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) => Scaffold(
         drawer: const NavigationDrawerWidget(),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60.0),
+          preferredSize: const Size.fromHeight(64.0),
           child: SafeArea(child: Header()),
         ),
         body: GridView.builder(
