@@ -1,5 +1,5 @@
 import 'package:aurb/screens/sections/header.dart';
-import 'package:aurb/components/menuCard.dart';
+import 'package:aurb/components/menu_card.dart';
 import 'package:aurb/components/navigation_drawer.dart';
 import 'package:aurb/screens/notifications/accessibility_screen.dart';
 import 'package:aurb/screens/notifications/bus_terminal_screen.dart';
