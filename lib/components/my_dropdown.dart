@@ -54,12 +54,12 @@ class MyDropdownFormField extends StatelessWidget {
             border: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.zero,
             ),
             focusedBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromARGB(255, 124, 124, 124)),
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.zero,
             ),
             fillColor: Colors.grey.shade100,
             filled: true,
@@ -74,7 +74,7 @@ class MyDropdownFormField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.zero,
             ),
           ),
         );

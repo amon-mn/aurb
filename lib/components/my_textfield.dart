@@ -24,10 +24,10 @@ class MyTextFieldWrapper extends StatefulWidget {
     this.inputFormatter,
     this.onSuffixIconPressed,
     this.onChanged,
-    this.initialValue, // Adicione esta linha
+    this.initialValue,
   }) : super(key: key) {
     if (initialValue != null) {
-      controller.text = initialValue!; // Defina o valor inicial do controlador
+      controller.text = initialValue!;
     }
   }
 
@@ -43,15 +43,13 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 2), // Ajuste o valor de horizontal conforme necessário
       child: TextFormField(
         style: TextStyle(fontSize: 16 * textScaleFactor),
-        inputFormatters:
-            widget.inputFormatter != null ? [widget.inputFormatter!] : [],
+        inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
         controller: widget.controller,
-        obscureText: widget
-            .obscureText, // Use o valor fornecido pela propriedade obscureText
+        obscureText: widget.obscureText,
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.prefixIcon,
@@ -61,26 +59,24 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
               ? IconButton(
                   icon: Icon(widget.suffixIcon),
                   color: Color.fromARGB(255, 0, 90, 3),
-                  onPressed: widget
-                      .onSuffixIconPressed, // Chame a função fornecida aqui
+                  onPressed: widget.onSuffixIconPressed,
                 )
               : null,
           border: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
-            borderRadius: BorderRadius.circular(15.0),
+            borderSide: const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
+            borderRadius: BorderRadius.zero,
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Color.fromARGB(255, 0, 103, 3)),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.zero,
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.zero,
           ),
           errorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.zero,
           ),
           fillColor: Colors.grey.shade100,
           filled: true,
@@ -89,6 +85,7 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
           labelStyle: TextStyle(
             color: isInvalid ? Colors.red : Colors.green[800],
           ),
+          contentPadding: EdgeInsets.zero,
         ),
         validator: (value) {
           final validationError = widget.validator?.call(value);
@@ -101,8 +98,7 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
           setState(() {
             isFilled = value.isNotEmpty;
           });
-          widget.onChanged
-              ?.call(value); // Chame a função onChanged se estiver definida
+          widget.onChanged?.call(value);
         },
       ),
     );

@@ -89,6 +89,35 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       controller: _controller,
                       obscureText: false,
                     ),
+                    SizedBox(height: 24),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Local',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      child: SizedBox(height: 240, width: 420,
+                                              child: Image(
+                          image: AssetImage('lib/assets/fotoMapa.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    
                   ],
                 ),
               ),

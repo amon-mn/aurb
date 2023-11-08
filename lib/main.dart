@@ -38,6 +38,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: title,
         theme: ThemeData(primarySwatch: customGrayColor),
-        home: AccessibilityPage(),
+        home: HomeScreen(),
       );
 }
