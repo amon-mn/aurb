@@ -1,5 +1,6 @@
 import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_text_button.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -72,7 +73,13 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       MyTextButton(
-                        onTap: () {},
+                        onTap: () {
+                          // Use o Navigator para navegar para a página home.dart
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()));
+                        },
                         text: 'Entrar',
                         textSize: 36,
                       ),
