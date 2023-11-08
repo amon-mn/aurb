@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: 'Obstruções Temporárias',
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ObstructionssPage(),
+                      builder: (context) => ObstructionsPage(),
                     ));
                   });
             }
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: 'Uso do Espaço Público',
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UsePublicSpacePage(),
+                      builder: (context) => PublicSpacePage(),
                     ));
                   });
             }
