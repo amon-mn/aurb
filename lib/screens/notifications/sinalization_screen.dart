@@ -2,7 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class SinalizationPage extends StatefulWidget {
@@ -26,9 +26,17 @@ class _SinalizationPageState extends State<SinalizationPage> {
 
   final itemListSinalization = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Ausência de sinal. horizontal',
+    'Ausência de sinal. vertical',
+    'Faixa de pedestre parc. apagada',
+    'Faixa de pedestre total. apagada',
+    'Placa escondida',
+    'Placa apagada',
+    'Pista sem linhas indicativas',
+    'Semáforo com defeito',
+    'Sinalização horizontal necessária',
+    'Sinalização vertical necessária',
+    'Sinalização escolar necessária',
     'Outros...',
   ];
 
@@ -64,16 +72,14 @@ class _SinalizationPageState extends State<SinalizationPage> {
                     Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 10),
-                      child:
-                        Text(
-                          'Natureza da Notificação',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[900],
-                          ),
+                      child: Text(
+                        'Natureza da Notificação',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
                         ),
-                      
+                      ),
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
@@ -126,7 +132,7 @@ class _SinalizationPageState extends State<SinalizationPage> {
                           border: Border.all(
                             color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 240,
@@ -182,7 +188,7 @@ class _SinalizationPageState extends State<SinalizationPage> {
                           border: Border.all(
                             color: Color.fromARGB(255, 124, 124, 124),
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 30,
@@ -190,9 +196,8 @@ class _SinalizationPageState extends State<SinalizationPage> {
                           child: DateTimePicker(
                             type: DateTimePickerType.date,
                             dateMask: 'dd/MM/yyyy',
-                            initialValue: selectedDate.isEmpty
-                                ? null
-                                : selectedDate,
+                            initialValue:
+                                selectedDate.isEmpty ? null : selectedDate,
                             firstDate: DateTime(2023),
                             lastDate: DateTime(2030),
                             icon: Icon(
@@ -243,7 +248,7 @@ class _SinalizationPageState extends State<SinalizationPage> {
                               border: Border.all(
                                 color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.zero,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: SizedBox(
                               height: 22,
@@ -283,15 +288,17 @@ class _SinalizationPageState extends State<SinalizationPage> {
                         SizedBox(width: 24),
                         SizedBox(
                           height: 40,
-                          width: 120,
+                          width: 108,
                           child: MyButton(
+                            colorButton: Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
                             onTap: () {},
                             textButton: 'Enviar',
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 54),
                   ],
                 ),
               ),

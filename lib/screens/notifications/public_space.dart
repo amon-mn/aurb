@@ -2,7 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class PublicSpacePage extends StatefulWidget {
@@ -15,8 +15,7 @@ class PublicSpacePage extends StatefulWidget {
 class _PublicSpacePageState extends State<PublicSpacePage> {
   final TextEditingController _controller = TextEditingController();
 
-  ValueNotifier<String> selectedPS =
-      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedPS = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedRisco = ValueNotifier<String>('Selecione');
 
   String selectedDate = '';
@@ -64,16 +63,14 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                     Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 10),
-                      child:
-                        Text(
-                          'Natureza da Notificação',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[900],
-                          ),
+                      child: Text(
+                        'Natureza da Notificação',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
                         ),
-                      
+                      ),
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
@@ -126,7 +123,7 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                           border: Border.all(
                             color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 240,
@@ -182,7 +179,7 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                           border: Border.all(
                             color: Color.fromARGB(255, 124, 124, 124),
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 30,
@@ -190,9 +187,8 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                           child: DateTimePicker(
                             type: DateTimePickerType.date,
                             dateMask: 'dd/MM/yyyy',
-                            initialValue: selectedDate.isEmpty
-                                ? null
-                                : selectedDate,
+                            initialValue:
+                                selectedDate.isEmpty ? null : selectedDate,
                             firstDate: DateTime(2023),
                             lastDate: DateTime(2030),
                             icon: Icon(
@@ -243,7 +239,7 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                               border: Border.all(
                                 color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.zero,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: SizedBox(
                               height: 22,
@@ -283,15 +279,17 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                         SizedBox(width: 24),
                         SizedBox(
                           height: 40,
-                          width: 120,
+                          width: 108,
                           child: MyButton(
+                            colorButton: Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
                             onTap: () {},
                             textButton: 'Enviar',
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 54),
                   ],
                 ),
               ),

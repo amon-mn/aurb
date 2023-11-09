@@ -5,12 +5,16 @@ class MyButton extends StatefulWidget {
   final String textButton;
   final bool isRed; // Novo parâmetro
   final double textSize;
+  final Color colorButton;
+  final double? paddingButton;
 
   const MyButton({
     Key? key,
     required this.onTap,
     required this.textButton,
     required this.textSize,
+    required this.colorButton,
+    this.paddingButton,
     this.isRed = false, // Valor padrão para isRed
   }) : super(key: key);
 
@@ -23,9 +27,9 @@ class _MyButtonState extends State<MyButton> {
 
   Color? getButtonColor() {
     if (_isPressed) {
-      return widget.isRed ? Colors.red[700] : Color.fromARGB(255,121,182,76);
+      return widget.isRed ? Colors.red[700] : widget.colorButton;
     } else {
-      return widget.isRed ? Colors.red[800] : Color.fromARGB(255,121,182,76);
+      return widget.isRed ? Colors.red[800] : widget.colorButton;
     }
   }
 
@@ -36,10 +40,12 @@ class _MyButtonState extends State<MyButton> {
     return SizedBox(
       width: screenWidth,
       child: Container(
-        padding: const EdgeInsets.all(4),
+        padding: widget.paddingButton != null
+            ? EdgeInsets.all(widget.paddingButton!)
+            : const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: getButtonColor(),
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.circular(16.0),
           boxShadow: _isPressed
               ? [
                   BoxShadow(

@@ -2,7 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class BusTerminalPage extends StatefulWidget {
@@ -26,9 +26,17 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
 
   final itemListBusTerminal = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Falta de cobertura',
+    'Falta de segurança',
+    'Falta de rampa de acesso',
+    'Falta de assentos ',
+    'Tempo de espera',
+    'Ausência de banheiros',
+    'Banheiros em mau funcionamento',
+    'Falta de indicador de numeros telefônicos de emergência',
+    'Inundações em forte chuva',
+    'Terminal/ponto quebrado/deteriorado',
+    'Condições de espera em horário de pico',
     'Outros...',
   ];
 
@@ -55,25 +63,23 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
-                      child:
-                        Text(
-                          'Natureza da Notificação',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[900],
-                          ),
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Natureza da Notificação',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
                         ),
-                      
+                      ),
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
@@ -85,10 +91,10 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Breve descrição da observação',
                         style: TextStyle(
@@ -98,16 +104,16 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyTextFieldWrapper(
                       hintText: 'Digite sua mensagem',
                       controller: _controller,
                       obscureText: false,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Local',
                         style: TextStyle(
@@ -117,18 +123,18 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
-                        child: SizedBox(
+                        child: const SizedBox(
                           height: 240,
                           width: 414,
                           child: Image(
@@ -138,10 +144,10 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Avaliação de Risco',
                         style: TextStyle(
@@ -151,7 +157,7 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyDropdownFormField(
                       selectedValueNotifier: selectedRisco,
                       itemsList: itemListRisco,
@@ -161,10 +167,10 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Data da Observação',
                         style: TextStyle(
@@ -177,12 +183,12 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 124, 124, 124),
+                            color: const Color.fromARGB(255, 124, 124, 124),
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 30,
@@ -190,12 +196,11 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                           child: DateTimePicker(
                             type: DateTimePickerType.date,
                             dateMask: 'dd/MM/yyyy',
-                            initialValue: selectedDate.isEmpty
-                                ? null
-                                : selectedDate,
+                            initialValue:
+                                selectedDate.isEmpty ? null : selectedDate,
                             firstDate: DateTime(2023),
                             lastDate: DateTime(2030),
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.calendar_today,
                               color: Colors.black,
                             ),
@@ -213,18 +218,18 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.camera_alt,
                           size: 30,
                         ),
-                        SizedBox(width: 2),
+                        const SizedBox(width: 2),
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             'Anexar Imagens',
                             style: TextStyle(
@@ -234,18 +239,18 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.zero,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
-                            child: SizedBox(
+                            child: const SizedBox(
                               height: 22,
                               width: 48,
                               child: Center(
@@ -256,12 +261,12 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Switch(
-                          activeColor: Color.fromARGB(255, 121, 182, 76),
+                          activeColor: const Color.fromARGB(255, 121, 182, 76),
                           value: isSwitched,
                           onChanged: (value) {
                             setState(() {
@@ -271,7 +276,7 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                         ),
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             'Modo Anônimo',
                             style: TextStyle(
@@ -280,18 +285,21 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 24),
+                        const SizedBox(width: 24),
                         SizedBox(
                           height: 40,
-                          width: 120,
+                          width: 108,
                           child: MyButton(
+                            colorButton:
+                                const Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
                             onTap: () {},
                             textButton: 'Enviar',
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 54),
                   ],
                 ),
               ),

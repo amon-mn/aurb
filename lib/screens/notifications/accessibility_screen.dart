@@ -2,7 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class AccessibilityPage extends StatefulWidget {
@@ -28,12 +28,13 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     'Selecione',
     'Falta de rampa de acesso calçadas',
     'Falta de rampa de acesso escadas',
-    'Falta de rampa de acesso órg. púb.',
+    'Falta de rampa de acesso órg. púb',
     'Falta de rampa de acesso passarelas',
-    'Falta de rampa de acesso a terminais de ônibus',
+    'Falta de rampa de acesso a \n pontos/terminais de ônibus',
+    'Falta de acesso a cadeirantes em ônibus',
     'Falta de material antiderrapante',
     'Falta de piso tátil direcional/alerta',
-    'Falta de localizador para cegos',
+    'Falta de localzador para cegos',
     'Material escorregadio',
     'Outros...',
   ];
@@ -61,15 +62,16 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40), // Margem lateral
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 40), // Margem lateral
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Natureza da Notificação',
                         style: TextStyle(
@@ -89,10 +91,10 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Breve descrição da observação',
                         style: TextStyle(
@@ -102,16 +104,16 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyTextFieldWrapper(
                       hintText: 'Digite sua mensagem',
                       controller: _controller,
                       obscureText: false,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Local',
                         style: TextStyle(
@@ -121,18 +123,18 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
-                        child: SizedBox(
+                        child: const SizedBox(
                           height: 240,
                           width: 414,
                           child: Image(
@@ -142,10 +144,10 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Avaliação de Risco',
                         style: TextStyle(
@@ -155,7 +157,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyDropdownFormField(
                       selectedValueNotifier: selectedRisco,
                       itemsList: itemListRisco,
@@ -165,10 +167,10 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Data da Observação',
                         style: TextStyle(
@@ -181,12 +183,12 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 124, 124, 124),
+                            color: const Color.fromARGB(255, 124, 124, 124),
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                             height: 30,
@@ -199,7 +201,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                   : selectedDate, // Defina como null quando estiver vazio
                               firstDate: DateTime(2023),
                               lastDate: DateTime(2030),
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.calendar_today,
                                 color: Colors.black,
                               ),
@@ -218,18 +220,18 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             )),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.camera_alt,
                           size: 30,
                         ),
-                        SizedBox(width: 2),
+                        const SizedBox(width: 2),
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             'Anexar Imagens',
                             style: TextStyle(
@@ -239,18 +241,18 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.zero,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
-                            child: SizedBox(
+                            child: const SizedBox(
                               height: 22,
                               width: 48,
                               child: Center(
@@ -262,12 +264,12 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Switch(
-                          activeColor: Color.fromARGB(255,121,182,76),
+                          activeColor: const Color.fromARGB(255, 121, 182, 76),
                           value: isSwitched,
                           onChanged: (value) {
                             setState(() {
@@ -277,7 +279,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             'Modo Anônimo',
                             style: TextStyle(
@@ -286,18 +288,21 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 24),
+                        const SizedBox(width: 24),
                         SizedBox(
                           height: 40,
-                          width: 120,
+                          width: 108,
                           child: MyButton(
                             textSize: 14,
-                            onTap: (){},
+                            colorButton:
+                                const Color.fromARGB(255, 121, 182, 76),
+                            onTap: () {},
                             textButton: 'Enviar',
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 54),
                   ],
                 ),
               ),

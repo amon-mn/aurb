@@ -44,10 +44,12 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 2), // Ajuste o valor de horizontal conforme necessário
+      padding: EdgeInsets.symmetric(
+          horizontal: 2), // Ajuste o valor de horizontal conforme necessário
       child: TextFormField(
         style: TextStyle(fontSize: 16 * textScaleFactor),
-        inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
+        inputFormatters:
+            widget.inputFormatter != null ? [widget.inputFormatter!] : [],
         controller: widget.controller,
         obscureText: widget.obscureText,
         decoration: InputDecoration(
@@ -63,20 +65,21 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
-            borderRadius: BorderRadius.zero,
+            borderSide:
+                const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Color.fromARGB(255, 0, 103, 3)),
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.circular(16.0),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.circular(16.0),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.circular(16.0),
           ),
           fillColor: Colors.grey.shade100,
           filled: true,

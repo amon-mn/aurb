@@ -1,5 +1,5 @@
 import 'package:aurb/authentication/components/profile_pic.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:flutter/material.dart';
 
 class UserScreen extends StatelessWidget {

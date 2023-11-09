@@ -44,7 +44,7 @@ class Header extends StatelessWidget {
                           height: 42,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.yellow,
+                            color: Colors.amber,
                           ),
                         ),
                       ],

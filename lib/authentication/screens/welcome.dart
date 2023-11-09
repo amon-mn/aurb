@@ -1,6 +1,7 @@
+import 'package:aurb/authentication/screens/login_screen.dart';
+import 'package:aurb/authentication/screens/register_screen.dart';
 import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_text_button.dart';
-import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -52,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 74),
                 MyCard(
                   width: MediaQuery.sizeOf(context).width,
-                  height: 560,
+                  height: MediaQuery.sizeOf(context).height - 264,
                   child: Column(
                     children: [
                       Container(
@@ -78,13 +79,19 @@ class WelcomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
+                                  builder: (context) => LoginScreen()));
                         },
                         text: 'Entrar',
                         textSize: 36,
                       ),
                       MyTextButton(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const RegisterScreen()));
+                        },
                         text: 'Cadastrar',
                         textSize: 16,
                       ),

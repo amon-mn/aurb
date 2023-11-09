@@ -2,7 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:aurb/screens/sections/header.dart';
+import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class PublicTransportPage extends StatefulWidget {
@@ -15,8 +15,9 @@ class PublicTransportPage extends StatefulWidget {
 class _PublicTransportPageState extends State<PublicTransportPage> {
   final TextEditingController _controller = TextEditingController();
 
-  ValueNotifier<String> selectedPT =
-      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedPT = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedEmpresa = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedNumero = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedRisco = ValueNotifier<String>('Selecione');
 
   String selectedDate = '';
@@ -26,9 +27,44 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
 
   final itemListPT = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Condições do veículo',
+    'Ausência de Rampa de acesso a cadeirantes',
+    'Muito lotado em horário de pico',
+    'Numero reduzido de assentos',
+    'Falta de segurança',
+    'Demora na espera',
+    'Assalto',
+    'Janelas travadas',
+    'Identificador de parada com defeito',
+    'Outros...',
+  ];
+  final itemListEmpresas = [
+    'Selecione',
+    'Rondônia Transportes Ltda.',
+    'Viação São Pedro Ltda.',
+    'Viação Nova Integração Ltda.',
+    'Via Verde Transportes Col. Ltda.',
+    'Expresso Coroado Transportes Col. Ltda.',
+    'Global Green Transportes Ltda.',
+    'Outros...',
+  ];
+
+  final itemListLinhas = [
+    'Selecione',
+    '003',
+    '011',
+    '055',
+    '059',
+    '126',
+    '205',
+    '212',
+    '306',
+    '316',
+    '318',
+    '323',
+    '427',
+    '455',
+    '458',
     'Outros...',
   ];
 
@@ -64,16 +100,14 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                     Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 10),
-                      child:
-                        Text(
-                          'Natureza da Notificação',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[900],
-                          ),
+                      child: Text(
+                        'Natureza da Notificação',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
                         ),
-                      
+                      ),
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
@@ -126,7 +160,7 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                           border: Border.all(
                             color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 240,
@@ -137,6 +171,52 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 24),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Numero da Linha',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    MyDropdownFormField(
+                      selectedValueNotifier: selectedNumero,
+                      itemsList: itemListLinhas,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedNumero.value = value!;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 24),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Nome da Empresa',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    MyDropdownFormField(
+                      selectedValueNotifier: selectedEmpresa,
+                      itemsList: itemListEmpresas,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedEmpresa.value = value!;
+                        });
+                      },
                     ),
                     SizedBox(height: 24),
                     Container(
@@ -182,7 +262,7 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                           border: Border.all(
                             color: Color.fromARGB(255, 124, 124, 124),
                           ),
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SizedBox(
                           height: 30,
@@ -190,9 +270,8 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                           child: DateTimePicker(
                             type: DateTimePickerType.date,
                             dateMask: 'dd/MM/yyyy',
-                            initialValue: selectedDate.isEmpty
-                                ? null
-                                : selectedDate,
+                            initialValue:
+                                selectedDate.isEmpty ? null : selectedDate,
                             firstDate: DateTime(2023),
                             lastDate: DateTime(2030),
                             icon: Icon(
@@ -243,7 +322,7 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                               border: Border.all(
                                 color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.zero,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: SizedBox(
                               height: 22,
@@ -283,15 +362,17 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                         SizedBox(width: 24),
                         SizedBox(
                           height: 40,
-                          width: 120,
+                          width: 108,
                           child: MyButton(
+                            colorButton: Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
                             onTap: () {},
                             textButton: 'Enviar',
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 54),
                   ],
                 ),
               ),

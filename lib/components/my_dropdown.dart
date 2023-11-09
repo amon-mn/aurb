@@ -7,7 +7,8 @@ class MyDropdownFormField extends StatelessWidget {
   final String? hint;
   final Function(String?)? onChanged;
 
-  MyDropdownFormField({
+  const MyDropdownFormField({
+    super.key,
     required this.selectedValueNotifier,
     this.itemsList,
     required this.onChanged,
@@ -32,7 +33,7 @@ class MyDropdownFormField extends StatelessWidget {
                   child: Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: 16), // Adjust the horizontal padding
                         child: Text(item),
                       ),
@@ -49,23 +50,23 @@ class MyDropdownFormField extends StatelessWidget {
           ),
           dropdownColor: Colors.grey[100],
           decoration: InputDecoration(
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 10), // Adjust vertical padding
+            contentPadding: const EdgeInsets.symmetric(
+                vertical: 10, horizontal: 8), // Adjust vertical padding
             border: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
-              borderRadius: BorderRadius.zero,
+              borderRadius: BorderRadius.circular(16.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromARGB(255, 124, 124, 124)),
-              borderRadius: BorderRadius.zero,
+              borderRadius: BorderRadius.circular(16.0),
             ),
             fillColor: Colors.grey.shade100,
             filled: true,
             labelText: labelText,
             hintText: hint,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.black,
             ),
             focusedErrorBorder: OutlineInputBorder(
@@ -74,7 +75,7 @@ class MyDropdownFormField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.zero,
+              borderRadius: BorderRadius.circular(16.0),
             ),
           ),
         );

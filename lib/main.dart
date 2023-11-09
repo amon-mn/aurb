@@ -1,6 +1,4 @@
-import 'package:aurb/screens/home.dart';
-import 'package:aurb/screens/notifications/accessibility_screen.dart';
-import 'package:aurb/screens/welcome.dart';
+import 'package:aurb/authentication/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +13,7 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static final String title = 'AURB';
+  static const String title = 'AURB';
 
   static const MaterialColor customGrayColor = MaterialColor(
     0xFF666666, // Replace with your desired primary gray color
@@ -38,6 +36,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: title,
         theme: ThemeData(primarySwatch: customGrayColor),
-        home: WelcomeScreen(),
+        home: const WelcomeScreen(),
       );
 }
