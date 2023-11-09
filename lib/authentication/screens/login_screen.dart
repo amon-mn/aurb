@@ -2,6 +2,7 @@ import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/square_tile.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -117,7 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 colorButton:
                                     const Color.fromARGB(255, 69, 69, 69),
                                 paddingButton: 12,
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomeScreen()));
+                                },
                                 textButton: 'Entrar',
                                 textSize: 18),
                           ],
