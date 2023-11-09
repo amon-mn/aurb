@@ -1,4 +1,3 @@
-import 'package:aurb/screens/home.dart';
 import 'package:aurb/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +36,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: title,
         theme: ThemeData(primarySwatch: customGrayColor),
-        home: HomeScreen(),
+        home: WelcomeScreen(),
       );
 }
