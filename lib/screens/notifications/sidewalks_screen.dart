@@ -27,9 +27,9 @@ class _SidewalksPageState extends State<SidewalksPage> {
   final itemListSidewalk = [
     'Selecione',
     'Condições de mobilidade',
-    'Obstrução por Desnível',
-    'Obstrução por Buraco',
-    'Obstrução por Lixo',
+    'Obstrução por desnível',
+    'Obstrução por buraco',
+    'Obstrução por lixo',
     'Obstrução por poste',
     'Obstrução por árvore',
     'Obstrução por veículo',

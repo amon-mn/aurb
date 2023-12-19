@@ -16,22 +16,12 @@ class OtherNotificationsPage extends StatefulWidget {
 class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
   final TextEditingController _controller = TextEditingController();
 
-  ValueNotifier<String> selectedOtherNotification =
-      ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedRisco = ValueNotifier<String>('Selecione');
 
   String selectedDate = '';
   bool isDateSelected =
       false; // Variável para rastrear se a data foi selecionada
   bool isSwitched = false;
-
-  final itemListOtherNotification = [
-    'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
-    'Outros...',
-  ];
 
   final itemListRisco = [
     'Selecione',

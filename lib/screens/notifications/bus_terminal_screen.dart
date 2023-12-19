@@ -34,7 +34,7 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
     'Tempo de espera',
     'Ausência de banheiros',
     'Banheiros em mau funcionamento',
-    'Falta de indicador de numeros \ntelefônicos de emergência',
+    'Falta de indicador de números \ntelefônicos de emergência',
     'Inundações em forte chuva',
     'Terminal/Ponto quebrado \nou deteriorado',
     'Condições de espera em horário \nde pico',

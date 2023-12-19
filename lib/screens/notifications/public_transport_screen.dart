@@ -29,9 +29,9 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
   final itemListPT = [
     'Selecione',
     'Condições do veículo',
-    'Ausência de rampa de acesso \na cadeirantes',
+    'Ausência de rampa de acesso \npara cadeirantes',
     'Muito lotado em horário de pico',
-    'Numero reduzido de assentos',
+    'Número reduzido de assentos',
     'Falta de segurança',
     'Demora na espera',
     'Assalto',

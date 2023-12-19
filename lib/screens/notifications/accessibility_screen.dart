@@ -27,10 +27,10 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
 
   final itemListAccessibility = [
     'Selecione',
-    'Falta de rampa de acesso calçadas',
-    'Falta de rampa de acesso escadas',
-    'Falta de rampa de acesso órg. púb',
-    'Falta de rampa de acesso passarelas',
+    'Falta de rampa de acesso \n- calçadas',
+    'Falta de rampa de acesso \n- escadas',
+    'Falta de rampa de acesso \n- órg. púb',
+    'Falta de rampa de acesso \n- passarelas',
     'Falta de rampa de acesso a \npontos/terminais de ônibus',
     'Falta de acesso a cadeirantes \nem ônibus',
     'Falta de material antiderrapante',
