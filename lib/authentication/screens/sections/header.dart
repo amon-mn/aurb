@@ -90,7 +90,6 @@ class Header extends StatelessWidget {
               size: 28,
             ),
             onPressed: () {
-              // Adicione a função para navegar para a página NotificationPage
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationPage()),
