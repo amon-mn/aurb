@@ -1,3 +1,5 @@
+import 'package:aurb/authentication/screens/about_screen.dart';
+import 'package:aurb/authentication/screens/welcome.dart';
 import 'package:aurb/screens/control_panel_screen.dart';
 import 'package:aurb/screens/notifications/accessibility_screen.dart';
 import 'package:aurb/screens/notifications/bus_terminal_screen.dart';
@@ -131,6 +133,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.logout,
                     onClicked: () => selectedItem(context, 12),
                   ),
+                  const SizedBox(height: 8),
+                  buildMenuItem(
+                    text: 'Sobre',
+                    icon: Icons.info_outlined,
+                    onClicked: () => selectedItem(context, 13),
+                  ),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -251,8 +259,16 @@ class NavigationDrawerWidget extends StatelessWidget {
         ));
         break;
       case 11:
+        () {};
+        break;
+      case 12:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SidewalksPage(),
+          builder: (context) => WelcomeScreen(),
+        ));
+        break;
+      case 13:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => AboutScreen(),
         ));
         break;
     }
