@@ -65,30 +65,7 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
-                        'Natureza da Notificação',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    MyDropdownFormField(
-                      selectedValueNotifier: selectedOtherNotification,
-                      itemsList: itemListOtherNotification,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOtherNotification.value = value!;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 24),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Breve descrição da observação',
+                        'Descrição da observação',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,

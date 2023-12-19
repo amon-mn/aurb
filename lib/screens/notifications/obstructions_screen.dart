@@ -26,9 +26,11 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
 
   final itemListObstruction = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Construção',
+    'Lixo',
+    'Bueiros sem tampa',
+    'Calçada quebrada',
+    'Encanamento rompido'
     'Outros...',
   ];
 

@@ -25,9 +25,12 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
 
   final itemListPS = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Muros e cercas',
+    'Objetos relacionados a materiais \nde construção',
+    'Lixo',
+    'Materiais derrapantes e jardins \nou desníveis',
+    'Ocupação por empreendimentos \ncomerciais.',
+    'Postes e árvores',
     'Outros...',
   ];
 
