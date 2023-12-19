@@ -1,6 +1,7 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -33,10 +34,10 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
     'Tempo de espera',
     'Ausência de banheiros',
     'Banheiros em mau funcionamento',
-    'Falta de indicador de numeros telefônicos de emergência',
+    'Falta de indicador de números \ntelefônicos de emergência',
     'Inundações em forte chuva',
-    'Terminal/ponto quebrado/deteriorado',
-    'Condições de espera em horário de pico',
+    'Terminal/Ponto quebrado \nou deteriorado',
+    'Condições de espera em horário \nde pico',
     'Outros...',
   ];
 
@@ -293,7 +294,12 @@ class _BusTerminalPageState extends State<BusTerminalPage> {
                             colorButton:
                                 const Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                              );
+                            },
                             textButton: 'Enviar',
                           ),
                         ),

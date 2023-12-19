@@ -1,6 +1,7 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -15,22 +16,12 @@ class OtherNotificationsPage extends StatefulWidget {
 class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
   final TextEditingController _controller = TextEditingController();
 
-  ValueNotifier<String> selectedOtherNotification =
-      ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedRisco = ValueNotifier<String>('Selecione');
 
   String selectedDate = '';
   bool isDateSelected =
       false; // Variável para rastrear se a data foi selecionada
   bool isSwitched = false;
-
-  final itemListOtherNotification = [
-    'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
-    'Outros...',
-  ];
 
   final itemListRisco = [
     'Selecione',
@@ -65,30 +56,7 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
-                        'Natureza da Notificação',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    MyDropdownFormField(
-                      selectedValueNotifier: selectedOtherNotification,
-                      itemsList: itemListOtherNotification,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOtherNotification.value = value!;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 24),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Breve descrição da observação',
+                        'Descrição da observação',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -284,7 +252,12 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
                           child: MyButton(
                             colorButton: Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                              );
+                            },
                             textButton: 'Enviar',
                           ),
                         ),

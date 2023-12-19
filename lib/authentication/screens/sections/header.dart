@@ -1,3 +1,4 @@
+import 'package:aurb/authentication/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
@@ -89,7 +90,10 @@ class Header extends StatelessWidget {
               size: 28,
             ),
             onPressed: () {
-              // Adicione a função desejada para a ação de mensagem aqui
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationPage()),
+              );
             },
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -26,9 +27,11 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
 
   final itemListObstruction = [
     'Selecione',
-    'Falta de sinalização de trânsito',
-    'Sinalização confusa',
-    'Sinalização danificada',
+    'Construção',
+    'Lixo',
+    'Bueiros sem tampa',
+    'Calçada quebrada',
+    'Encanamento rompido'
     'Outros...',
   ];
 
@@ -284,7 +287,12 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                           child: MyButton(
                             colorButton: Color.fromARGB(255, 121, 182, 76),
                             textSize: 14,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                              );
+                            },
                             textButton: 'Enviar',
                           ),
                         ),
