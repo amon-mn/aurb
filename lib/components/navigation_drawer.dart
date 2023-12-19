@@ -232,12 +232,12 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 7:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ObstructionssPage(),
+          builder: (context) => ObstructionsPage(),
         ));
         break;
       case 8:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UsePublicSpacePage(),
+          builder: (context) => PublicSpacePage(),
         ));
         break;
       case 9:
