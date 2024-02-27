@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "661746596550",
+    "project_id": "aurb-76255",
+    "storage_bucket": "aurb-76255.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661746596550:android:82907f6a00fd632c3f35c7",
+        "android_client_info": {
+          "package_name": "com.example.aurb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtsdh9et5i1_VTuShmwvUy2ediuSituU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
