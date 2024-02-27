@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '661746596550',
     projectId: 'aurb-76255',
     storageBucket: 'aurb-76255.appspot.com',
+    iosClientId: '661746596550-uquqq8lgc29o4llq26dsuuau65cn26p4.apps.googleusercontent.com',
     iosBundleId: 'com.example.aurb',
   );
 
@@ -76,6 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '661746596550',
     projectId: 'aurb-76255',
     storageBucket: 'aurb-76255.appspot.com',
+    iosClientId: '661746596550-u88cnqjmntkp1tb5kpg8ever47ir0aip.apps.googleusercontent.com',
     iosBundleId: 'com.example.aurb.RunnerTests',
   );
 }
