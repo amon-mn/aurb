@@ -4,6 +4,8 @@ import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/square_tile.dart';
 import 'package:aurb/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:aurb/authentication/components/sign_with_google.dart'; // Importe o widget do botão de login com o Google
+import 'package:aurb/authentication/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -115,17 +117,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             SizedBox(height: 16),
                             MyButton(
-                                colorButton:
-                                    const Color.fromARGB(255, 69, 69, 69),
-                                paddingButton: 12,
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomeScreen()));
-                                },
-                                textButton: 'Entrar',
-                                textSize: 18),
+                              colorButton: const Color.fromARGB(255, 69, 69, 69),
+                              paddingButton: 12,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
+                              },
+                              textButton: 'Entrar',
+                              textSize: 18,
+                            ),
                           ],
                         ),
                       ),
@@ -166,24 +170,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           // google button
                           GestureDetector(
-                            onTap: () {},
-                            child: const SquareTite(
-                                content: 'lib/assets/google.png'),
+                            onTap: () async {
+                              final authService = AuthService();
+                              final success = await authService.signInWithGoogle();
+                              if (success) {
+                                // Login bem-sucedido, navegue para a HomeScreen
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                                );
+                              } else {
+                                // Trate o caso em que o login falhou
+                                // Por exemplo, exibindo uma mensagem de erro para o usuário
+                              }
+                            },
+                            child: GoogleSignInButton(), // ou o widget que representa seu botão de login do Google
                           ),
-
-                          const SizedBox(width: 15),
-
-                          // facebook button
-                          GestureDetector(
-                            onTap: () {},
-                            child: const SquareTite(
-                                content: 'lib/assets/facebook.png'),
-                          ),
-
-                          const SizedBox(width: 15),
-
-                          // yahoo button
-                          const SquareTite(content: 'lib/assets/yahoo.png'),
                         ],
                       )
                     ],
