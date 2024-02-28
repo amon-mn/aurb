@@ -55,12 +55,12 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.prefixIcon,
-            color: Color.fromARGB(255, 0, 90, 3),
+            color: const Color.fromARGB(255, 69, 69, 69),
           ),
           suffixIcon: widget.suffixIcon != null
               ? IconButton(
                   icon: Icon(widget.suffixIcon),
-                  color: Color.fromARGB(255, 0, 90, 3),
+                  color: const Color.fromARGB(255, 69, 69, 69),
                   onPressed: widget.onSuffixIconPressed,
                 )
               : null,

@@ -1,8 +1,9 @@
 import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_textfield.dart';
-import 'package:aurb/components/square_tile.dart';
+import 'package:aurb/components/show_snackbar.dart';
 import 'package:aurb/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/components/sign_with_google.dart'; // Importe o widget do botão de login com o Google
 import 'package:aurb/authentication/services/auth_service.dart';
@@ -17,8 +18,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,10 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 232),
                 MyCard(
                   width: MediaQuery.sizeOf(context).width,
-                  height: MediaQuery.sizeOf(context).height - 364,
+                  height: MediaQuery.sizeOf(context).height - 350,
                   child: Column(
                     children: [
                       Form(
+                        key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -117,16 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             SizedBox(height: 16),
                             MyButton(
-                              colorButton: const Color.fromARGB(255, 69, 69, 69),
+                              colorButton:
+                                  const Color.fromARGB(255, 69, 69, 69),
                               paddingButton: 12,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ),
-                                );
-                              },
+                              onTap: _signUserIn,
                               textButton: 'Entrar',
                               textSize: 18,
                             ),
@@ -172,19 +170,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           GestureDetector(
                             onTap: () async {
                               final authService = AuthService();
-                              final success = await authService.signInWithGoogle();
+                              final success =
+                                  await authService.signInWithGoogle();
+                              /*
                               if (success) {
                                 // Login bem-sucedido, navegue para a HomeScreen
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                                  MaterialPageRoute(builder: (context) => HomeScreen(user: user,)),
                                 );
                               } else {
                                 // Trate o caso em que o login falhou
                                 // Por exemplo, exibindo uma mensagem de erro para o usuário
                               }
+                              */
                             },
-                            child: GoogleSignInButton(), // ou o widget que representa seu botão de login do Google
+                            child:
+                                GoogleSignInButton(), // ou o widget que representa seu botão de login do Google
                           ),
                         ],
                       )
@@ -197,5 +199,46 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  // sign user in method
+  void _signUserIn() async {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
+
+    if (_formKey.currentState!.validate()) {
+      try {
+        /*
+        setState(() {
+          _isLoading = true;
+        });
+        */
+
+        String? erro =
+            await authService.loginUser(email: email, password: pass);
+
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        } else {
+          // Redirecione para a tela regular do usuário (HomePage).
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HomeScreen(user: FirebaseAuth.instance.currentUser!),
+            ),
+          );
+        }
+      } catch (e) {
+        // Trate exceções, se necessário
+        print("Erro durante o login: $e");
+        showSnackBar(context: context, mensagem: "Erro durante o login");
+      } finally {
+        /*setState(() {
+          _isLoading = false;
+        });
+        */
+      }
+    }
   }
 }

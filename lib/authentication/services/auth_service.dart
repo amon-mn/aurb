@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Login com Google
@@ -50,21 +53,15 @@ class AuthService {
     return null;
   }
 
-/*
   Future<String?> registerUser({
     required String email,
     required String password,
     required String name,
-    required String cpf,
+    required String cep,
     required String state,
     required String city,
-    required String propertyName,
-    String? cnpj,
-    required String cep,
     required String street,
     required String neighborhood,
-    required String locality,
-    required bool isProducer,
   }) async {
     try {
       UserCredential userCredential =
@@ -73,40 +70,20 @@ class AuthService {
         password: password,
       );
 
-      String userType = isProducer ? 'Producer' : 'Merchant';
-
       Map<String, dynamic> userData = {
         'name': name,
         'state': state,
         'city': city,
-        'cpf': cpf,
+        'cep': cep,
+        'street': street,
+        'neighborhood': neighborhood,
       };
-
-      if (isProducer) {
-        userData.addAll({
-          'propertyName': propertyName,
-          'cep': cep,
-          'street': street,
-          'neighborhood': neighborhood,
-          'locality': locality,
-        });
-      } else {
-        userData.addAll({
-          'propertyName': propertyName,
-          'cnpj': cnpj,
-          'cep': cep,
-          'street': street,
-          'neighborhood': neighborhood,
-          'locality': locality,
-        });
-      }
 
       // Salvar informações personalizadas no Firebase Firestore com base no tipo de usuário
       await _firebaseFirestore
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
-        'userType': userType,
         ...userData,
       });
     } on FirebaseAuthException catch (e) {
@@ -119,7 +96,6 @@ class AuthService {
 
     return null;
   }
-*/
 
   // Função de logout
   Future<String?> logout() async {
@@ -135,7 +111,6 @@ class AuthService {
     }
   }
 
-/*
 // Função para verificar se o usuario preencheu as informações de cadastro
   Future<bool> hasAdditionalInfo(String userId) async {
     try {
@@ -148,7 +123,7 @@ class AuthService {
       return false;
     }
   }
-*/
+
   Future<String?> missPassword({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);

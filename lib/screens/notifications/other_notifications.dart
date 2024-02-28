@@ -2,6 +2,7 @@ import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -255,7 +256,11 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen(
+                                          user: FirebaseAuth
+                                              .instance.currentUser!,
+                                        )),
                               );
                             },
                             textButton: 'Enviar',

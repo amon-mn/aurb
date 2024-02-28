@@ -11,9 +11,13 @@ import 'package:aurb/screens/notifications/public_transport_screen.dart';
 import 'package:aurb/screens/notifications/sidewalks_screen.dart';
 import 'package:aurb/screens/notifications/sinalization_screen.dart';
 import 'package:aurb/screens/notifications/streets_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  final User user;
+  HomeScreen({super.key, required this.user});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
