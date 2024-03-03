@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SinalizationPage extends StatefulWidget {
   const SinalizationPage({super.key});
@@ -50,6 +51,10 @@ class _SinalizationPageState extends State<SinalizationPage> {
     'Alto',
     'Extremo',
   ];
+
+  GoogleMapController? _mapController;
+  LatLng _center = const LatLng(-23.550520, -46.633308); // Initial map center
+  bool isMapFullScreen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -115,35 +120,60 @@ class _SinalizationPageState extends State<SinalizationPage> {
                     SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Local',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Local',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: SizedBox(
-                          height: 240,
-                          width: 414,
-                          child: Image(
-                            image: AssetImage('lib/assets/gps.png'),
-                            fit: BoxFit.cover,
+                          const SizedBox(height: 4),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isMapFullScreen = !isMapFullScreen;
+                              });
+                            },
+                            child: Container(
+                              height: isMapFullScreen ? 400 : 240,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.5),
+                                child: GoogleMap(
+                                  onMapCreated: (controller) {
+                                    _mapController = controller;
+                                  },
+                                  initialCameraPosition: CameraPosition(
+                                    target: _center,
+                                    zoom: 15.0,
+                                  ),
+                                  markers: <Marker>[
+                                    Marker(
+                                      markerId: MarkerId("marker_1"),
+                                      position: _center,
+                                      infoWindow: const InfoWindow(
+                                        title: 'Marker Title',
+                                        snippet: 'Marker Snippet',
+                                      ),
+                                    ),
+                                  ].toSet(),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 24),
