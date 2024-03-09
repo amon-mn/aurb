@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
-import 'package:aurb/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:aurb/screens/home.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SinalizationPage extends StatefulWidget {
-  const SinalizationPage({super.key});
+  const SinalizationPage({Key? key}) : super(key: key);
 
   @override
   _SinalizationPageState createState() => _SinalizationPageState();
@@ -53,8 +54,15 @@ class _SinalizationPageState extends State<SinalizationPage> {
   ];
 
   GoogleMapController? _mapController;
-  LatLng _center = const LatLng(-23.550520, -46.633308); // Initial map center
+  LatLng? _center; // Removido o valor inicial fixo
   bool isMapFullScreen = false;
+  Set<Marker> _markers = {}; // Conjunto de marcadores
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,23 +160,12 @@ class _SinalizationPageState extends State<SinalizationPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(4.5),
                                 child: GoogleMap(
-                                  onMapCreated: (controller) {
-                                    _mapController = controller;
-                                  },
+                                  onMapCreated: _onMapCreated,
                                   initialCameraPosition: CameraPosition(
-                                    target: _center,
+                                    target: _center ?? LatLng(0, 0),
                                     zoom: 15.0,
                                   ),
-                                  markers: <Marker>[
-                                    Marker(
-                                      markerId: MarkerId("marker_1"),
-                                      position: _center,
-                                      infoWindow: const InfoWindow(
-                                        title: 'Marker Title',
-                                        snippet: 'Marker Snippet',
-                                      ),
-                                    ),
-                                  ].toSet(),
+                                  markers: _markers,
                                 ),
                               ),
                             ),
@@ -348,5 +345,44 @@ class _SinalizationPageState extends State<SinalizationPage> {
         ),
       ),
     );
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() {
+      _mapController = controller;
+      if (_center != null) {
+        _markers.add(
+          Marker(
+            markerId: MarkerId('current_location'),
+            position: _center!,
+            infoWindow: InfoWindow(
+              title: 'Local Atual',
+              snippet: 'Sua localização',
+            ),
+          ),
+        );
+      } else {
+        print("_center is null in _onMapCreated()");
+      }
+    });
+  }
+
+  Future<void> _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    setState(() {
+      _center = LatLng(position.latitude, position.longitude);
+      _markers.add(
+        Marker(
+          markerId: MarkerId('current_location'),
+          position: _center!,
+          infoWindow: InfoWindow(
+            title: 'Local Atual',
+            snippet: 'Sua localização',
+          ),
+        ),
+      );
+    });
   }
 }
