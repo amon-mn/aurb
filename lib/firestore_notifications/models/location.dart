@@ -1,43 +1,31 @@
-import 'package:aurb/firestore_notifications/models/location.dart';
+class Location {
+  String endereco;
+  String? foto;
+  double latitude;
+  double longitude;
 
-class UserNotification {
-  String id;
-  String tipo;
-  String? descricao;
-  String risco;
-  String data;
-  Location? loc;
-
-  UserNotification({
-    required this.id,
-    required this.tipo,
-    this.descricao,
-    this.loc,
-    required this.risco,
-    required this.data,
+  Location({
+    required this.endereco,
+    this.foto,
+    required this.latitude,
+    required this.longitude,
   });
 
-  UserNotification.fromMap(Map<String, dynamic> map)
-      : id = map["id"],
-        tipo = map["tipo"],
-        descricao = map["descricao"],
-        loc = map['loc'] != null ? Location.fromMap(map['loc']) : null,
-        risco = map["risco"],
-        data = map['data'];
+  Location.fromMap(Map<String, dynamic> map)
+      : endereco = map["endereco"],
+        foto = map["foto"],
+        latitude = map["latitude"].toDouble(),
+        longitude = map["longitude"].toDouble();
 
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "tipo": tipo,
-      "descricao": descricao ?? "",
-      "loc": loc?.toMap(),
-      "risco": risco,
-      "data": data,
+      "endereco": endereco,
+      "foto": foto ?? "",
+      "latitude": latitude,
+      "longitude": longitude,
     };
   }
-} // Lista de atividades
-
-
+}
 /*
   
 
