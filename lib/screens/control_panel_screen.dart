@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 class ControlPanelPage extends StatelessWidget {
-  final List<StatusData> data = [
-    StatusData('Concluídas', 314),
-    StatusData('Em Andamento', 122),
-    StatusData('Não Iniciado', 258),
+  final List<LatLng> specificCoordinates = [
+    LatLng(-3.0870, -60.0055),
+    LatLng(-3.0974991343053784, -59.97653873538353),
+    LatLng(-3.130959089581668, -60.013288458078044),
+    LatLng(-3.0774773162121307, -59.930338426124834),
+    LatLng(-3.096688825461525, -60.025621980782375),
+    LatLng(-3.0383542663038434, -59.990288705534184),
+    LatLng(-3.080645610265716, -60.01018371733513),
+    LatLng(-3.103175861814809, -60.04659195549893),
   ];
 
   @override
@@ -15,7 +21,6 @@ class ControlPanelPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
                 customIcon: Icons.arrow_back,
@@ -23,23 +28,36 @@ class ControlPanelPage extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 40), // Espaço entre o header e o conteúdo
+              SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.only(left: 35.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
-                  'Gráfico de Status das Ocorrências',
+                  "Painel de Análise da Mobilidade",
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
                   ),
                 ),
               ),
+              SizedBox(height: 8),
               Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 350.0,
-                  child: _buildBarChart(),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: specificCoordinates.first,
+                        zoom: 12.0, // Ajuste o valor do zoom aqui
+                      ),
+                      markers: _buildMarkers(),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -49,44 +67,37 @@ class ControlPanelPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBarChart() {
-    List<charts.Series<StatusData, String>> series = [
-      charts.Series(
-        id: 'Solicitações',
-        data: data,
-        domainFn: (StatusData status, _) => status.status,
-        measureFn: (StatusData status, _) => status.quantity,
-        colorFn: (StatusData status, _) => charts.ColorUtil.fromDartColor(
-          _getColorForStatus(status.status),
-        ),
-      ),
-    ];
+  Set<Marker> _buildMarkers() {
+    Set<Marker> markers = {};
 
-    return charts.BarChart(
-      series,
-      animate: true,
-      vertical: false,
-      barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis: charts.OrdinalAxisSpec(
-        renderSpec: charts.NoneRenderSpec(),
-      ),
-    );
-  }
+    for (int i = 0; i < specificCoordinates.length; i++) {
+      LatLng coordinate = specificCoordinates[i];
 
-  Color _getColorForStatus(String status) {
-    if (status == 'Concluídas') {
-      return Colors.green;
-    } else if (status == 'Em Andamento') {
-      return Colors.blue;
-    } else {
-      return Colors.red;
+      BitmapDescriptor? icon;
+
+      switch (i % 4) {
+        case 0:
+          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+          break;
+        case 1:
+          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+          break;
+        case 2:
+          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+          break;
+      }
+
+      if (icon != null) {
+        markers.add(
+          Marker(
+            markerId: MarkerId('marker_$i'),
+            position: coordinate,
+            icon: icon,
+          ),
+        );
+      }
     }
+
+    return markers;
   }
-}
-
-class StatusData {
-  final String status;
-  final int quantity;
-
-  StatusData(this.status, this.quantity);
 }
