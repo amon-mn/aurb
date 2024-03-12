@@ -161,24 +161,22 @@ class _SinalizationPageState extends State<SinalizationPage> {
                                           NotificationLocationController>();
                                       return GoogleMap(
                                         initialCameraPosition: CameraPosition(
-                                            target:
-                                                LatLng(local.lat, local.long),
-                                            zoom: 18.0),
+                                          target: LatLng(-3.100055312439282, -59.97655211153541),
+                                          zoom: 18.0,
+                                        ),
                                         zoomControlsEnabled: true,
                                         mapType: MapType.normal,
                                         onMapCreated: local.onMapCreated,
                                         markers: {
                                           Marker(
                                             markerId: MarkerId("MarkerId"),
-                                            position:
-                                                LatLng(local.lat, local.long),
-                                            infoWindow: const InfoWindow(
-                                                title: "Sua Localização"),
-                                            icon:
-                                                BitmapDescriptor.defaultMarker,
+                                            position: LatLng(local.lat, local.long),
+                                            infoWindow: const InfoWindow(title: "Sua Localização"),
+                                            icon: BitmapDescriptor.defaultMarker,
                                           ),
                                         },
                                       );
+
                                     },
                                   ),
                                 ),
