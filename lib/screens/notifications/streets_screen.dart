@@ -1,12 +1,14 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class StreetsPage extends StatefulWidget {
   const StreetsPage({super.key});
@@ -148,24 +150,37 @@ class _StreetsPageState extends State<StreetsPage> {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.5),
-                                child: GoogleMap(
-                                  onMapCreated: (controller) {
-                                    _mapController = controller;
-                                  },
-                                  initialCameraPosition: CameraPosition(
-                                    target: _center,
-                                    zoom: 15.0,
+                                child: ChangeNotifierProvider<
+                                    NotificationLocationController>(
+                                  create: (context) =>
+                                      NotificationLocationController(),
+                                  child: Builder(
+                                    builder: (context) {
+                                      final local = context.watch<
+                                          NotificationLocationController>();
+                                      return GoogleMap(
+                                        initialCameraPosition: CameraPosition(
+                                          target: LatLng(-3.100055312439282,
+                                              -59.97655211153541),
+                                          zoom: 18.0,
+                                        ),
+                                        zoomControlsEnabled: true,
+                                        mapType: MapType.normal,
+                                        onMapCreated: local.onMapCreated,
+                                        markers: {
+                                          Marker(
+                                            markerId: MarkerId("MarkerId"),
+                                            position:
+                                                LatLng(local.lat, local.long),
+                                            infoWindow: const InfoWindow(
+                                                title: "Sua Localização"),
+                                            icon:
+                                                BitmapDescriptor.defaultMarker,
+                                          ),
+                                        },
+                                      );
+                                    },
                                   ),
-                                  markers: <Marker>[
-                                    Marker(
-                                      markerId: MarkerId("marker_1"),
-                                      position: _center,
-                                      infoWindow: const InfoWindow(
-                                        title: 'Marker Title',
-                                        snippet: 'Marker Snippet',
-                                      ),
-                                    ),
-                                  ].toSet(),
                                 ),
                               ),
                             ),
