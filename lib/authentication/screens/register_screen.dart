@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            width: 120,
+                            width: 160,
                             child: Text(
                               'AURB',
                               style: TextStyle(

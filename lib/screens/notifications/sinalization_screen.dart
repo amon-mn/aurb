@@ -161,7 +161,8 @@ class _SinalizationPageState extends State<SinalizationPage> {
                                           NotificationLocationController>();
                                       return GoogleMap(
                                         initialCameraPosition: CameraPosition(
-                                          target: LatLng(-3.100055312439282, -59.97655211153541),
+                                          target: LatLng(-3.100055312439282,
+                                              -59.97655211153541),
                                           zoom: 18.0,
                                         ),
                                         zoomControlsEnabled: true,
@@ -170,13 +171,15 @@ class _SinalizationPageState extends State<SinalizationPage> {
                                         markers: {
                                           Marker(
                                             markerId: MarkerId("MarkerId"),
-                                            position: LatLng(local.lat, local.long),
-                                            infoWindow: const InfoWindow(title: "Sua Localização"),
-                                            icon: BitmapDescriptor.defaultMarker,
+                                            position:
+                                                LatLng(local.lat, local.long),
+                                            infoWindow: const InfoWindow(
+                                                title: "Sua Localização"),
+                                            icon:
+                                                BitmapDescriptor.defaultMarker,
                                           ),
                                         },
                                       );
-
                                     },
                                   ),
                                 ),
@@ -305,46 +308,55 @@ class _SinalizationPageState extends State<SinalizationPage> {
                     ),
                     SizedBox(height: 24),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Switch(
-                          activeColor: Color.fromARGB(255, 121, 182, 76),
-                          value: isSwitched,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitched = value;
-                            });
-                          },
+                        Expanded(
+                          flex: 1,
+                          child: Switch(
+                            activeColor: Color.fromARGB(255, 121, 182, 76),
+                            value: isSwitched,
+                            onChanged: (value) {
+                              setState(() {
+                                isSwitched = value;
+                              });
+                            },
+                          ),
                         ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            'Modo Anônimo',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.grey[900],
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Modo Anônimo',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.grey[900],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 24),
-                        SizedBox(
-                          height: 40,
-                          width: 108,
-                          child: MyButton(
-                            colorButton: Color.fromARGB(255, 121, 182, 76),
-                            textSize: 14,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: 40,
+                            child: MyButton(
+                              colorButton: Color.fromARGB(255, 121, 182, 76),
+                              textSize: 14,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                     builder: (context) => HomeScreen(
-                                          user: FirebaseAuth
-                                              .instance.currentUser!,
-                                        )),
-                              );
-                            },
-                            textButton: 'Enviar',
+                                      user: FirebaseAuth.instance.currentUser!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              textButton: 'Enviar',
+                            ),
                           ),
                         ),
                       ],

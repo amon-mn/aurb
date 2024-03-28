@@ -39,19 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.amber,
-                            ),
-                          ),
-                        ],
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.amber,
+                        ),
                       ),
                       SizedBox(width: 16),
                       Column(
@@ -59,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            width: 120,
+                            width: 160,
                             child: Text(
                               'AURB',
                               style: TextStyle(
@@ -95,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Container(
                               alignment: Alignment.center,
                               child: Text(
@@ -107,19 +101,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 24),
+                            const SizedBox(height: 24),
                             MyTextFieldWrapper(
                               hintText: 'Email',
                               controller: _emailController,
                               obscureText: false,
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             MyTextFieldWrapper(
                               hintText: 'Senha',
                               controller: _passwordController,
                               obscureText: false,
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             MyButton(
                               colorButton:
                                   const Color.fromARGB(255, 69, 69, 69),
