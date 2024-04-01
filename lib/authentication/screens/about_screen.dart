@@ -24,40 +24,68 @@ class AboutScreen extends StatelessWidget {
                 SizedBox(
                   height: 24,
                 ),
-                Container(
-                  width: 340,
-                  child: Card(
-                    elevation: 3,
-                    color: Colors.white.withOpacity(0.90),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32.0, vertical: 16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Projeto FAPEAM - TCE',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 16.0),
-                          Text(
-                            'Projeto financiado pela FAPEAM, referente ao EDITAL N. 010/2021- CT&I ÁREAS PRIORITÁRIAS. \nCoordenado por: Jaisson Oka',
-                            style: TextStyle(fontSize: 11.0),
-                            textAlign: TextAlign.justify,
-                          ),
-                        ],
-                      ),
+                Text(
+                  'Idealizador:',
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                  child: Divider(),
+                ),
+                Text(
+                  'Prof. Marcos Castro de Lima',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  'Realização:',
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                  child: Divider(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'lib/assets/ufam_logo.png', // Substitua pelo caminho da primeira imagem
+                      width: 70,
+                      height: 70,
                     ),
+                    SizedBox(width: 32),
+                    Image.asset(
+                      'lib/assets/tce_logo.png', // Substitua pelo caminho da segunda imagem
+                      width: 75,
+                      height: 75,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  'Apoio:',
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                  child: Divider(),
+                ),
+                Center(
+                  child: Image.asset(
+                    'lib/assets/acariquara_logo.png', // Substitua pelo caminho da terceira imagem
+                    width: 90,
+                    height: 90,
                   ),
                 ),
                 SizedBox(
                   height: 24,
                 ),
                 Text(
-                  'Desenvolvido por:',
+                  'Desenvolvimento:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 Padding(

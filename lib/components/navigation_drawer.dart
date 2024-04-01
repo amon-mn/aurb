@@ -1,5 +1,6 @@
 import 'package:aurb/authentication/screens/about_screen.dart';
 import 'package:aurb/authentication/screens/welcome.dart';
+import 'package:aurb/authentication/services/auth_service.dart';
 import 'package:aurb/screens/control_panel_screen.dart';
 import 'package:aurb/screens/notifications/accessibility_screen.dart';
 import 'package:aurb/screens/notifications/bus_terminal_screen.dart';
@@ -16,7 +17,26 @@ import 'package:flutter/material.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
-  const NavigationDrawerWidget({super.key});
+  final AuthService authService = AuthService();
+
+  Future<void> handleLogout(BuildContext context) async {
+    try {
+      // Faz logout usando o AuthService
+      await authService.logout().then(
+        ((value) {
+          // Após o logout ser concluído, navega para a tela WelcomeScreen()
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          );
+        }),
+      );
+    } catch (e) {
+      // Trata qualquer erro que possa ocorrer durante o logout
+      print('Erro ao fazer logout: $e');
+    }
+  }
+
+  NavigationDrawerWidget({super.key});
   @override
   Widget build(BuildContext context) {
     const name = 'Nome do Usuário';
@@ -129,10 +149,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   buildMenuItem(
-                    text: 'Sair',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 12),
-                  ),
+                      text: 'Sair',
+                      icon: Icons.logout,
+                      futureOnClicked: () => handleLogout(context)),
                   const SizedBox(height: 8),
                   buildMenuItem(
                     text: 'Sobre',
@@ -187,6 +206,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     required String text,
     required IconData icon,
     VoidCallback? onClicked,
+    VoidCallback? futureOnClicked,
   }) {
     final color = Colors.grey[900];
     const hoverColor = Colors.black;
@@ -195,7 +215,7 @@ class NavigationDrawerWidget extends StatelessWidget {
       leading: Icon(icon, color: color),
       title: Text(text, style: TextStyle(color: color)),
       hoverColor: hoverColor,
-      onTap: onClicked,
+      onTap: onClicked ?? futureOnClicked,
     );
   }
 
