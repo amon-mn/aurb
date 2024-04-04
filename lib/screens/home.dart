@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
-        drawer: NavigationDrawerWidget(),
+        drawer: NavigationDrawerWidget(user: widget.user),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64.0),
           child: SafeArea(child: Header()),

@@ -2,12 +2,11 @@ import 'package:aurb/authentication/components/profile_pic.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:flutter/material.dart';
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
   final String name;
   final String urlImage;
   final String email;
   final String cel;
-  final String genero;
   final String cep;
   final String endereco;
   final String bairro;
@@ -19,13 +18,17 @@ class UserScreen extends StatelessWidget {
     required this.urlImage,
     required this.email,
     required this.cel,
-    required this.genero,
     required this.cep,
     required this.endereco,
     required this.bairro,
     required this.cidadeEstado,
   }) : super(key: key);
 
+  @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +49,7 @@ class UserScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ProfilePic(
-                      urlImage: urlImage,
+                      urlImage: widget.urlImage,
                       width: 80,
                       height: 80,
                     ),
@@ -59,7 +62,7 @@ class UserScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name,
+                            widget.name,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
@@ -67,7 +70,7 @@ class UserScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            email,
+                            widget.email,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -82,33 +85,29 @@ class UserScreen extends StatelessWidget {
               SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
-                child: RichTextRow(textSpan: 'Cel:', text: cel),
+                child: RichTextRow(textSpan: 'Cel:', text: widget.cel),
               ),
               SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
-                child: RichTextRow(textSpan: 'Genero:', text: genero),
-              ),
-              SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
-                child: RichTextRow(textSpan: 'CEP:', text: cep),
-              ),
-              SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
-                child: RichTextRow(textSpan: 'Endereço:', text: endereco),
-              ),
-              SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
-                child: RichTextRow(textSpan: 'Bairro:', text: bairro),
+                child: RichTextRow(textSpan: 'CEP:', text: widget.cep),
               ),
               SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child:
-                    RichTextRow(textSpan: 'Cidade/Estado:', text: cidadeEstado),
+                    RichTextRow(textSpan: 'Endereço:', text: widget.endereco),
+              ),
+              SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 2),
+                child: RichTextRow(textSpan: 'Bairro:', text: widget.bairro),
+              ),
+              SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 2),
+                child: RichTextRow(
+                    textSpan: 'Cidade/Estado:', text: widget.cidadeEstado),
               ),
               SizedBox(height: 16),
               Padding(

@@ -44,9 +44,9 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 2), // Ajuste o valor de horizontal conforme necessário
+      padding: EdgeInsets.symmetric(horizontal: 2),
       child: TextFormField(
+        maxLines: null,
         style: TextStyle(fontSize: 16 * textScaleFactor),
         inputFormatters:
             widget.inputFormatter != null ? [widget.inputFormatter!] : [],

@@ -19,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   AuthService authService = AuthService();
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -166,18 +167,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               final authService = AuthService();
                               final success =
                                   await authService.signInWithGoogle();
-                              /*
+
                               if (success) {
                                 // Login bem-sucedido, navegue para a HomeScreen
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HomeScreen(user: user,)),
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen(
+                                            user: FirebaseAuth
+                                                .instance.currentUser!,
+                                          )),
                                 );
                               } else {
                                 // Trate o caso em que o login falhou
                                 // Por exemplo, exibindo uma mensagem de erro para o usuário
                               }
-                              */
                             },
                             child:
                                 GoogleSignInButton(), // ou o widget que representa seu botão de login do Google

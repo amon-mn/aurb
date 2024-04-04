@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Login com Google
@@ -62,6 +61,7 @@ class AuthService {
     required String city,
     required String street,
     required String neighborhood,
+    required String phone, // Novo parâmetro
   }) async {
     try {
       UserCredential userCredential =
@@ -77,6 +77,7 @@ class AuthService {
         'cep': cep,
         'street': street,
         'neighborhood': neighborhood,
+        'phone': phone, // Novo campo
       };
 
       // Salvar informações personalizadas no Firebase Firestore com base no tipo de usuário
@@ -90,8 +91,11 @@ class AuthService {
       switch (e.code) {
         case "email-already-in-use":
           return "O e-mail já está em uso.";
+        default:
+          return "Erro ao criar usuário: ${e.message}";
       }
-      return e.code;
+    } catch (e) {
+      return "Erro desconhecido ao criar usuário: $e";
     }
 
     return null;
@@ -103,6 +107,7 @@ class AuthService {
       print("Tentando fazer logout...");
       // Faz o logout do Firebase
       await _firebaseAuth.signOut();
+      await _googleSignIn.signOut();
       print("Logout realizado com sucesso!");
       return null; // Retornar null significa que o logout foi bem-sucedido.
     } catch (error) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 class ControlPanelPage extends StatelessWidget {
   final List<LatLng> specificCoordinates = [
     LatLng(-3.0870, -60.0055),
@@ -60,6 +59,66 @@ class ControlPanelPage extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          "Sinalização",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          "Ruas e Avenidas",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          color: Colors.blue,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          "Transporte Público",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -77,13 +136,15 @@ class ControlPanelPage extends StatelessWidget {
 
       switch (i % 4) {
         case 0:
-          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+          icon =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
           break;
         case 1:
           icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
           break;
         case 2:
-          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+          icon =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
           break;
       }
 

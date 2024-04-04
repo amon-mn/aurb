@@ -25,7 +25,7 @@ class AboutScreen extends StatelessWidget {
                   height: 24,
                 ),
                 Text(
-                  'Idealizador:',
+                  'Idealização:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 Padding(
@@ -37,10 +37,17 @@ class AboutScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16.0),
                 ),
                 SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  'Prof. Jaisson Miyosi Oka',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(
                   height: 24,
                 ),
                 Text(
-                  'Realização:',
+                  'Parceria:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 Padding(
@@ -67,24 +74,6 @@ class AboutScreen extends StatelessWidget {
                   height: 24,
                 ),
                 Text(
-                  'Apoio:',
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
-                  child: Divider(),
-                ),
-                Center(
-                  child: Image.asset(
-                    'lib/assets/acariquara_logo.png', // Substitua pelo caminho da terceira imagem
-                    width: 90,
-                    height: 90,
-                  ),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                Text(
                   'Desenvolvimento:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
@@ -95,6 +84,17 @@ class AboutScreen extends StatelessWidget {
                 SizedBox(
                   height: 16,
                 ),
+                ProfileCard(
+                  urlImage: 'lib/assets/profile_amaotech.jpg',
+                  title: 'AMAO Tech',
+                  subTitle: 'Startup P, D & I',
+                  description:
+                      'Somos uma startup de Pesquisa e Desenvolvimento focada em utilizar tecnologia de ponta para otimizar processos e soluções na região amazônica',
+                  icons: [FontAwesomeIcons.instagram],
+                  redirectUrls: ['https://www.instagram.com/amao.tech/'],
+                  iconColors: [Color.fromARGB(255, 188, 42, 141)],
+                ),
+                /*
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 475,
@@ -102,16 +102,7 @@ class AboutScreen extends StatelessWidget {
                     viewportFraction: 0.8,
                   ),
                   items: [
-                    ProfileCard(
-                      urlImage: 'lib/assets/profile_amaotech.jpg',
-                      title: 'AMAO Tech',
-                      subTitle: 'Startup P&D',
-                      description:
-                          'Somos uma startup de Pesquisa e Desenvolvimento focada em utilizar tecnologia de ponta para otimizar processos e soluções na região amazônica',
-                      icons: [FontAwesomeIcons.instagram],
-                      redirectUrls: ['https://www.instagram.com/amao.tech/'],
-                      iconColors: [Color.fromARGB(255, 188, 42, 141)],
-                    ),
+                    
                     ProfileCard(
                       urlImage: 'lib/assets/profile_henriquebarkett.jpg',
                       title: 'Henrique Barkett',
@@ -144,8 +135,10 @@ class AboutScreen extends StatelessWidget {
                       ],
                       iconColors: [Colors.black, Colors.blue],
                     ),
+                    
                   ],
                 ),
+                */
                 SizedBox(
                   height: 16,
                 ),

@@ -13,10 +13,41 @@ import 'package:aurb/screens/notifications/sidewalks_screen.dart';
 import 'package:aurb/screens/notifications/sinalization_screen.dart';
 import 'package:aurb/screens/notifications/streets_screen.dart';
 import 'package:aurb/authentication/screens/user_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  final User user;
+  NavigationDrawerWidget({super.key, required this.user});
+
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  Map<String, dynamic> _userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserDataFromFirebase();
+  }
+
+  Future<void> fetchUserDataFromFirebase() async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (snapshot.exists) {
+      setState(() {
+        _userData = snapshot.data()!;
+      });
+    }
+  }
+
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+
   final AuthService authService = AuthService();
 
   Future<void> handleLogout(BuildContext context) async {
@@ -36,18 +67,16 @@ class NavigationDrawerWidget extends StatelessWidget {
     }
   }
 
-  NavigationDrawerWidget({super.key});
   @override
   Widget build(BuildContext context) {
-    const name = 'Nome do Usuário';
-    const email = 'usuario@gmail.com';
-    const urlImage = 'lib/assets/perfil2.png';
-    const cel = '(xx) x xxxx-xxxx';
-    const genero = 'Masculino';
-    const cep = 'xxxxxx-xxx';
-    const endereco = 'Rua ou avenida, número';
-    const bairro = 'Santa Terezinha';
-    const cidadeEstado = 'Manaus, Amazonas';
+    String name = _userData['name'] ?? '';
+    String email = widget.user.email!;
+    String urlImage = 'lib/assets/perfil2.png';
+    String cel = _userData['phone'] ?? '';
+    String cep = _userData['cep'] ?? '';
+    String endereco = _userData['street'] ?? '';
+    String bairro = _userData['neighborhood'] ?? '';
+    String cidadeEstado = "${_userData['city']}, ${_userData['state']}";
 
     return Drawer(
       child: Material(
@@ -59,13 +88,12 @@ class NavigationDrawerWidget extends StatelessWidget {
               name: name,
               email: email,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const UserScreen(
+                builder: (context) => UserScreen(
                   name: name,
                   urlImage: urlImage,
                   email: email,
                   cel: cel,
                   cep: cep,
-                  genero: genero,
                   endereco: endereco,
                   bairro: bairro,
                   cidadeEstado: cidadeEstado,
@@ -182,24 +210,37 @@ class NavigationDrawerWidget extends StatelessWidget {
           children: [
             CircleAvatar(radius: 30, backgroundImage: AssetImage(urlImage)),
             const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 20, color: Colors.grey[900]),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  email,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[900]),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _truncateText(name, 20), // Limita o nome a 20 caracteres
+                    style: TextStyle(fontSize: 20, color: Colors.grey[900]),
+                  ),
+                  const SizedBox(height: 4),
+                  Tooltip(
+                    message: email, // Exibe o e-mail completo ao passar o mouse
+                    child: Text(
+                      _truncateText(
+                          email, 30), // Limita o e-mail a 30 caracteres
+                      style: TextStyle(fontSize: 14, color: Colors.grey[900]),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _truncateText(String text, int maxLength) {
+    if (text.length > maxLength) {
+      return '${text.substring(0, maxLength)}...';
+    }
+    return text;
   }
 
   Widget buildMenuItem({

@@ -103,11 +103,6 @@ class WelcomeScreen extends StatelessWidget {
                             textSize: 16,
                           ),
                           SizedBox(height: 16),
-                          MyTextButton(
-                            onTap: () {},
-                            text: 'Notificação Anônima',
-                            textSize: 16,
-                          ),
                         ],
                       ),
                     ),

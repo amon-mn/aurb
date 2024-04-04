@@ -29,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
 
   // Global Keys
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -97,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 136),
                 MyCard(
                   width: MediaQuery.sizeOf(context).width,
-                  height: MediaQuery.sizeOf(context).height + 38,
+                  height: MediaQuery.sizeOf(context).height + 98,
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -185,7 +186,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             filter: {"#": RegExp(r'[0-9]')},
                             type: MaskAutoCompletionType.lazy,
                           ),
-
                           suffixIcon: Icons.search,
                           //onSuffixIconPressed: () => _autoFillAddress(context),
                           controller: _cepController,
@@ -297,6 +297,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _neighborhoodController;
     final TextEditingController cityController = _cityController;
     final TextEditingController stateController = _stateController;
+    final TextEditingController phoneController =
+        _phoneController; // Novo campo
+    final TextEditingController genderController =
+        _genderController; // Novo campo
 
     final GlobalKey<FormState> formKey = _formKey;
 
@@ -311,6 +315,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           city: cityController.text,
           street: streetController.text,
           neighborhood: neighborhoodController.text,
+          phone: phoneController.text, // Passando o valor do telefone
         ).then((String? error) {
           if (error != null) {
             showSnackBar(context: context, mensagem: error);
@@ -356,6 +361,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String city,
     required String street,
     required String neighborhood,
+    required String phone, // Novo parâmetro
   }) async {
     try {
       final AuthService authService = AuthService();
@@ -369,6 +375,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         city: city,
         street: street,
         neighborhood: neighborhood,
+        phone: phone, // Passando o valor do telefone
       );
     } catch (error) {
       return error.toString();
