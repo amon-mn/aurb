@@ -9,7 +9,7 @@ class TrafficLaneWidget extends StatelessWidget {
     double spaceBetweenLanes = screenWidth * 0.05; // 5% da largura da tela
 
     return Container(
-      height: 160.0, // Ajuste a altura conforme necessário
+      height: 163.0, // Ajuste a altura conforme necessário
       // Cor de fundo da faixa de trânsito
       child: Row(
         children: [

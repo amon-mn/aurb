@@ -1,4 +1,4 @@
-import 'package:aurb/authentication/screens/notification_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {

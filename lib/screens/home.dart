@@ -1,16 +1,16 @@
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:aurb/components/menu_card.dart';
 import 'package:aurb/components/navigation_drawer.dart';
-import 'package:aurb/screens/notifications/accessibility_screen.dart';
-import 'package:aurb/screens/notifications/bus_terminal_screen.dart';
-import 'package:aurb/screens/notifications/construction_screen.dart';
-import 'package:aurb/screens/notifications/obstructions_screen.dart';
-import 'package:aurb/screens/notifications/other_notifications.dart';
-import 'package:aurb/screens/notifications/public_space.dart';
-import 'package:aurb/screens/notifications/public_transport_screen.dart';
-import 'package:aurb/screens/notifications/sidewalks_screen.dart';
-import 'package:aurb/screens/notifications/sinalization_screen.dart';
-import 'package:aurb/screens/notifications/streets_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/accessibility_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/bus_terminal_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/construction_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/obstructions_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/other_notifications.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/public_space.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/public_transport_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/sidewalks_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/sinalization_screen.dart';
+import 'package:aurb/firestore_notifications/screens/notifications/streets_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

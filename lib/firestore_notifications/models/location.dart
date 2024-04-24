@@ -1,11 +1,11 @@
 class Location {
-  String endereco;
+  String? endereco;
   String? foto;
   double latitude;
   double longitude;
 
   Location({
-    required this.endereco,
+    this.endereco,
     this.foto,
     required this.latitude,
     required this.longitude,

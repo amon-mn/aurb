@@ -47,7 +47,8 @@ class NotificationPage extends StatelessWidget {
                         ),
                         _buildCard(
                           title: 'Acessibilidade 001',
-                          subtitle: 'Falta de rampa de acesso calçadas - Não Iniciado',
+                          subtitle:
+                              'Falta de rampa de acesso calçadas - Não Iniciado',
                         ),
                       ],
                     ),

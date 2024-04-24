@@ -1,7 +1,11 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/components/show_snackbar.dart';
+import 'package:aurb/firestore_notifications/models/location.dart';
+import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
+import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:aurb/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +13,7 @@ import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AccessibilityPage extends StatefulWidget {
   const AccessibilityPage({super.key});
@@ -18,7 +23,8 @@ class AccessibilityPage extends StatefulWidget {
 }
 
 class _AccessibilityPageState extends State<AccessibilityPage> {
-  final TextEditingController _controller = TextEditingController();
+  NotificationService notificationService = NotificationService();
+  final TextEditingController _descriptionController = TextEditingController();
 
   ValueNotifier<String> selectedAcessibility =
       ValueNotifier<String>('Selecione');
@@ -56,6 +62,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
   GoogleMapController? _mapController;
   LatLng _center = const LatLng(-23.550520, -46.633308); // Initial map center
   bool isMapFullScreen = false;
+  double _latNotification = 0.0;
+  double _longNotification = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +125,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       const SizedBox(height: 4),
                       MyTextFieldWrapper(
                         hintText: 'Digite sua mensagem',
-                        controller: _controller,
+                        controller: _descriptionController,
                         obscureText: false,
                       ),
                       const SizedBox(height: 24),
@@ -162,27 +170,47 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       builder: (context) {
                                         final local = context.watch<
                                             NotificationLocationController>();
-                                        return GoogleMap(
-                                          initialCameraPosition: CameraPosition(
-                                            target: LatLng(-3.100055312439282,
-                                                -59.97655211153541),
-                                            zoom: 18.0,
-                                          ),
-                                          zoomControlsEnabled: true,
-                                          mapType: MapType.normal,
-                                          onMapCreated: local.onMapCreated,
-                                          markers: {
-                                            Marker(
-                                              markerId: MarkerId("MarkerId"),
-                                              position:
-                                                  LatLng(local.lat, local.long),
-                                              infoWindow: const InfoWindow(
-                                                  title: "Sua Localização"),
-                                              icon: BitmapDescriptor
-                                                  .defaultMarker,
+                                        if (local.error == "") {
+                                          local.getPosition();
+                                          _latNotification = local.lat;
+                                          _longNotification = local.long;
+                                          return GoogleMap(
+                                            initialCameraPosition:
+                                                CameraPosition(
+                                              target: LatLng(-3.100055312439282,
+                                                  -59.97655211153541),
+                                              zoom: 18.0,
                                             ),
-                                          },
-                                        );
+                                            zoomControlsEnabled: true,
+                                            mapType: MapType.normal,
+                                            onMapCreated: local.onMapCreated,
+                                            markers: {
+                                              Marker(
+                                                markerId: MarkerId("MarkerId"),
+                                                position: LatLng(
+                                                    local.lat, local.long),
+                                                infoWindow: const InfoWindow(
+                                                    title: "Sua Localização"),
+                                                icon: BitmapDescriptor
+                                                    .defaultMarker,
+                                              ),
+                                            },
+                                          );
+                                        } else {
+                                          // Caso haja erro, exibir a mensagem de erro
+                                          return Container(
+                                            alignment: Alignment.topLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              local.error,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[900],
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       },
                                     ),
                                   ),
@@ -192,29 +220,6 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                           ],
                         ),
                       ),
-
-                      /*
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: const SizedBox(
-                            height: 240,
-                            width: 414,
-                            child: Image(
-                              image: AssetImage('lib/assets/gps.png'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      */
                       const SizedBox(height: 24),
                       Container(
                         alignment: Alignment.topLeft,
@@ -375,14 +380,30 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                 colorButton: Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeScreen(
-                                        user:
-                                            FirebaseAuth.instance.currentUser!,
-                                      ),
+                                  UserNotification notification =
+                                      UserNotification(
+                                    id: Uuid().v4(),
+                                    descricao: _descriptionController.text,
+                                    tipo: selectedAcessibility.value,
+                                    risco: selectedRisco.value,
+                                    data: selectedDate,
+                                    loc: Location(
+                                      latitude: _latNotification,
+                                      longitude: _longNotification,
                                     ),
+                                  );
+
+                                  // Adicione a notificação utilizando o serviço de gerenciamento
+                                  notificationService.addNotification(
+                                      notification: notification);
+
+                                  // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
+                                  Navigator.pop(context);
+                                  showSnackBar(
+                                    context: context,
+                                    mensagem:
+                                        'Notificação enviada com sucesso.',
+                                    isErro: false,
                                   );
                                 },
                                 textButton: 'Enviar',
