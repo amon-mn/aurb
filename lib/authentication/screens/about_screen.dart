@@ -84,15 +84,18 @@ class AboutScreen extends StatelessWidget {
                 SizedBox(
                   height: 16,
                 ),
-                ProfileCard(
-                  urlImage: 'lib/assets/profile_amaotech.jpg',
-                  title: 'AMAO Tech',
-                  subTitle: 'Startup P, D & I',
-                  description:
-                      'Somos uma startup de Pesquisa e Desenvolvimento focada em utilizar tecnologia de ponta para otimizar processos e soluções na região amazônica',
-                  icons: [FontAwesomeIcons.instagram],
-                  redirectUrls: ['https://www.instagram.com/amao.tech/'],
-                  iconColors: [Color.fromARGB(255, 188, 42, 141)],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: ProfileCard(
+                    urlImage: 'lib/assets/profile_amaotech.jpg',
+                    title: 'AMAO Tech',
+                    subTitle: 'Startup P, D & I',
+                    description:
+                        'Somos uma startup de Pesquisa e Desenvolvimento focada em utilizar tecnologia de ponta para otimizar processos e soluções na região amazônica',
+                    icons: [FontAwesomeIcons.instagram],
+                    redirectUrls: ['https://www.instagram.com/amao.tech/'],
+                    iconColors: [Color.fromARGB(255, 188, 42, 141)],
+                  ),
                 ),
                 /*
                 CarouselSlider(
