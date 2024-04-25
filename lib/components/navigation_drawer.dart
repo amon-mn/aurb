@@ -265,48 +265,57 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
     switch (index) {
       case 0:
+        String title = 'Sinalização';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SinalizationPage(),
+          builder: (context) => SinalizationPage(tipo: title),
         ));
         break;
       case 1:
+        String title = 'Calçamento';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SidewalksPage(),
+          builder: (context) => SidewalksPage(tipo: title),
         ));
         break;
       case 2:
+        String title = 'Ruas e Avenidas';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => StreetsPage(),
+          builder: (context) => StreetsPage(tipo: title),
         ));
         break;
       case 3:
+        String title = 'Acessibilidade';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AccessibilityPage(),
+          builder: (context) => AccessibilityPage(tipo: title),
         ));
         break;
       case 4:
+        String title = 'Terminais de Ônibus';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BusTerminalPage(),
+          builder: (context) => BusTerminalPage(tipo: title),
         ));
         break;
       case 5:
+        String title = 'Transporte Público';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PublicTransportPage(),
+          builder: (context) => PublicTransportPage(tipo: title),
         ));
         break;
       case 6:
+        String title = 'Obras';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ConstructionPage(),
+          builder: (context) => ConstructionPage(tipo: title),
         ));
         break;
       case 7:
+        String title = 'Obstruções Temporárias';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ObstructionsPage(),
+          builder: (context) => ObstructionsPage(tipo: title),
         ));
         break;
       case 8:
+        String title = 'Uso do Espaço Público';
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PublicSpacePage(),
+          builder: (context) => PublicSpacePage(tipo: title),
         ));
         break;
       case 9:

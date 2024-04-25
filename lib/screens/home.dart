@@ -39,92 +39,119 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           itemBuilder: (context, index) {
             if (index == 0) {
+              String title = 'Sinalização';
               return MenuCard(
                   imagePath: 'lib/assets/sinalization.png',
                   title: 'Sinalização',
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SinalizationPage(),
+                      builder: (context) => SinalizationPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 1) {
+              String title = 'Calçamento';
               return MenuCard(
                   imagePath: 'lib/assets/sidewalk.png',
-                  title: 'Calçamento',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SidewalksPage(),
+                      builder: (context) => SidewalksPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 2) {
+              String title = 'Ruas e Avenidas';
               return MenuCard(
                   imagePath: 'lib/assets/street.png',
-                  title: 'Ruas e Avenidas',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => StreetsPage(),
+                      builder: (context) => StreetsPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 3) {
+              String title = 'Acessibilidade';
               return MenuCard(
                   imagePath: 'lib/assets/accessibility.png',
-                  title: 'Acessibilidade',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AccessibilityPage(),
+                      builder: (context) => AccessibilityPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 4) {
+              String title = 'Terminais de Ônibus';
               return MenuCard(
                   imagePath: 'lib/assets/bus_stop.png',
                   title: 'Terminais de Ônibus',
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BusTerminalPage(),
+                      builder: (context) => BusTerminalPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 5) {
+              String title = 'Transporte Público';
               return MenuCard(
                   imagePath: 'lib/assets/bus.png',
-                  title: 'Transporte Público',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PublicTransportPage(),
+                      builder: (context) => PublicTransportPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 6) {
+              String title = 'Obras';
               return MenuCard(
                   imagePath: 'lib/assets/asphalt.png',
-                  title: 'Obras',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ConstructionPage(),
+                      builder: (context) => ConstructionPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 7) {
+              String title = 'Obstruções Temporárias';
               return MenuCard(
                   imagePath: 'lib/assets/traffic_guard.png',
-                  title: 'Obstruções Temporárias',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ObstructionsPage(),
+                      builder: (context) => ObstructionsPage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }
             if (index == 8) {
+              String title = 'Uso do Espaço Público';
               return MenuCard(
                   imagePath: 'lib/assets/construction.png',
-                  title: 'Uso do Espaço Público',
+                  title: title,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PublicSpacePage(),
+                      builder: (context) => PublicSpacePage(
+                        tipo: title,
+                      ),
                     ));
                   });
             }

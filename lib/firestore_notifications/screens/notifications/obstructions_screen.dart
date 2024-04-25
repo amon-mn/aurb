@@ -1,23 +1,30 @@
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
+import 'package:aurb/components/show_snackbar.dart';
+import 'package:aurb/firestore_notifications/models/location.dart';
+import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
-import 'package:aurb/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ObstructionsPage extends StatefulWidget {
-  const ObstructionsPage({super.key});
+  final String tipo;
+  const ObstructionsPage({super.key, required this.tipo});
 
   @override
   _ObstructionsPageState createState() => _ObstructionsPageState();
 }
 
 class _ObstructionsPageState extends State<ObstructionsPage> {
+  NotificationService notificationService = NotificationService();
+  double _latNotification = 0.0;
+  double _longNotification = 0.0;
   final TextEditingController _controller = TextEditingController();
 
   ValueNotifier<String> selectedObstruction =
@@ -155,27 +162,45 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                     builder: (context) {
                                       final local = context.watch<
                                           NotificationLocationController>();
-                                      return GoogleMap(
-                                        initialCameraPosition: CameraPosition(
-                                          target: LatLng(-3.100055312439282,
-                                              -59.97655211153541),
-                                          zoom: 18.0,
-                                        ),
-                                        zoomControlsEnabled: true,
-                                        mapType: MapType.normal,
-                                        onMapCreated: local.onMapCreated,
-                                        markers: {
-                                          Marker(
-                                            markerId: MarkerId("MarkerId"),
-                                            position:
-                                                LatLng(local.lat, local.long),
-                                            infoWindow: const InfoWindow(
-                                                title: "Sua Localização"),
-                                            icon:
-                                                BitmapDescriptor.defaultMarker,
+                                      if (local.error == "") {
+                                        _latNotification = local.lat;
+                                        _longNotification = local.long;
+                                        return GoogleMap(
+                                          initialCameraPosition: CameraPosition(
+                                            target: LatLng(-3.100055312439282,
+                                                -59.97655211153541),
+                                            zoom: 18.0,
                                           ),
-                                        },
-                                      );
+                                          zoomControlsEnabled: true,
+                                          mapType: MapType.normal,
+                                          onMapCreated: local.onMapCreated,
+                                          markers: {
+                                            Marker(
+                                              markerId: MarkerId("MarkerId"),
+                                              position: LatLng(_latNotification,
+                                                  _longNotification),
+                                              infoWindow: const InfoWindow(
+                                                  title: "Sua Localização"),
+                                              icon: BitmapDescriptor
+                                                  .defaultMarker,
+                                            ),
+                                          },
+                                        );
+                                      } else {
+                                        // Caso haja erro, exibir a mensagem de erro
+                                        return Container(
+                                          alignment: Alignment.topLeft,
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            local.error,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey[900],
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -342,13 +367,31 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                               colorButton: Color.fromARGB(255, 121, 182, 76),
                               textSize: 14,
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(
-                                      user: FirebaseAuth.instance.currentUser!,
-                                    ),
+                                UserNotification notification =
+                                    UserNotification(
+                                  id: Uuid().v4(),
+                                  descricao: _controller.text,
+                                  tipo: widget.tipo,
+                                  natureza: selectedObstruction.value,
+                                  risco: selectedRisco.value,
+                                  data: selectedDate,
+                                  loc: Location(
+                                    latitude: _latNotification,
+                                    longitude: _longNotification,
                                   ),
+                                  status: "Não Iniciado",
+                                );
+
+                                // Adicione a notificação utilizando o serviço de gerenciamento
+                                notificationService.addNotification(
+                                    notification: notification);
+
+                                // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
+                                Navigator.pop(context);
+                                showSnackBar(
+                                  context: context,
+                                  mensagem: 'Notificação enviada com sucesso.',
+                                  isErro: false,
                                 );
                               },
                               textButton: 'Enviar',

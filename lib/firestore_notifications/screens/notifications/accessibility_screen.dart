@@ -6,8 +6,6 @@ import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
-import 'package:aurb/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -16,7 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class AccessibilityPage extends StatefulWidget {
-  const AccessibilityPage({super.key});
+  final String tipo;
+  const AccessibilityPage({super.key, required this.tipo});
 
   @override
   _AccessibilityPageState createState() => _AccessibilityPageState();
@@ -171,7 +170,6 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                         final local = context.watch<
                                             NotificationLocationController>();
                                         if (local.error == "") {
-                                          local.getPosition();
                                           _latNotification = local.lat;
                                           _longNotification = local.long;
                                           return GoogleMap(
@@ -188,7 +186,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                               Marker(
                                                 markerId: MarkerId("MarkerId"),
                                                 position: LatLng(
-                                                    local.lat, local.long),
+                                                    _latNotification,
+                                                    _longNotification),
                                                 infoWindow: const InfoWindow(
                                                     title: "Sua Localização"),
                                                 icon: BitmapDescriptor
@@ -384,13 +383,15 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       UserNotification(
                                     id: Uuid().v4(),
                                     descricao: _descriptionController.text,
-                                    tipo: selectedAcessibility.value,
+                                    tipo: widget.tipo,
+                                    natureza: selectedAcessibility.value,
                                     risco: selectedRisco.value,
                                     data: selectedDate,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
                                     ),
+                                    status: "Não Iniciado",
                                   );
 
                                   // Adicione a notificação utilizando o serviço de gerenciamento
