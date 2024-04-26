@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:aurb/components/my_textfield.dart';
@@ -6,10 +8,12 @@ import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -55,8 +59,60 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
     'Extremo',
   ];
 
-  GoogleMapController? _mapController;
-  LatLng _center = const LatLng(-23.550520, -46.633308); // Initial map center
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  ValueNotifier<bool> isUploadingNotifier = ValueNotifier<bool>(false);
+  ValueNotifier<int> numberOfImagesSelectedNotifier = ValueNotifier<int>(0);
+  List<XFile> selectedImages = [];
+  bool uploading = false;
+  double progress = 0.0;
+
+  Future<XFile?> getImage() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  Future<void> upload(XFile file) async {
+    isUploadingNotifier.value = true;
+    String ref = 'images/img-${DateTime.now().toString()}.jpeg';
+    Reference storageRef = FirebaseStorage.instance.ref().child(ref);
+
+    UploadTask task = storageRef.putFile(
+      File(file.path),
+      SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {
+          'user': '123',
+        },
+      ),
+    );
+    task.snapshotEvents.listen((TaskSnapshot snapshot) {
+      if (snapshot.state == TaskState.running) {
+        setState(() {
+          uploading = true;
+          progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        });
+      } else if (snapshot.state == TaskState.success) {
+        setState(() {
+          uploading = false;
+          progress = 100.0;
+          // Incrementa o contador de imagens enviadas com sucesso
+          int currentCount = numberOfImagesSelectedNotifier.value;
+          numberOfImagesSelectedNotifier.value = currentCount + 1;
+        });
+      }
+    });
+    await task;
+    isUploadingNotifier.value = false;
+  }
+
+  void pickAndUploadImage() async {
+    XFile? file = await getImage();
+    if (file != null) {
+      await upload(file);
+    }
+  } // Initial map center
+
   bool isMapFullScreen = false;
 
   @override
@@ -288,40 +344,82 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Icon(
-                          Icons.camera_alt,
-                          size: 30,
-                        ),
-                        SizedBox(width: 2),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            'Anexar Imagens',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[900],
-                            ),
+                        GestureDetector(
+                          onTap: () async {
+                            pickAndUploadImage();
+                          },
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: isUploadingNotifier,
+                            builder: (context, isUploading, child) {
+                              return Row(
+                                children: [
+                                  if (isUploading)
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: SizedBox(
+                                        width: 15,
+                                        height: 15,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Icon(
+                                      Icons.camera_alt,
+                                      size: 30,
+                                    ),
+                                  SizedBox(width: 2),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      isUploading
+                                          ? '${progress.round()}% enviado'
+                                          : 'Anexar Imagens',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[900],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                         SizedBox(width: 16),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.black,
                               ),
                               borderRadius: BorderRadius.circular(16.0),
                             ),
-                            child: SizedBox(
-                              height: 22,
-                              width: 48,
-                              child: Center(
-                                child: Text('6'),
-                              ),
+                            child: ValueListenableBuilder<int>(
+                              valueListenable: numberOfImagesSelectedNotifier,
+                              builder: (context, value, child) {
+                                return SizedBox(
+                                  height: 22,
+                                  width: 48,
+                                  child: Center(
+                                    child: Text(
+                                      '$value',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[900],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
