@@ -5,11 +5,11 @@ class MyRow extends StatelessWidget {
   final IconData? icon;
 
   const MyRow({
-    Key? key,
+    super.key,
     required this.title,
     this.icon,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +25,25 @@ class MyRow extends StatelessWidget {
             ),
             child: ListTile(
               contentPadding:
-                  EdgeInsets.all(0), // Remove o preenchimento padrão
+                  const EdgeInsets.all(0), // Remove o preenchimento padrão
               leading: Icon(icon),
               title: Text(
                 title,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     value,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
             ),
           ),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }

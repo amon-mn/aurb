@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TrafficLaneWidget extends StatelessWidget {
-  const TrafficLaneWidget({Key? key});
+  const TrafficLaneWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double spaceBetweenLanes = screenWidth * 0.05; // 5% da largura da tela
 
-    return Container(
+    return SizedBox(
       height: 163.0, // Ajuste a altura conforme necessário
       // Cor de fundo da faixa de trânsito
       child: Row(
@@ -51,13 +50,13 @@ class DashedLine extends StatelessWidget {
   final double height;
   final double width;
 
-  DashedLine({required this.color, required this.height, required this.width});
+  const DashedLine({Key? key, required this.color, required this.height, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: DashedLinePainter(color),
-      child: Container(
+      child: SizedBox(
         height: height,
         width: width,
       ),

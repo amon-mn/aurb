@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_config/flutter_config.dart';
-
 import 'firebase_options.dart';
 
 Future main() async {
@@ -21,7 +20,7 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +41,8 @@ class MyApp extends StatelessWidget {
       900: Color(0xFFB3B3B3), // Darkest shade
     },
   );
+
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -80,7 +81,7 @@ class AuthPage extends StatelessWidget {
 class HomeScreenNavigator extends StatelessWidget {
   final User user;
 
-  const HomeScreenNavigator({Key? key, required this.user}) : super(key: key);
+  const HomeScreenNavigator({Key? key, required this.user});
 
   @override
   Widget build(BuildContext context) {

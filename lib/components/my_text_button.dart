@@ -6,11 +6,10 @@ class MyTextButton extends StatefulWidget {
   final double textSize;
 
   const MyTextButton(
-      {Key? key,
+      {super.key,
       required this.onTap,
       required this.text,
-      required this.textSize})
-      : super(key: key);
+      required this.textSize});
 
   @override
   _MyTextButtonState createState() => _MyTextButtonState();

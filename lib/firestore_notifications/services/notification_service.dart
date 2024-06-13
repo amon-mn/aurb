@@ -3,13 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NotificationService {
-  String user_id = FirebaseAuth.instance.currentUser!.uid;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> addNotification({required UserNotification notification}) async {
     return firestore
         .collection('users')
-        .doc(user_id)
+        .doc(userId)
         .collection('notifications')
         .doc(notification.id)
         .set(notification.toMap());
@@ -20,7 +20,7 @@ class NotificationService {
 
     QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
         .collection('users')
-        .doc(user_id)
+        .doc(userId)
         .collection('notifications')
         .get();
 
@@ -34,7 +34,7 @@ class NotificationService {
   Future<void> removeNotification({required String notificationId}) async {
     return firestore
         .collection('users')
-        .doc(user_id)
+        .doc(userId)
         .collection('notifications')
         .doc(notificationId)
         .delete();

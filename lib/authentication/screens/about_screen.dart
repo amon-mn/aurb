@@ -1,11 +1,10 @@
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,37 +20,37 @@ class AboutScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
-                Text(
+                const Text(
                   'Idealização:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 72.0),
                   child: Divider(),
                 ),
-                Text(
+                const Text(
                   'Prof. Marcos Castro de Lima',
                   style: TextStyle(fontSize: 16.0),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
-                Text(
+                const Text(
                   'Prof. Jaisson Miyosi Oka',
                   style: TextStyle(fontSize: 16.0),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
-                Text(
+                const Text(
                   'Parceria:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 72.0),
                   child: Divider(),
                 ),
                 Row(
@@ -62,7 +61,7 @@ class AboutScreen extends StatelessWidget {
                       width: 70,
                       height: 70,
                     ),
-                    SizedBox(width: 32),
+                    const SizedBox(width: 32),
                     Image.asset(
                       'lib/assets/tce_logo.png', // Substitua pelo caminho da segunda imagem
                       width: 75,
@@ -70,22 +69,22 @@ class AboutScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
-                Text(
+                const Text(
                   'Desenvolvimento:',
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 72.0),
                   child: Divider(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.0),
                   child: ProfileCard(
                     urlImage: 'lib/assets/profile_amaotech.jpg',
                     title: 'AMAO Tech',
@@ -142,7 +141,7 @@ class AboutScreen extends StatelessWidget {
                   ],
                 ),
                 */
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
               ],
@@ -163,7 +162,7 @@ class ProfileCard extends StatelessWidget {
   final List<Color> iconColors;
   final List<IconData> icons; // Adicionado o parâmetro para os ícones
 
-  ProfileCard({
+  const ProfileCard({super.key, 
     required this.urlImage,
     required this.title,
     required this.subTitle,
@@ -188,26 +187,26 @@ class ProfileCard extends StatelessWidget {
               radius: 60.0,
               backgroundImage: AssetImage(urlImage),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               title,
-              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
             ),
             Text(
               subTitle,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               description,
-              style: TextStyle(fontSize: 11.0),
+              style: const TextStyle(fontSize: 11.0),
               textAlign: TextAlign.justify,
             ),
-            Divider(),
-            SizedBox(height: 16.0),
+            const Divider(),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -237,7 +236,7 @@ class RoundedSocialIcon extends StatelessWidget {
   final Color backgroundColor;
   final String redirectUrl;
 
-  RoundedSocialIcon({
+  const RoundedSocialIcon({super.key, 
     required this.icon,
     required this.backgroundColor,
     required this.redirectUrl,
@@ -250,7 +249,7 @@ class RoundedSocialIcon extends StatelessWidget {
         _launchURL(redirectUrl);
       },
       child: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: backgroundColor,

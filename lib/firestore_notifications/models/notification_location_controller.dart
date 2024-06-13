@@ -7,12 +7,14 @@ class NotificationLocationController extends ChangeNotifier {
   double lat = 0.0;
   double long = 0.0;
   String error = '';
-  late GoogleMapController _mapsController;
+  GoogleMapController? _mapsController;
+  bool _disposed = false; // Adiciona uma variável para rastrear se foi descartado
 
-  get mapsController => _mapsController;
+  GoogleMapController? get mapsController => _mapsController;
+
   onMapCreated(GoogleMapController gmc) async {
     _mapsController = gmc;
-    getPosition();
+    await getPosition();
   }
 
   getPosition() async {
@@ -20,11 +22,15 @@ class NotificationLocationController extends ChangeNotifier {
       Position position = await _currentPosition();
       lat = position.latitude;
       long = position.longitude;
-      _mapsController.animateCamera(CameraUpdate.newLatLng(LatLng(lat, long)));
+      if (_mapsController != null && !_disposed) {
+        _mapsController!.animateCamera(CameraUpdate.newLatLng(LatLng(lat, long)));
+      }
     } catch (e) {
       error = e.toString();
     }
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   Future<Position> _currentPosition() async {
@@ -48,6 +54,12 @@ class NotificationLocationController extends ChangeNotifier {
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true; // Marca como descartado antes de chamar o super.dispose()
+    super.dispose();
   }
 }
 */

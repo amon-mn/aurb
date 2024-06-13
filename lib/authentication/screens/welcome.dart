@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              Positioned(
+              const Positioned(
                 top: 142,
                 child: TrafficLaneWidget(),
               ),
@@ -74,19 +74,19 @@ class WelcomeScreen extends StatelessWidget {
                                   bottomRight: Radius.circular(200)),
                             ),
                             padding: const EdgeInsets.all(24.0),
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('lib/assets/traffic_lane.png'),
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           MyTextButton(
                             onTap: () {
                               // Use o Navigator para navegar para a página home.dart
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
+                                      builder: (context) => const LoginScreen()));
                             },
                             text: 'Entrar',
                             textSize: 36,
@@ -102,7 +102,7 @@ class WelcomeScreen extends StatelessWidget {
                             text: 'Cadastrar',
                             textSize: 16,
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),
