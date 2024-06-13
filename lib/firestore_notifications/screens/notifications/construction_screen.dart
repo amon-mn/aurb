@@ -8,8 +8,6 @@ import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
-import 'package:aurb/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
@@ -67,8 +65,8 @@ class _ConstructionPageState extends State<ConstructionPage> {
   double progress = 0.0;
 
   Future<XFile?> getImage() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
     return image;
   }
 
@@ -222,7 +220,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                         _latNotification = local.lat;
                                         _longNotification = local.long;
                                         return GoogleMap(
-                                          initialCameraPosition: CameraPosition(
+                                          initialCameraPosition: const CameraPosition(
                                             target: LatLng(-3.100055312439282,
                                                 -59.97655211153541),
                                             zoom: 18.0,
@@ -232,7 +230,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                           onMapCreated: local.onMapCreated,
                                           markers: {
                                             Marker(
-                                              markerId: MarkerId("MarkerId"),
+                                              markerId: const MarkerId("MarkerId"),
                                               position: LatLng(_latNotification,
                                                   _longNotification),
                                               infoWindow: const InfoWindow(
@@ -246,7 +244,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                         // Caso haja erro, exibir a mensagem de erro
                                         return Container(
                                           alignment: Alignment.topLeft,
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding: const EdgeInsets.only(left: 10),
                                           child: Text(
                                             local.error,
                                             style: TextStyle(
@@ -354,9 +352,9 @@ class _ConstructionPageState extends State<ConstructionPage> {
                               return Row(
                                 children: [
                                   if (isUploading)
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.only(right: 16.0),
+                                          EdgeInsets.only(right: 16.0),
                                       child: SizedBox(
                                         width: 15,
                                         height: 15,
@@ -367,11 +365,11 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                       ),
                                     )
                                   else
-                                    Icon(
+                                    const Icon(
                                       Icons.camera_alt,
                                       size: 30,
                                     ),
-                                  SizedBox(width: 2),
+                                  const SizedBox(width: 2),
                                   Container(
                                     alignment: Alignment.topLeft,
                                     padding: const EdgeInsets.only(left: 10),
@@ -391,7 +389,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
                             },
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: Container(
@@ -432,7 +430,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
                         Expanded(
                           flex: 1,
                           child: Switch(
-                            activeColor: Color.fromARGB(255, 121, 182, 76),
+                            activeColor: const Color.fromARGB(255, 121, 182, 76),
                             value: isSwitched,
                             onChanged: (value) {
                               setState(() {
@@ -462,12 +460,12 @@ class _ConstructionPageState extends State<ConstructionPage> {
                           child: SizedBox(
                             height: 40,
                             child: MyButton(
-                              colorButton: Color.fromARGB(255, 121, 182, 76),
+                              colorButton: const Color.fromARGB(255, 121, 182, 76),
                               textSize: 14,
                               onTap: () {
                                 UserNotification notification =
                                     UserNotification(
-                                  id: Uuid().v4(),
+                                  id: const Uuid().v4(),
                                   descricao: _controller.text,
                                   tipo: widget.tipo,
                                   natureza: selectedConstruction.value,

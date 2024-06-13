@@ -9,14 +9,14 @@ class MyButton extends StatefulWidget {
   final double? paddingButton;
 
   const MyButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.textButton,
     required this.textSize,
     required this.colorButton,
     this.paddingButton,
     this.isRed = false, // Valor padrão para isRed
-  }) : super(key: key);
+  });
 
   @override
   _MyButtonState createState() => _MyButtonState();

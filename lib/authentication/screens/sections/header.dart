@@ -5,7 +5,7 @@ class Header extends StatelessWidget {
   final IconData? customIcon;
   final Function()? customOnPressed;
 
-  Header({this.customIcon, this.customOnPressed});
+  const Header({super.key, this.customIcon, this.customOnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +43,15 @@ class Header extends StatelessWidget {
                         Container(
                           width: 42,
                           height: 42,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.amber,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(width: 10),
-                    Column(
+                    const SizedBox(width: 10),
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -84,7 +84,7 @@ class Header extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.mail,
               color: Colors.black,
               size: 28,
@@ -92,7 +92,7 @@ class Header extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
+                MaterialPageRoute(builder: (context) => const NotificationPage()),
               );
             },
           ),

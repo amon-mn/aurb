@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
   final User user;
-  NavigationDrawerWidget({super.key, required this.user});
+  const NavigationDrawerWidget({super.key, required this.user});
 
   @override
   State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
@@ -57,7 +57,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ((value) {
           // Após o logout ser concluído, navega para a tela WelcomeScreen()
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
           );
         }),
       );
@@ -320,7 +320,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         break;
       case 9:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => OtherNotificationsPage(),
+          builder: (context) => const OtherNotificationsPage(),
         ));
         break;
       case 10:
@@ -333,12 +333,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         break;
       case 12:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => WelcomeScreen(),
+          builder: (context) => const WelcomeScreen(),
         ));
         break;
       case 13:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AboutScreen(),
+          builder: (context) => const AboutScreen(),
         ));
         break;
     }

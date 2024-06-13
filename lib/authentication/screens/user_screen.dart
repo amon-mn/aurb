@@ -13,7 +13,7 @@ class UserScreen extends StatefulWidget {
   final String cidadeEstado;
 
   const UserScreen({
-    Key? key,
+    super.key,
     required this.name,
     required this.urlImage,
     required this.email,
@@ -22,7 +22,7 @@ class UserScreen extends StatefulWidget {
     required this.endereco,
     required this.bairro,
     required this.cidadeEstado,
-  }) : super(key: key);
+  });
 
   @override
   State<UserScreen> createState() => _UserScreenState();
@@ -53,7 +53,7 @@ class _UserScreenState extends State<UserScreen> {
                       width: 80,
                       height: 80,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Padding(
@@ -63,7 +63,7 @@ class _UserScreenState extends State<UserScreen> {
                         children: [
                           Text(
                             widget.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
                           ),
                           Text(
                             widget.email,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                             ),
@@ -82,50 +82,50 @@ class _UserScreenState extends State<UserScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child: RichTextRow(textSpan: 'Cel:', text: widget.cel),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child: RichTextRow(textSpan: 'CEP:', text: widget.cep),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child:
                     RichTextRow(textSpan: 'Endereço:', text: widget.endereco),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child: RichTextRow(textSpan: 'Bairro:', text: widget.bairro),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 2),
                 child: RichTextRow(
                     textSpan: 'Cidade/Estado:', text: widget.cidadeEstado),
               ),
-              SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.only(left: 16, top: 2),
                 child: RowWithIconAndText(
                   icon: Icons.check_circle,
                   text: "Verificação de e-mail",
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
+              const Padding(
+                padding: EdgeInsets.only(left: 16, top: 2),
                 child: RowWithIconAndText(
                   icon: Icons.check_circle,
                   text: "Verificação de rede social",
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 2),
+              const Padding(
+                padding: EdgeInsets.only(left: 16, top: 2),
                 child: RowWithIconAndText(
                   icon: Icons.check_circle,
                   text: "Verificação de telefone",
@@ -143,7 +143,7 @@ class RichTextRow extends StatelessWidget {
   final String textSpan;
   final String text;
 
-  RichTextRow({required this.text, required this.textSpan});
+  const RichTextRow({super.key, required this.text, required this.textSpan});
 
   @override
   Widget build(BuildContext context) {
@@ -155,17 +155,17 @@ class RichTextRow extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: textSpan,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 2,
         ),
         Text(
           text,
-          style: TextStyle(fontSize: 14),
+          style: const TextStyle(fontSize: 14),
         ),
       ],
     );
@@ -176,7 +176,7 @@ class RowWithIconAndText extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  RowWithIconAndText({required this.icon, required this.text});
+  const RowWithIconAndText({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -185,15 +185,15 @@ class RowWithIconAndText extends StatelessWidget {
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.green,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(
           text,
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
       ],
     );

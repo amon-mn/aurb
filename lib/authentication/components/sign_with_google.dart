@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class GoogleSignInButton extends StatelessWidget {
   final Function()? onPressed;
 
-  GoogleSignInButton({this.onPressed});
+  const GoogleSignInButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class GoogleSignInButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(5.0), // Borda arredondada
         ),
-        padding: EdgeInsets.all(10.0), // Espaçamento interno
+        padding: const EdgeInsets.all(10.0), // Espaçamento interno
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -24,7 +24,7 @@ class GoogleSignInButton extends StatelessWidget {
               'lib/assets/google.png', // Substitua pelo caminho para o seu próprio logotipo do Google
               height: 24.0, // Altura do logotipo
             ),
-            SizedBox(width: 10.0), // Espaçamento entre o logotipo e o texto
+            const SizedBox(width: 10.0), // Espaçamento entre o logotipo e o texto
             Text(
               'Entre com o Google', // Texto do botão
               style: TextStyle(

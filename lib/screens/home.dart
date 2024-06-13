@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
-  HomeScreen({super.key, required this.user});
+  const HomeScreen({super.key, required this.user});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: NavigationDrawerWidget(user: widget.user),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(64.0),
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(64.0),
           child: SafeArea(child: Header()),
         ),
         body: GridView.builder(
@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: 'Outras Notificações',
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => OtherNotificationsPage(),
+                      builder: (context) => const OtherNotificationsPage(),
                     ));
                   });
             }

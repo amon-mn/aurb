@@ -11,8 +11,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
+
 
   // Global Keys
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -57,15 +57,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Container(
                             width: 36,
                             height: 36,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.amber,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(width: 16),
-                      Column(
+                      const SizedBox(width: 16),
+                      const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Container(
                           alignment: Alignment.center,
                           child: Text(
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
                           controller: _nameController,
@@ -128,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         MyTextFieldWrapper(
                           hintText: 'Telefone',
                           controller: _phoneController,
@@ -140,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         MyTextFieldWrapper(
                           hintText: 'Email',
                           controller: _emailController,
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         MyTextFieldWrapper(
                           hintText: 'Senha',
                           controller: _passwordController,
@@ -164,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         MyTextFieldWrapper(
                           hintText: 'Confirmação de senha',
                           controller: _confirmationController,
@@ -179,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         MyTextFieldWrapper(
                           inputFormatter: MaskTextInputFormatter(
                             mask: '#####-###',
@@ -262,7 +262,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           text: TextSpan(
                             text:
                                 "Ao clicar em 'Cadastrar' você concorda com nossos ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromRGBO(120, 131, 137, 1)),
                             children: [
                               TextSpan(
@@ -299,8 +299,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final TextEditingController stateController = _stateController;
     final TextEditingController phoneController =
         _phoneController; // Novo campo
-    final TextEditingController genderController =
-        _genderController; // Novo campo
 
     final GlobalKey<FormState> formKey = _formKey;
 

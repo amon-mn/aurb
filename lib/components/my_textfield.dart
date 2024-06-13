@@ -14,7 +14,7 @@ class MyTextFieldWrapper extends StatefulWidget {
   final String? initialValue;
 
   MyTextFieldWrapper({
-    Key? key,
+    super.key,
     required this.controller,
     this.hintText,
     required this.obscureText,
@@ -25,7 +25,7 @@ class MyTextFieldWrapper extends StatefulWidget {
     this.onSuffixIconPressed,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key) {
+  }) {
     if (initialValue != null) {
       controller.text = initialValue!;
     }
@@ -44,7 +44,7 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       child: TextFormField(
         maxLines: null,
         style: TextStyle(fontSize: 16 * textScaleFactor),

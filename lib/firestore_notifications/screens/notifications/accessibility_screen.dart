@@ -70,8 +70,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
   double progress = 0.0;
 
   Future<XFile?> getImage() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
     return image;
   }
 
@@ -230,7 +230,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           _longNotification = local.long;
                                           return GoogleMap(
                                             initialCameraPosition:
-                                                CameraPosition(
+                                                const CameraPosition(
                                               target: LatLng(-3.100055312439282,
                                                   -59.97655211153541),
                                               zoom: 18.0,
@@ -240,7 +240,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                             onMapCreated: local.onMapCreated,
                                             markers: {
                                               Marker(
-                                                markerId: MarkerId("MarkerId"),
+                                                markerId: const MarkerId("MarkerId"),
                                                 position: LatLng(
                                                     _latNotification,
                                                     _longNotification),
@@ -255,7 +255,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           // Caso haja erro, exibir a mensagem de erro
                                           return Container(
                                             alignment: Alignment.topLeft,
-                                            padding: EdgeInsets.only(left: 10),
+                                            padding: const EdgeInsets.only(left: 10),
                                             child: Text(
                                               local.error,
                                               style: TextStyle(
@@ -365,9 +365,9 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                 return Row(
                                   children: [
                                     if (isUploading)
-                                      Padding(
+                                      const Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 16.0),
+                                            EdgeInsets.only(right: 16.0),
                                         child: SizedBox(
                                           width: 15,
                                           height: 15,
@@ -378,11 +378,11 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                         ),
                                       )
                                     else
-                                      Icon(
+                                      const Icon(
                                         Icons.camera_alt,
                                         size: 30,
                                       ),
-                                    SizedBox(width: 2),
+                                    const SizedBox(width: 2),
                                     Container(
                                       alignment: Alignment.topLeft,
                                       padding: const EdgeInsets.only(left: 10),
@@ -402,7 +402,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                               },
                             ),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Container(
@@ -443,7 +443,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                           Expanded(
                             flex: 1,
                             child: Switch(
-                              activeColor: Color.fromARGB(255, 121, 182, 76),
+                              activeColor: const Color.fromARGB(255, 121, 182, 76),
                               value: isSwitched,
                               onChanged: (value) {
                                 setState(() {
@@ -473,12 +473,12 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             child: SizedBox(
                               height: 40,
                               child: MyButton(
-                                colorButton: Color.fromARGB(255, 121, 182, 76),
+                                colorButton: const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
                                 onTap: () {
                                   UserNotification notification =
                                       UserNotification(
-                                    id: Uuid().v4(),
+                                    id: const Uuid().v4(),
                                     descricao: _descriptionController.text,
                                     tipo: widget.tipo,
                                     natureza: selectedAcessibility.value,

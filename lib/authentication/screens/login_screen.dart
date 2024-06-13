@@ -10,8 +10,8 @@ import 'package:aurb/authentication/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -43,13 +43,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         width: 36,
                         height: 36,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.amber,
                         ),
                       ),
-                      SizedBox(width: 16),
-                      Column(
+                      const SizedBox(width: 16),
+                      const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: Divider(
                                 thickness: 0.5,
-                                color: const Color.fromARGB(255, 69, 69, 69),
+                                color: Color.fromARGB(255, 69, 69, 69),
                               ),
                             ),
                             Padding(
@@ -142,14 +142,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 'Ou continue com',
                                 style: TextStyle(
-                                  color: const Color.fromARGB(255, 69, 69, 69),
+                                  color: Color.fromARGB(255, 69, 69, 69),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Divider(
                                 thickness: 0.5,
-                                color: const Color.fromARGB(255, 69, 69, 69),
+                                color: Color.fromARGB(255, 69, 69, 69),
                               ),
                             ),
                           ],
@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             child:
-                                GoogleSignInButton(), // ou o widget que representa seu botão de login do Google
+                                const GoogleSignInButton(), // ou o widget que representa seu botão de login do Google
                           ),
                         ],
                       )

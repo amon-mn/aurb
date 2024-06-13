@@ -67,8 +67,8 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
   double progress = 0.0;
 
   Future<XFile?> getImage() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
     return image;
   }
 
@@ -129,15 +129,15 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Natureza da Notificação',
                         style: TextStyle(
@@ -157,10 +157,10 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Breve descrição da observação',
                         style: TextStyle(
@@ -170,13 +170,13 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyTextFieldWrapper(
                       hintText: 'Digite sua mensagem',
                       controller: _controller,
                       obscureText: false,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.only(left: 10),
@@ -222,7 +222,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                         _latNotification = local.lat;
                                         _longNotification = local.long;
                                         return GoogleMap(
-                                          initialCameraPosition: CameraPosition(
+                                          initialCameraPosition: const CameraPosition(
                                             target: LatLng(-3.100055312439282,
                                                 -59.97655211153541),
                                             zoom: 18.0,
@@ -232,7 +232,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                           onMapCreated: local.onMapCreated,
                                           markers: {
                                             Marker(
-                                              markerId: MarkerId("MarkerId"),
+                                              markerId: const MarkerId("MarkerId"),
                                               position: LatLng(_latNotification,
                                                   _longNotification),
                                               infoWindow: const InfoWindow(
@@ -246,7 +246,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                         // Caso haja erro, exibir a mensagem de erro
                                         return Container(
                                           alignment: Alignment.topLeft,
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding: const EdgeInsets.only(left: 10),
                                           child: Text(
                                             local.error,
                                             style: TextStyle(
@@ -266,10 +266,10 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Avaliação de Risco',
                         style: TextStyle(
@@ -279,7 +279,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     MyDropdownFormField(
                       selectedValueNotifier: selectedRisco,
                       itemsList: itemListRisco,
@@ -289,10 +289,10 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         'Data da Observação',
                         style: TextStyle(
@@ -305,10 +305,10 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 124, 124, 124),
+                            color: const Color.fromARGB(255, 124, 124, 124),
                           ),
                           borderRadius: BorderRadius.circular(16.0),
                         ),
@@ -322,7 +322,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                 selectedDate.isEmpty ? null : selectedDate,
                             firstDate: DateTime(2023),
                             lastDate: DateTime(2030),
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.calendar_today,
                               color: Colors.black,
                             ),
@@ -340,7 +340,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -354,9 +354,9 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                               return Row(
                                 children: [
                                   if (isUploading)
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.only(right: 16.0),
+                                          EdgeInsets.only(right: 16.0),
                                       child: SizedBox(
                                         width: 15,
                                         height: 15,
@@ -367,11 +367,11 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                                       ),
                                     )
                                   else
-                                    Icon(
+                                    const Icon(
                                       Icons.camera_alt,
                                       size: 30,
                                     ),
-                                  SizedBox(width: 2),
+                                  const SizedBox(width: 2),
                                   Container(
                                     alignment: Alignment.topLeft,
                                     padding: const EdgeInsets.only(left: 10),
@@ -391,7 +391,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                             },
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: Container(
@@ -425,14 +425,14 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           flex: 1,
                           child: Switch(
-                            activeColor: Color.fromARGB(255, 121, 182, 76),
+                            activeColor: const Color.fromARGB(255, 121, 182, 76),
                             value: isSwitched,
                             onChanged: (value) {
                               setState(() {
@@ -462,12 +462,12 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                           child: SizedBox(
                             height: 40,
                             child: MyButton(
-                              colorButton: Color.fromARGB(255, 121, 182, 76),
+                              colorButton: const Color.fromARGB(255, 121, 182, 76),
                               textSize: 14,
                               onTap: () {
                                 UserNotification notification =
                                     UserNotification(
-                                  id: Uuid().v4(),
+                                  id: const Uuid().v4(),
                                   descricao: _controller.text,
                                   tipo: widget.tipo,
                                   natureza: selectedObstruction.value,
@@ -498,7 +498,7 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 54),
+                    const SizedBox(height: 54),
                   ],
                 ),
               ),

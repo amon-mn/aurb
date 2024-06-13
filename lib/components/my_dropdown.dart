@@ -8,7 +8,7 @@ class MyDropdownFormField extends StatelessWidget {
   final String? hint;
   final Function(String?)? onChanged;
 
-  MyDropdownFormField({
+  const MyDropdownFormField({super.key, 
     required this.selectedValueNotifier,
     this.itemsList,
     required this.onChanged,
@@ -62,7 +62,7 @@ class MyDropdownFormField extends StatelessWidget {
               filled: true,
               labelText: labelText,
               hintText: hint,
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black,
               ),
               focusedErrorBorder: OutlineInputBorder(

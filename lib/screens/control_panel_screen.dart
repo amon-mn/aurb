@@ -14,6 +14,8 @@ class ControlPanelPage extends StatelessWidget {
     LatLng(-3.103175861814809, -60.04659195549893),
   ];
 
+  ControlPanelPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class ControlPanelPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
                   "Painel de Análise da Mobilidade",
                   style: TextStyle(
@@ -40,7 +42,7 @@ class ControlPanelPage extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
@@ -64,8 +66,7 @@ class ControlPanelPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 4.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -82,8 +83,7 @@ class ControlPanelPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 4.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -100,8 +100,7 @@ class ControlPanelPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 4.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -136,15 +135,13 @@ class ControlPanelPage extends StatelessWidget {
 
       switch (i % 4) {
         case 0:
-          icon =
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
           break;
         case 1:
           icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
           break;
         case 2:
-          icon =
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
           break;
       }
 

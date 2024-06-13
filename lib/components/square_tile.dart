@@ -38,9 +38,9 @@ class SquareTite extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border.all(
-            color: borderColor ?? Color.fromARGB(255, 195, 195, 195)),
+            color: borderColor ?? const Color.fromARGB(255, 195, 195, 195)),
         borderRadius: BorderRadius.circular(16),
-        color: Color.fromRGBO(238, 238, 238, 1),
+        color: const Color.fromRGBO(238, 238, 238, 1),
       ),
       child: childWidget,
     );

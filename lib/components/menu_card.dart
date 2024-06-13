@@ -5,7 +5,7 @@ class MenuCard extends StatelessWidget {
   final String title;
   final Function onTap;
 
-  MenuCard({
+  const MenuCard({super.key, 
     required this.imagePath,
     required this.title,
     required this.onTap,
@@ -34,10 +34,10 @@ class MenuCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
