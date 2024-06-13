@@ -15,6 +15,7 @@ import 'package:aurb/firestore_notifications/screens/notifications/streets_scree
 import 'package:aurb/authentication/screens/user_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
@@ -27,11 +28,13 @@ class NavigationDrawerWidget extends StatefulWidget {
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Map<String, dynamic> _userData = {};
+  String urlImage = 'lib/assets/perfil2.png';
 
   @override
   void initState() {
     super.initState();
     fetchUserDataFromFirebase();
+    _loadProfileImage();
   }
 
   Future<void> fetchUserDataFromFirebase() async {
@@ -43,6 +46,26 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       setState(() {
         _userData = snapshot.data()!;
       });
+    }
+  }
+
+  Future<void> _loadProfileImage() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('profile_images/${user.uid}.jpg');
+      try {
+        String url = await ref.getDownloadURL();
+        setState(() {
+          urlImage = url;
+        });
+      } catch (e) {
+        // Caso o usuário não tenha foto de perfil
+        setState(() {
+          urlImage = 'lib/assets/perfil2.png';
+        });
+      }
     }
   }
 
@@ -71,7 +94,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Widget build(BuildContext context) {
     String name = _userData['name'] ?? '';
     String email = widget.user.email!;
-    String urlImage = 'lib/assets/perfil2.png';
     String cel = _userData['phone'] ?? '';
     String cep = _userData['cep'] ?? '';
     String endereco = _userData['street'] ?? '';
@@ -90,7 +112,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => UserScreen(
                   name: name,
-                  urlImage: urlImage,
                   email: email,
                   cel: cel,
                   cep: cep,
@@ -208,7 +229,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
         child: Row(
           children: [
-            CircleAvatar(radius: 30, backgroundImage: AssetImage(urlImage)),
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: urlImage.startsWith('http')
+                  ? NetworkImage(urlImage)
+                  : AssetImage(urlImage) as ImageProvider,
+            ),
             const SizedBox(width: 20),
             Expanded(
               child: Column(

@@ -231,13 +231,21 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           return GoogleMap(
                                             initialCameraPosition:
                                                 CameraPosition(
-                                              target: LatLng(-3.100055312439282,
-                                                  -59.97655211153541),
+                                              target: LatLng(_latNotification,
+                                                  _longNotification),
                                               zoom: 18.0,
                                             ),
                                             zoomControlsEnabled: true,
                                             mapType: MapType.normal,
                                             onMapCreated: local.onMapCreated,
+                                            onCameraMove:
+                                                (CameraPosition position) {
+                                              local.updatePosition(
+                                                  position.target);
+                                            },
+                                            onCameraIdle: () {
+                                              local.setNewPosition();
+                                            },
                                             markers: {
                                               Marker(
                                                 markerId: MarkerId("MarkerId"),

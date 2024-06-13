@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_config/flutter_config.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'firebase_options.dart';
 
 Future main() async {
