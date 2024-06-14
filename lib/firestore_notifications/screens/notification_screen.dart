@@ -3,6 +3,7 @@ import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:intl/intl.dart';
+import 'details_notification.dart'; // Importe a página de detalhes
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -50,7 +51,7 @@ class NotificationPage extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         UserNotification notification = snapshot.data![index];
-                        return _buildCard(notification);
+                        return _buildCard(context, notification); // Passe o contexto
                       },
                     );
                   }
@@ -63,36 +64,46 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCard(UserNotification notification) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'ID: ${notification.id.substring(0, 8)}  -  Status: ${notification.status}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+  Widget _buildCard(BuildContext context, UserNotification notification) { // Adicione o contexto aqui
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailsNotificationPage(notification: notification),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'ID: ${notification.id.substring(0, 8)}  -  Status: ${notification.status}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Tipo: ${notification.tipo}  -  Risco: ${notification.risco}',
-              style: const TextStyle(
-                fontSize: 16,
+              const SizedBox(height: 4),
+              Text(
+                'Tipo: ${notification.tipo}  -  Risco: ${notification.risco}',
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Data: ${DateFormat('dd/MM/yyyy').format(DateTime.parse(notification.data))}',
-              style: const TextStyle(
-                fontSize: 16,
+              const SizedBox(height: 4),
+              Text(
+                'Data: ${DateFormat('dd/MM/yyyy').format(DateTime.parse(notification.data))}',
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
