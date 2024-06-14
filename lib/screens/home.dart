@@ -28,7 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: NavigationDrawerWidget(user: widget.user),
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(64.0),
-          child: SafeArea(child: Header()),
+          child: SafeArea(
+              child: Header(
+            customIconRight: Icons.mail,
+          )),
         ),
         body: GridView.builder(
           itemCount: 10,

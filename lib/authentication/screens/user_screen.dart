@@ -86,7 +86,7 @@ class _UserScreenState extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -204,7 +204,8 @@ class RichTextRow extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: textSpan,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
           ),

@@ -8,6 +8,7 @@ import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
@@ -75,17 +76,19 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     return image;
   }
 
-  Future<void> upload(XFile file) async {
+  Future<void> upload(XFile file, String notificationId) async {
     isUploadingNotifier.value = true;
     String ref = 'images/img-${DateTime.now().toString()}.jpeg';
     Reference storageRef = FirebaseStorage.instance.ref().child(ref);
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     UploadTask task = storageRef.putFile(
       File(file.path),
       SettableMetadata(
         contentType: 'image/jpeg',
         customMetadata: {
-          'user': '123',
+          'user': currentUserId,
+          'notification': notificationId,
         },
       ),
     );
@@ -109,16 +112,17 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     isUploadingNotifier.value = false;
   }
 
-  void pickAndUploadImage() async {
+  void pickAndUploadImage(String notificationId) async {
     XFile? file = await getImage();
     if (file != null) {
-      await upload(file);
+      await upload(file, notificationId);
     }
   }
 
   bool isMapFullScreen = false;
   double _latNotification = 0.0;
   double _longNotification = 0.0;
+  final _notificationId = const Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +133,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
+                customIconRight: Icons.mail,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -246,6 +251,12 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                             onCameraIdle: () {
                                               local.setNewPosition();
                                             },
+                                            onLongPress: (LatLng position) {
+                                              local.setNewPositionWithLatLng(
+                                                  position);
+                                            },
+                                            myLocationEnabled: true,
+                                            myLocationButtonEnabled: true,
                                             markers: {
                                               Marker(
                                                 markerId:
@@ -367,7 +378,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              pickAndUploadImage();
+                              pickAndUploadImage(_notificationId);
                             },
                             child: ValueListenableBuilder<bool>(
                               valueListenable: isUploadingNotifier,
@@ -489,7 +500,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                 onTap: () {
                                   UserNotification notification =
                                       UserNotification(
-                                    id: const Uuid().v4(),
+                                    id: _notificationId,
                                     descricao: _descriptionController.text,
                                     tipo: widget.tipo,
                                     natureza: selectedAcessibility.value,

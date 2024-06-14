@@ -15,7 +15,7 @@ class AboutScreen extends StatelessWidget {
             child: Column(
               children: [
                 Header(
-                  customIcon: Icons.arrow_back,
+                  customIconLeft: Icons.arrow_back,
                   customOnPressed: () {
                     Navigator.pop(context);
                   },
@@ -162,7 +162,8 @@ class ProfileCard extends StatelessWidget {
   final List<Color> iconColors;
   final List<IconData> icons; // Adicionado o parâmetro para os ícones
 
-  const ProfileCard({super.key, 
+  const ProfileCard({
+    super.key,
     required this.urlImage,
     required this.title,
     required this.subTitle,
@@ -190,7 +191,8 @@ class ProfileCard extends StatelessWidget {
             const SizedBox(height: 16.0),
             Text(
               title,
-              style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+              style:
+                  const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
             ),
             Text(
               subTitle,
@@ -236,7 +238,8 @@ class RoundedSocialIcon extends StatelessWidget {
   final Color backgroundColor;
   final String redirectUrl;
 
-  const RoundedSocialIcon({super.key, 
+  const RoundedSocialIcon({
+    super.key,
     required this.icon,
     required this.backgroundColor,
     required this.redirectUrl,
