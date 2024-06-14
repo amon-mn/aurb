@@ -39,4 +39,13 @@ class NotificationService {
         .doc(notificationId)
         .delete();
   }
+
+  Future<void> updateNotification(UserNotification notification) async {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .doc(notification.id)
+        .update(notification.toMap());
+  }
 }
