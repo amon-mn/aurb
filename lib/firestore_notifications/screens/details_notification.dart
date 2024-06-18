@@ -215,7 +215,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },

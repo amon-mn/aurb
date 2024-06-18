@@ -6,7 +6,6 @@ import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/show_snackbar.dart';
 import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
-import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,6 +16,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 
 class AccessibilityPage extends StatefulWidget {
   final String tipo;
@@ -296,6 +296,34 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Endereço',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Consumer<NotificationLocationController>(
+                        builder: (context, controller, child) {
+                          return ValueListenableBuilder<String>(
+                            valueListenable: controller.addressNotifier,
+                            builder: (context, address, child) {
+                              return Text(
+                                address.isNotEmpty
+                                    ? address
+                                    : 'Carregando endereço...',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey[900],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                       const SizedBox(height: 24),
                       Container(
                         alignment: Alignment.topLeft,
@@ -348,9 +376,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                               child: DateTimePicker(
                                 type: DateTimePickerType.date,
                                 dateMask: 'dd/MM/yyyy',
-                                initialValue: selectedDate.isEmpty
-                                    ? null
-                                    : selectedDate, // Defina como null quando estiver vazio
+                                initialValue:
+                                    selectedDate.isEmpty ? null : selectedDate,
                                 firstDate: DateTime(2023),
                                 lastDate: DateTime(2030),
                                 icon: const Icon(
@@ -360,9 +387,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                 dateLabelText: '',
                                 onChanged: (val) {
                                   setState(() {
-                                    selectedDate = val.isEmpty
-                                        ? ''
-                                        : val; // Defina como vazio se for nulo
+                                    selectedDate = val.isEmpty ? '' : val;
                                   });
                                 },
                                 style: TextStyle(
