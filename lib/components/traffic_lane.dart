@@ -19,7 +19,7 @@ class TrafficLaneWidget extends StatelessWidget {
                 width: screenWidth,
                 color: Colors.white, // Cor da faixa contínua nas extremidades
               ),
-              SizedBox(height: 0.18 * screenWidth), // Espaço entre as faixas
+              SizedBox(height: 0.16 * screenWidth), // Espaço entre as faixas
               DashedLine(
                 color: Colors.amber,
                 height: 2,
@@ -31,7 +31,7 @@ class TrafficLaneWidget extends StatelessWidget {
                 height: 2,
                 width: screenWidth,
               ),
-              SizedBox(height: 0.18 * screenWidth), // Espaço entre as faixas
+              SizedBox(height: 0.16 * screenWidth), // Espaço entre as faixas
               Container(
                 height: 3,
                 width: screenWidth,

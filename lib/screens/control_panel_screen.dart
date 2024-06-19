@@ -24,7 +24,7 @@ class ControlPanelPage extends StatelessWidget {
           child: Column(
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -66,7 +66,8 @@ class ControlPanelPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -83,7 +84,8 @@ class ControlPanelPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -100,7 +102,8 @@ class ControlPanelPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: Row(
                       children: [
                         Container(
@@ -135,13 +138,15 @@ class ControlPanelPage extends StatelessWidget {
 
       switch (i % 4) {
         case 0:
-          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+          icon =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
           break;
         case 1:
           icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
           break;
         case 2:
-          icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+          icon =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
           break;
       }
 

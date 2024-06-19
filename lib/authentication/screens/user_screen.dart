@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:aurb/authentication/components/profile_pic.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserScreen extends StatefulWidget {
   final String name;
-  final String urlImage;
   final String email;
   final String cel;
   final String cep;
@@ -15,7 +19,6 @@ class UserScreen extends StatefulWidget {
   const UserScreen({
     super.key,
     required this.name,
-    required this.urlImage,
     required this.email,
     required this.cel,
     required this.cep,
@@ -29,6 +32,51 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  String urlImage = 'lib/assets/perfil2.png';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('profile_images/${user.uid}.jpg');
+      try {
+        String url = await ref.getDownloadURL();
+        setState(() {
+          urlImage = url;
+        });
+      } catch (e) {
+        // Caso o usuário não tenha foto de perfil
+        setState(() {
+          urlImage = 'lib/assets/perfil2.png';
+        });
+      }
+    }
+  }
+
+  Future<void> _uploadProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      File file = File(pickedFile.path);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('profile_images/${user.uid}.jpg');
+        await ref.putFile(file);
+        _loadProfileImage();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +86,7 @@ class _UserScreenState extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -49,9 +97,10 @@ class _UserScreenState extends State<UserScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ProfilePic(
-                      urlImage: widget.urlImage,
+                      urlImage: urlImage,
                       width: 80,
                       height: 80,
+                      onPressed: _uploadProfileImage,
                     ),
                     const SizedBox(
                       width: 20,
@@ -155,7 +204,8 @@ class RichTextRow extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: textSpan,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
           ),

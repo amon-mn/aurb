@@ -17,7 +17,7 @@ class NotificationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -42,7 +42,8 @@ class NotificationPage extends StatelessWidget {
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Erro ao carregar notificações'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('Nenhuma notificação encontrada'));
+                    return Center(
+                        child: Text('Nenhuma notificação encontrada'));
                   } else {
                     return ListView.builder(
                       shrinkWrap: true,

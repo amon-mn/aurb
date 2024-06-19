@@ -2,10 +2,15 @@ import 'package:aurb/firestore_notifications/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  final IconData? customIcon;
+  final IconData? customIconLeft;
+  final IconData? customIconRight;
   final Function()? customOnPressed;
 
-  const Header({super.key, this.customIcon, this.customOnPressed});
+  const Header(
+      {super.key,
+      this.customIconLeft,
+      this.customIconRight,
+      this.customOnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +21,7 @@ class Header extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(
-              customIcon ??
+              customIconLeft ??
                   Icons
                       .menu_rounded, // Usa o ícone personalizado ou o ícone padrão
               color: Colors.black,
@@ -83,20 +88,21 @@ class Header extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.mail,
-              color: Colors.black,
-              size: 28,
+          if (customIconRight != null)
+            IconButton(
+              icon: Icon(
+                customIconRight,
+                color: Colors.black,
+                size: 28,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationPage()),
+                );
+              },
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NotificationPage()),
-              );
-            },
-          ),
         ],
       ),
     );

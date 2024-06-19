@@ -9,7 +9,7 @@ import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -73,17 +73,19 @@ class _SidewalksPageState extends State<SidewalksPage> {
     return image;
   }
 
-  Future<void> upload(XFile file) async {
+  Future<void> upload(XFile file, String notificationId) async {
     isUploadingNotifier.value = true;
     String ref = 'images/img-${DateTime.now().toString()}.jpeg';
     Reference storageRef = FirebaseStorage.instance.ref().child(ref);
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     UploadTask task = storageRef.putFile(
       File(file.path),
       SettableMetadata(
         contentType: 'image/jpeg',
         customMetadata: {
-          'user': '123',
+          'user': currentUserId,
+          'notification': notificationId,
         },
       ),
     );
@@ -107,14 +109,15 @@ class _SidewalksPageState extends State<SidewalksPage> {
     isUploadingNotifier.value = false;
   }
 
-  void pickAndUploadImage() async {
+  void pickAndUploadImage(String notificationId) async {
     XFile? file = await getImage();
     if (file != null) {
-      await upload(file);
+      await upload(file, notificationId);
     }
   }
 
   bool isMapFullScreen = false;
+  final _notificationId = const Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +128,8 @@ class _SidewalksPageState extends State<SidewalksPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
+                customIconRight: Icons.mail,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -223,17 +227,32 @@ class _SidewalksPageState extends State<SidewalksPage> {
                                         _latNotification = local.lat;
                                         _longNotification = local.long;
                                         return GoogleMap(
-                                          initialCameraPosition: const CameraPosition(
-                                            target: LatLng(-3.100055312439282,
-                                                -59.97655211153541),
+                                          initialCameraPosition: CameraPosition(
+                                            target: LatLng(_latNotification,
+                                                _longNotification),
                                             zoom: 18.0,
                                           ),
                                           zoomControlsEnabled: true,
                                           mapType: MapType.normal,
                                           onMapCreated: local.onMapCreated,
+                                          onCameraMove:
+                                              (CameraPosition position) {
+                                            local.updatePosition(
+                                                position.target);
+                                          },
+                                          onCameraIdle: () {
+                                            local.setNewPosition();
+                                          },
+                                          onLongPress: (LatLng position) {
+                                            local.setNewPositionWithLatLng(
+                                                position);
+                                          },
+                                          myLocationEnabled: true,
+                                          myLocationButtonEnabled: true,
                                           markers: {
                                             Marker(
-                                              markerId: const MarkerId("MarkerId"),
+                                              markerId:
+                                                  const MarkerId("MarkerId"),
                                               position: LatLng(_latNotification,
                                                   _longNotification),
                                               infoWindow: const InfoWindow(
@@ -247,7 +266,8 @@ class _SidewalksPageState extends State<SidewalksPage> {
                                         // Caso haja erro, exibir a mensagem de erro
                                         return Container(
                                           alignment: Alignment.topLeft,
-                                          padding: const EdgeInsets.only(left: 10),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
                                           child: Text(
                                             local.error,
                                             style: TextStyle(
@@ -347,7 +367,7 @@ class _SidewalksPageState extends State<SidewalksPage> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            pickAndUploadImage();
+                            pickAndUploadImage(_notificationId);
                           },
                           child: ValueListenableBuilder<bool>(
                             valueListenable: isUploadingNotifier,
@@ -356,8 +376,7 @@ class _SidewalksPageState extends State<SidewalksPage> {
                                 children: [
                                   if (isUploading)
                                     const Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 16.0),
+                                      padding: EdgeInsets.only(right: 16.0),
                                       child: SizedBox(
                                         width: 15,
                                         height: 15,
@@ -433,7 +452,8 @@ class _SidewalksPageState extends State<SidewalksPage> {
                         Expanded(
                           flex: 1,
                           child: Switch(
-                            activeColor: const Color.fromARGB(255, 121, 182, 76),
+                            activeColor:
+                                const Color.fromARGB(255, 121, 182, 76),
                             value: isSwitched,
                             onChanged: (value) {
                               setState(() {
@@ -463,12 +483,13 @@ class _SidewalksPageState extends State<SidewalksPage> {
                           child: SizedBox(
                             height: 40,
                             child: MyButton(
-                              colorButton: const Color.fromARGB(255, 121, 182, 76),
+                              colorButton:
+                                  const Color.fromARGB(255, 121, 182, 76),
                               textSize: 14,
                               onTap: () {
                                 UserNotification notification =
                                     UserNotification(
-                                  id: const Uuid().v4(),
+                                  id: _notificationId,
                                   descricao: _controller.text,
                                   tipo: widget.tipo,
                                   natureza: selectedSidewalk.value,

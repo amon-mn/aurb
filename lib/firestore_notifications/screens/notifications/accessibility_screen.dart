@@ -6,8 +6,8 @@ import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/show_snackbar.dart';
 import 'package:aurb/firestore_notifications/models/location.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
-import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
@@ -16,6 +16,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 
 class AccessibilityPage extends StatefulWidget {
   final String tipo;
@@ -75,17 +76,19 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     return image;
   }
 
-  Future<void> upload(XFile file) async {
+  Future<void> upload(XFile file, String notificationId) async {
     isUploadingNotifier.value = true;
     String ref = 'images/img-${DateTime.now().toString()}.jpeg';
     Reference storageRef = FirebaseStorage.instance.ref().child(ref);
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     UploadTask task = storageRef.putFile(
       File(file.path),
       SettableMetadata(
         contentType: 'image/jpeg',
         customMetadata: {
-          'user': '123',
+          'user': currentUserId,
+          'notification': notificationId,
         },
       ),
     );
@@ -109,16 +112,17 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     isUploadingNotifier.value = false;
   }
 
-  void pickAndUploadImage() async {
+  void pickAndUploadImage(String notificationId) async {
     XFile? file = await getImage();
     if (file != null) {
-      await upload(file);
+      await upload(file, notificationId);
     }
   }
 
   bool isMapFullScreen = false;
   double _latNotification = 0.0;
   double _longNotification = 0.0;
+  final _notificationId = const Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +133,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                customIcon: Icons.arrow_back,
+                customIconLeft: Icons.arrow_back,
+                customIconRight: Icons.mail,
                 customOnPressed: () {
                   Navigator.pop(context);
                 },
@@ -230,17 +235,32 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           _longNotification = local.long;
                                           return GoogleMap(
                                             initialCameraPosition:
-                                                const CameraPosition(
-                                              target: LatLng(-3.100055312439282,
-                                                  -59.97655211153541),
+                                                CameraPosition(
+                                              target: LatLng(_latNotification,
+                                                  _longNotification),
                                               zoom: 18.0,
                                             ),
                                             zoomControlsEnabled: true,
                                             mapType: MapType.normal,
                                             onMapCreated: local.onMapCreated,
+                                            onCameraMove:
+                                                (CameraPosition position) {
+                                              local.updatePosition(
+                                                  position.target);
+                                            },
+                                            onCameraIdle: () {
+                                              local.setNewPosition();
+                                            },
+                                            onLongPress: (LatLng position) {
+                                              local.setNewPositionWithLatLng(
+                                                  position);
+                                            },
+                                            myLocationEnabled: true,
+                                            myLocationButtonEnabled: true,
                                             markers: {
                                               Marker(
-                                                markerId: const MarkerId("MarkerId"),
+                                                markerId:
+                                                    const MarkerId("MarkerId"),
                                                 position: LatLng(
                                                     _latNotification,
                                                     _longNotification),
@@ -255,7 +275,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           // Caso haja erro, exibir a mensagem de erro
                                           return Container(
                                             alignment: Alignment.topLeft,
-                                            padding: const EdgeInsets.only(left: 10),
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
                                             child: Text(
                                               local.error,
                                               style: TextStyle(
@@ -274,6 +295,34 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             ),
                           ],
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Endereço',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Consumer<NotificationLocationController>(
+                        builder: (context, controller, child) {
+                          return ValueListenableBuilder<String>(
+                            valueListenable: controller.addressNotifier,
+                            builder: (context, address, child) {
+                              return Text(
+                                address.isNotEmpty
+                                    ? address
+                                    : 'Carregando endereço...',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey[900],
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                       const SizedBox(height: 24),
                       Container(
@@ -327,9 +376,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                               child: DateTimePicker(
                                 type: DateTimePickerType.date,
                                 dateMask: 'dd/MM/yyyy',
-                                initialValue: selectedDate.isEmpty
-                                    ? null
-                                    : selectedDate, // Defina como null quando estiver vazio
+                                initialValue:
+                                    selectedDate.isEmpty ? null : selectedDate,
                                 firstDate: DateTime(2023),
                                 lastDate: DateTime(2030),
                                 icon: const Icon(
@@ -339,9 +387,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                 dateLabelText: '',
                                 onChanged: (val) {
                                   setState(() {
-                                    selectedDate = val.isEmpty
-                                        ? ''
-                                        : val; // Defina como vazio se for nulo
+                                    selectedDate = val.isEmpty ? '' : val;
                                   });
                                 },
                                 style: TextStyle(
@@ -357,7 +403,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              pickAndUploadImage();
+                              pickAndUploadImage(_notificationId);
                             },
                             child: ValueListenableBuilder<bool>(
                               valueListenable: isUploadingNotifier,
@@ -366,8 +412,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                   children: [
                                     if (isUploading)
                                       const Padding(
-                                        padding:
-                                            EdgeInsets.only(right: 16.0),
+                                        padding: EdgeInsets.only(right: 16.0),
                                         child: SizedBox(
                                           width: 15,
                                           height: 15,
@@ -443,7 +488,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                           Expanded(
                             flex: 1,
                             child: Switch(
-                              activeColor: const Color.fromARGB(255, 121, 182, 76),
+                              activeColor:
+                                  const Color.fromARGB(255, 121, 182, 76),
                               value: isSwitched,
                               onChanged: (value) {
                                 setState(() {
@@ -473,12 +519,13 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             child: SizedBox(
                               height: 40,
                               child: MyButton(
-                                colorButton: const Color.fromARGB(255, 121, 182, 76),
+                                colorButton:
+                                    const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
                                 onTap: () {
                                   UserNotification notification =
                                       UserNotification(
-                                    id: const Uuid().v4(),
+                                    id: _notificationId,
                                     descricao: _descriptionController.text,
                                     tipo: widget.tipo,
                                     natureza: selectedAcessibility.value,

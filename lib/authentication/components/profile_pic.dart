@@ -4,12 +4,15 @@ class ProfilePic extends StatelessWidget {
   final String urlImage;
   final double width;
   final double height;
+  final VoidCallback onPressed;
 
-  const ProfilePic(
-      {super.key,
-      required this.urlImage,
-      required this.width,
-      required this.height});
+  const ProfilePic({
+    Key? key,
+    required this.urlImage,
+    required this.width,
+    required this.height,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,9 @@ class ProfilePic extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage(urlImage),
+            backgroundImage: urlImage.startsWith('http')
+                ? NetworkImage(urlImage)
+                : AssetImage(urlImage) as ImageProvider,
           ),
           Positioned(
             right: -16,
@@ -37,7 +42,7 @@ class ProfilePic extends StatelessWidget {
                   ),
                   backgroundColor: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: onPressed,
                 child: const Icon(
                   Icons.camera_alt_outlined,
                   size: 20,

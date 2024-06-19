@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:aurb/authentication/screens/welcome.dart';
 import 'package:aurb/screens/adm_home.dart';
 import 'package:aurb/screens/home.dart';
@@ -9,10 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:provider/provider.dart'; // Add this import
+import 'package:aurb/firestore_notifications/models/notification_location_controller.dart'; // Adjust the import path as needed
 import 'firebase_options.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(
+      fileName: ".env"); // Certifique-se de que o nome do arquivo está correto
   await FlutterConfig.loadEnvVariables();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -22,7 +26,13 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => NotificationLocationController(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
