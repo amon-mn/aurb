@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:aurb/authentication/screens/welcome.dart';
+import 'package:aurb/screens/adm_home.dart';
 import 'package:aurb/screens/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,7 +70,39 @@ class AuthPage extends StatelessWidget {
         } else {
           if (snapshot.hasData && snapshot.data != null) {
             final user = snapshot.data!;
-            return HomeScreenNavigator(user: user);
+
+            // Verifica o tipo de usuário imediatamente após a autenticação
+            getUserType(user.uid).then((userType) {
+              if (userType == 'ADM') {
+                // Redirecionar para a tela de super usuário (AdmPage).
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdmPage(
+                      user: FirebaseAuth.instance.currentUser!,
+                    ),
+                  ),
+                );
+              } else if (userType == 'User') {
+                // Redirecionar para a tela regular do usuário (HomePage).
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(user: user),
+                  ),
+                );
+              } else {
+                // Se o tipo de usuário não for encontrado, redirecione para a página inicial
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(user: user),
+                  ),
+                );
+              }
+            });
+
+            return Container(); // Você pode remover este Container
           } else {
             return const WelcomeScreen();
           }
@@ -76,24 +110,18 @@ class AuthPage extends StatelessWidget {
       },
     );
   }
-}
 
-class HomeScreenNavigator extends StatelessWidget {
-  final User user;
+  Future<String> getUserType(String userId) async {
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-  const HomeScreenNavigator({Key? key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
-        (route) => false,
-      );
-    });
-
-    // Retorna um contêiner vazio, pois a navegação ocorrerá fora do fluxo de construção do widget
-    return Container();
+    if (userSnapshot.exists) {
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      return userData['userType'];
+    } else {
+      // Se o documento não existir, retorne um valor padrão
+      return 'default';
+    }
   }
 }

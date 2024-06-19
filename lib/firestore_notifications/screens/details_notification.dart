@@ -1,11 +1,13 @@
+import 'package:aurb/components/my_dropdown.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:intl/intl.dart';
-import 'package:aurb/authentication/screens/sections/header.dart'; // Importe o Header
-import 'package:aurb/firestore_notifications/services/notification_service.dart'; // Importe o serviço de notificação
+import 'package:aurb/authentication/screens/sections/header.dart';
+import 'package:aurb/firestore_notifications/services/notification_service.dart';
 import 'package:aurb/components/my_textfield.dart';
-import 'package:aurb/screens/home.dart'; // Importe a tela Home
+import 'package:aurb/screens/home.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 
 class DetailsNotificationPage extends StatefulWidget {
   final UserNotification notification;
@@ -22,11 +24,52 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   late TextEditingController _statusController;
   late TextEditingController _tipoController;
   late TextEditingController _naturezaController;
-  late TextEditingController _riscoController;
-  late TextEditingController _dataController;
   late TextEditingController _descricaoController;
   late TextEditingController _empresaController;
   late TextEditingController _linhaController;
+  late ValueNotifier<String> _selectedRisco;
+  late ValueNotifier<String> _selectedEmpresa;
+  late ValueNotifier<String> _selectedLinha;
+  String _selectedDate = '';
+
+  final itemListRisco = [
+    'Selecione',
+    'Nenhum',
+    'Baixo',
+    'Médio',
+    'Alto',
+    'Extremo',
+  ];
+
+  final itemListEmpresas = [
+    'Selecione',
+    'Rondônia Transportes Ltda.',
+    'Viação São Pedro Ltda.',
+    'Viação Nova Integração Ltda.',
+    'Via Verde Transportes Col. Ltda.',
+    'Expresso Coroado Transportes Col. Ltda.',
+    'Global Green Transportes Ltda.',
+    'Outros...',
+  ];
+
+  final itemListLinhas = [
+    'Selecione',
+    '003',
+    '011',
+    '055',
+    '059',
+    '126',
+    '205',
+    '212',
+    '306',
+    '316',
+    '318',
+    '323',
+    '427',
+    '455',
+    '458',
+    'Outros...',
+  ];
 
   @override
   void initState() {
@@ -36,16 +79,45 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
     _tipoController = TextEditingController(text: widget.notification.tipo);
     _naturezaController =
         TextEditingController(text: widget.notification.natureza ?? '');
-    _riscoController = TextEditingController(text: widget.notification.risco);
-    _dataController = TextEditingController(
-        text: DateFormat('dd/MM/yyyy')
-            .format(DateTime.parse(widget.notification.data)));
+    _selectedRisco = ValueNotifier<String>(
+      itemListRisco.contains(widget.notification.risco)
+          ? widget.notification.risco
+          : 'Selecione',
+    );
+    _selectedDate = widget.notification.data.isNotEmpty
+        ? DateFormat('yyyy-MM-dd')
+            .format(DateTime.parse(widget.notification.data))
+        : '';
     _descricaoController =
         TextEditingController(text: widget.notification.descricao ?? '');
     _empresaController =
         TextEditingController(text: widget.notification.empresa ?? '');
     _linhaController =
         TextEditingController(text: widget.notification.linha ?? '');
+
+    // Verifica se o valor de empresa não está vazio para decidir se deve ser incluído na lista
+    if (widget.notification.empresa != null &&
+        widget.notification.empresa!.isNotEmpty) {
+      _selectedEmpresa = ValueNotifier<String>(
+        itemListEmpresas.contains(widget.notification.empresa ?? '')
+            ? widget.notification.empresa ?? ''
+            : 'Selecione',
+      );
+    } else {
+      _selectedEmpresa = ValueNotifier<String>('Selecione');
+    }
+
+    // Verifica se o valor da linha não está vazio para decidir se deve ser incluído na lista
+    if (widget.notification.linha != null &&
+        widget.notification.linha!.isNotEmpty) {
+      _selectedLinha = ValueNotifier<String>(
+        itemListLinhas.contains(widget.notification.linha ?? '')
+            ? widget.notification.linha ?? ''
+            : 'Selecione',
+      );
+    } else {
+      _selectedLinha = ValueNotifier<String>('Selecione');
+    }
   }
 
   @override
@@ -53,11 +125,12 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
     _statusController.dispose();
     _tipoController.dispose();
     _naturezaController.dispose();
-    _riscoController.dispose();
-    _dataController.dispose();
     _descricaoController.dispose();
     _empresaController.dispose();
     _linhaController.dispose();
+    _selectedRisco.dispose();
+    _selectedEmpresa.dispose();
+    _selectedLinha.dispose();
     super.dispose();
   }
 
@@ -67,11 +140,13 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
       status: _statusController.text,
       tipo: _tipoController.text,
       natureza: _naturezaController.text,
-      risco: _riscoController.text,
-      data: widget.notification.data, // Assuming date is not editable
+      risco: _selectedRisco.value,
+      data: DateFormat('yyyy-MM-dd')
+          .parse(_selectedDate)
+          .toIso8601String(), // Update the date format
       descricao: _descricaoController.text,
-      empresa: _empresaController.text,
-      linha: _linhaController.text,
+      empresa: _selectedEmpresa.value, // Inclui a empresa selecionada
+      linha: _selectedLinha.value,
     );
 
     await NotificationService().updateNotification(updatedNotification);
@@ -98,6 +173,30 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   }
 
   Future<void> _deleteNotification() async {
+    if (widget.notification.status != "Não Iniciado") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Exclusão não permitida'),
+            content: const Text(
+              'Apenas notificações com o status "Não Iniciado" podem ser excluídas.',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     bool confirmDelete = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -105,7 +204,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
           title: const Text('Excluir Notificação'),
           content: const Text(
             'Tem certeza que deseja excluir esta notificação?',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 18),
           ),
           actions: [
             ElevatedButton(
@@ -113,7 +212,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                 Navigator.of(context).pop(false); // Cancela a exclusão
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // Cor de fundo vermelha
+                backgroundColor: Colors.green, // Cor de fundo verde
               ),
               child: const Text(
                 'Cancelar',
@@ -155,54 +254,177 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   }
 
   void _openEditModal() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Editar Notificação'),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildEditableField('Risco', _riscoController),
-                const SizedBox(height: 8),
-                _buildEditableField('Data', _dataController,
-                    readOnly: true), // Assuming date is not editable
-                const SizedBox(height: 8),
-                _buildEditableField('Descrição', _descricaoController),
-                const SizedBox(height: 8),
-                if (_empresaController.text.isNotEmpty)
-                  _buildEditableField('Empresa', _empresaController),
-                const SizedBox(height: 8),
-                if (_linhaController.text.isNotEmpty)
-                  _buildEditableField('Linha', _linhaController),
-              ],
+    if (widget.notification.status == "Não Iniciado") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String localSelectedDate = _selectedDate;
+          TextEditingController localDescricaoController =
+              TextEditingController(text: _descricaoController.text);
+          TextEditingController localEmpresaController =
+              TextEditingController(text: _empresaController.text);
+          TextEditingController localLinhaController =
+              TextEditingController(text: _linhaController.text);
+
+          // Criar um ValueNotifier local para gerenciar o estado do dropdown no modal
+          ValueNotifier<String> localSelectedRisco =
+              ValueNotifier<String>(_selectedRisco.value);
+          ValueNotifier<String> localSelectedEmpresa =
+              ValueNotifier<String>(_selectedEmpresa.value);
+          ValueNotifier<String> localSelectedLinha =
+              ValueNotifier<String>(_selectedLinha.value);
+
+          return AlertDialog(
+            title: const Text('Editar Notificação'),
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDatePickerField(
+                          'Data da Observação', localSelectedDate,
+                          (String val) {
+                        setState(() {
+                          localSelectedDate = val;
+                        });
+                      }),
+                      const SizedBox(height: 12),
+                      _buildEditableField(
+                          'Descrição da Observação', localDescricaoController),
+                      const SizedBox(height: 12),
+                      _buildDropdownField('Avaliação de Risco',
+                          localSelectedRisco, itemListRisco),
+                      const SizedBox(height: 12),
+                      if (localEmpresaController.text.isNotEmpty)
+                        _buildDropdownField('Nome da Empresa',
+                            localSelectedEmpresa, itemListEmpresas),
+                      const SizedBox(height: 12),
+                      if (localLinhaController.text.isNotEmpty)
+                        _buildDropdownField('Número da Linha',
+                            localSelectedLinha, itemListLinhas),
+                    ],
+                  ),
+                );
+              },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedDate = localSelectedDate;
+                    _descricaoController.text = localDescricaoController.text;
+                    _selectedRisco.value = localSelectedRisco.value;
+                    _selectedEmpresa.value = localSelectedEmpresa.value;
+                    _selectedLinha.value = localSelectedLinha.value;
+                  });
+                  Navigator.of(context).pop();
+                  _saveChanges();
+                },
+                child: const Text('Salvar'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Edição não permitida'),
+            content: const Text(
+              'Apenas notificações com o status "Não Iniciado" podem ser editadas.',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Widget _buildDropdownField(String label,
+      ValueNotifier<String> selectedValueNotifier, List<String> itemsList) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        MyDropdownFormField(
+          selectedValueNotifier: selectedValueNotifier,
+          itemsList: itemsList,
+          onChanged: (value) {
+            selectedValueNotifier.value = value!;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDatePickerField(
+      String label, String initialValue, ValueChanged<String> onChanged) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 2),
+          child: Container(
+            height: 48, // Altura reduzida para 48
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100, // Cor de fundo verde claro
+              border: Border.all(
+                color: Color.fromRGBO(
+                    49, 28, 28, 1), // Cor da borda verde mais escura
+              ),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: DateTimePicker(
+              type: DateTimePickerType.date,
+              dateMask: 'dd/MM/yyyy',
+              initialValue: initialValue,
+              firstDate: DateTime(2023),
+              lastDate: DateTime(2030),
+              icon: const Icon(
+                Icons.calendar_today,
+                color: Colors.black,
+              ),
+              dateLabelText: '',
+              onChanged: onChanged,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Color.fromRGBO(33, 33, 33, 1.0),
+              ),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, // Cor de fundo verde
-              ),
-              child: const Text('Cancelar',
-                  style: TextStyle(color: Colors.black)), // Texto preto
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await _saveChanges();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // Cor de fundo verde
-              ),
-              child: const Text('Salvar Alterações',
-                  style: TextStyle(color: Colors.black)), // Texto preto
-            ),
-          ],
-        );
-      },
+        ),
+      ],
     );
   }
 
@@ -220,7 +442,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                   Navigator.pop(context);
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -234,24 +456,33 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _buildNonEditableField(
-                        'Status', widget.notification.status ?? ''),
+                    _buildNonEditableField('Status da Notificação',
+                        widget.notification.status ?? ''),
                     const SizedBox(height: 8),
                     _buildNonEditableField(
-                        'Tipo', widget.notification.tipo ?? ''),
+                        'Tipo da Notificação', widget.notification.tipo),
+                    const SizedBox(height: 8),
+                    _buildNonEditableField('Natureza da Notificação',
+                        widget.notification.natureza ?? ''),
                     const SizedBox(height: 8),
                     _buildNonEditableField(
-                        'Natureza', widget.notification.natureza ?? ''),
-                    const SizedBox(height: 8),
-                    _buildNonEditableField('Risco', widget.notification.risco),
+                        'Avaliação de Risco', widget.notification.risco),
                     const SizedBox(height: 8),
                     _buildNonEditableField(
-                        'Data',
+                        'Data da Observação',
                         DateFormat('dd/MM/yyyy')
                             .format(DateTime.parse(widget.notification.data))),
                     const SizedBox(height: 8),
-                    _buildNonEditableField(
-                        'Descrição', widget.notification.descricao ?? ''),
+                    _buildNonEditableField('Descrição da Observação',
+                        widget.notification.descricao ?? ''),
+                    const SizedBox(height: 8),
+                    if (widget.notification.empresa?.isNotEmpty ?? false)
+                      _buildNonEditableField(
+                          'Nome da Empresa', widget.notification.empresa ?? ''),
+                    const SizedBox(height: 8),
+                    if (widget.notification.linha?.isNotEmpty ?? false)
+                      _buildNonEditableField(
+                          'Número da Linha', widget.notification.linha ?? ''),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -259,11 +490,17 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                           onPressed: _openEditModal,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
+                            minimumSize: Size(
+                                100, 30), // Aumenta o tamanho mínimo do botão
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12), // Ajusta o preenchimento interno
                           ),
                           child: Text(
                             'Editar',
                             style: TextStyle(
-                                color: Colors.black), // Cor do texto preto
+                                color: Colors.black,
+                                fontSize: 16), // Cor do texto preto
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -271,15 +508,21 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                           onPressed: _deleteNotification,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
+                            minimumSize: Size(
+                                100, 30), // Aumenta o tamanho mínimo do botão
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12), // Ajusta o preenchimento interno
                           ),
                           child: Text(
                             'Excluir',
                             style: TextStyle(
-                                color: Colors.black), // Cor do texto preto
+                                color: Colors.black,
+                                fontSize: 16), // Cor do texto preto
                           ),
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -298,7 +541,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -317,14 +560,14 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 18,
           ),
         ),
       ],

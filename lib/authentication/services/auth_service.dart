@@ -61,7 +61,8 @@ class AuthService {
     required String city,
     required String street,
     required String neighborhood,
-    required String phone, // Novo parâmetro
+    required String phone,
+    required String userType, // Adicionando o tipo de usuário
   }) async {
     try {
       UserCredential userCredential =
@@ -77,16 +78,19 @@ class AuthService {
         'cep': cep,
         'street': street,
         'neighborhood': neighborhood,
-        'phone': phone, // Novo campo
+        'phone': phone,
+        'userType': userType, // Adicionando o tipo de usuário
       };
 
-      // Salvar informações personalizadas no Firebase Firestore com base no tipo de usuário
+      // Salvar informações personalizadas no Firebase Firestore
       await _firebaseFirestore
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
         ...userData,
       });
+
+      return null; // Success
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":
@@ -97,8 +101,6 @@ class AuthService {
     } catch (e) {
       return "Erro desconhecido ao criar usuário: $e";
     }
-
-    return null;
   }
 
   // Função de logout

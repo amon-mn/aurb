@@ -1,7 +1,6 @@
 import 'package:aurb/authentication/services/auth_service.dart';
 import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_button.dart';
-
 import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/show_snackbar.dart';
 import 'package:aurb/screens/home.dart';
@@ -30,9 +29,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
 
-
   // Global Keys
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -314,6 +313,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           street: streetController.text,
           neighborhood: neighborhoodController.text,
           phone: phoneController.text, // Passando o valor do telefone
+          userType: 'User', // Adicionando o tipo de usuário padrão
         ).then((String? error) {
           if (error != null) {
             showSnackBar(context: context, mensagem: error);
@@ -360,6 +360,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String street,
     required String neighborhood,
     required String phone, // Novo parâmetro
+    required String userType, // Adicionando o tipo de usuário
   }) async {
     try {
       final AuthService authService = AuthService();
@@ -374,6 +375,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         street: street,
         neighborhood: neighborhood,
         phone: phone, // Passando o valor do telefone
+        userType: userType, // Passando o tipo de usuário
       );
     } catch (error) {
       return error.toString();

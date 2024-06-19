@@ -2,7 +2,9 @@ import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_button.dart';
 import 'package:aurb/components/my_textfield.dart';
 import 'package:aurb/components/show_snackbar.dart';
+import 'package:aurb/screens/adm_home.dart';
 import 'package:aurb/screens/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/components/sign_with_google.dart'; // Importe o widget do botão de login com o Google
@@ -22,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -119,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               colorButton:
                                   const Color.fromARGB(255, 69, 69, 69),
                               paddingButton: 12,
-                              onTap: _signUserIn,
+                              onTap: signUserIn,
                               textButton: 'Entrar',
                               textSize: 18,
                             ),
@@ -199,18 +202,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // sign user in method
-  void _signUserIn() async {
+// sign user in method
+  void signUserIn() async {
     String email = _emailController.text;
     String pass = _passwordController.text;
 
     if (_formKey.currentState!.validate()) {
       try {
-        /*
         setState(() {
           _isLoading = true;
         });
-        */
 
         String? erro =
             await authService.loginUser(email: email, password: pass);
@@ -218,25 +219,51 @@ class _LoginScreenState extends State<LoginScreen> {
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);
         } else {
-          // Redirecione para a tela regular do usuário (HomePage).
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  HomeScreen(user: FirebaseAuth.instance.currentUser!),
-            ),
-          );
+          // Obtenha o ID do usuário atualmente autenticado
+          String userId = FirebaseAuth.instance.currentUser!.uid;
+
+          // Verifique o userType do usuário atual
+          String userType = await getUserType(userId);
+
+          if (userType == "ADM") {
+            // Redirecione para a tela de super usuário (AdmPage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdmPage(
+                  user: FirebaseAuth.instance.currentUser!,
+                ),
+              ),
+            );
+          } else {
+            // Redirecione para a tela regular do usuário (HomePage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          }
         }
       } catch (e) {
         // Trate exceções, se necessário
         print("Erro durante o login: $e");
         showSnackBar(context: context, mensagem: "Erro durante o login");
       } finally {
-        /*setState(() {
+        setState(() {
           _isLoading = false;
         });
-        */
       }
     }
+  }
+
+  Future<String> getUserType(String userId) async {
+    // Use o Firebase para buscar os dados do usuário no banco de dados.
+    // Retorne o valor do campo userType.
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    return userData['userType'];
   }
 }
