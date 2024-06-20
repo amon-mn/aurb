@@ -306,23 +306,23 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Consumer<NotificationLocationController>(
-                        builder: (context, controller, child) {
-                          return ValueListenableBuilder<String>(
-                            valueListenable: controller.addressNotifier,
-                            builder: (context, address, child) {
-                              return Text(
-                                address.isNotEmpty
-                                    ? address
-                                    : 'Carregando endereço...',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.grey[900],
-                                ),
-                              );
-                            },
-                          );
-                        },
+                      ChangeNotifierProvider<NotificationLocationController>(
+                        create: (context) => NotificationLocationController(),
+                        child: Builder(
+                          builder: (context) {
+                            final address =
+                                context.watch<NotificationLocationController>();
+                            return Text(
+                              address.address.isNotEmpty
+                                  ? address.address
+                                  : 'Carregando endereço...',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[900],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       const SizedBox(height: 24),
                       Container(

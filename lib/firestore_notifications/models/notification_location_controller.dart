@@ -11,7 +11,6 @@ class NotificationLocationController extends ChangeNotifier {
   String address = '';
   String error = '';
   GoogleMapController? _mapsController;
-  ValueNotifier<String> addressNotifier = ValueNotifier<String>('');
   LatLng _newPosition = LatLng(0.0, 0.0);
   bool _disposed =
       false; // Adiciona uma variável para rastrear se foi descartado
@@ -90,8 +89,7 @@ class NotificationLocationController extends ChangeNotifier {
 
   Future<void> _getAddressFromCoordinates(
       double latitude, double longitude) async {
-    final apiKey =
-        dotenv.env['GOOGLE_MAPS_API_KEY']!; // Substitua por sua chave API
+    final apiKey = 'AIzaSyClds0h54Q44kPsblrhcmHO_sfL6-_d8Qc';
     final url =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey';
 
@@ -100,17 +98,17 @@ class NotificationLocationController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['results'].isNotEmpty) {
-          addressNotifier.value = data['results'][0]['formatted_address'];
-          print(addressNotifier.value);
+          address = data['results'][0]['formatted_address'];
+          print('linha 103 ${address}');
         } else {
-          addressNotifier.value = 'Endereço não encontrado';
-          print(addressNotifier.value);
+          address = 'Endereço não encontrado';
+          print(address);
         }
       } else {
         throw Exception('Erro ao obter o endereço');
       }
     } catch (e) {
-      addressNotifier.value = 'Erro ao obter endereço: $e';
+      address = 'Erro ao obter endereço: $e';
     }
     notifyListeners();
   }
