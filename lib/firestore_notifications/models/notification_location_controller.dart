@@ -8,12 +8,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class NotificationLocationController extends ChangeNotifier {
   double lat = 0.0;
   double long = 0.0;
-  String address = '';
   String error = '';
   GoogleMapController? _mapsController;
   LatLng _newPosition = LatLng(0.0, 0.0);
-  bool _disposed =
-      false; // Adiciona uma variável para rastrear se foi descartado
+  bool _disposed = false;
+
+  ValueNotifier<String> addressNotifier =
+      ValueNotifier<String>('Carregando endereço...');
 
   GoogleMapController? get mapsController => _mapsController;
 
@@ -35,8 +36,6 @@ class NotificationLocationController extends ChangeNotifier {
       await _getAddressFromCoordinates(lat, long);
     } catch (e) {
       error = e.toString();
-    }
-    if (!_disposed) {
       notifyListeners();
     }
   }
@@ -89,7 +88,7 @@ class NotificationLocationController extends ChangeNotifier {
 
   Future<void> _getAddressFromCoordinates(
       double latitude, double longitude) async {
-    final apiKey = 'AIzaSyClds0h54Q44kPsblrhcmHO_sfL6-_d8Qc';
+    final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
     final url =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey';
 
@@ -98,24 +97,24 @@ class NotificationLocationController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['results'].isNotEmpty) {
-          address = data['results'][0]['formatted_address'];
-          print('linha 103 ${address}');
+          addressNotifier.value = data['results'][0]['formatted_address'];
+          print('Endereço encontrado: ${addressNotifier.value}');
         } else {
-          address = 'Endereço não encontrado';
-          print(address);
+          addressNotifier.value = 'Endereço não encontrado';
+          print(addressNotifier.value);
         }
       } else {
         throw Exception('Erro ao obter o endereço');
       }
     } catch (e) {
-      address = 'Erro ao obter endereço: $e';
+      addressNotifier.value = 'Erro ao obter endereço: $e';
+      print('Exception in _getAddressFromCoordinates: $e');
     }
-    notifyListeners();
   }
 
   @override
   void dispose() {
-    _disposed = true; // Marca como descartado antes de chamar o super.dispose()
+    _disposed = true;
     super.dispose();
   }
 }
