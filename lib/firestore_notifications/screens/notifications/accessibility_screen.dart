@@ -103,6 +103,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
           progress = 100.0;
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
+          // Adiciona o nome do arquivo à lista de imagens selecionadas
+          selectedImages.add(file);
         });
       }
     });
@@ -518,17 +520,27 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       const Color.fromARGB(255, 121, 182, 76),
                                   textSize: 14,
                                   onTap: () {
+                                    String address = Provider.of<
+                                                NotificationLocationController>(
+                                            context,
+                                            listen: false)
+                                        .addressNotifier
+                                        .value;
                                     UserNotification notification =
                                         UserNotification(
                                       id: _notificationId,
-                                      descricao: _descriptionController.text,
                                       tipo: widget.tipo,
+                                      descricao: _descriptionController.text,
                                       natureza: selectedAcessibility.value,
                                       risco: selectedRisco.value,
                                       data: selectedDate,
                                       loc: Location(
                                         latitude: _latNotification,
                                         longitude: _longNotification,
+                                        endereco: address,
+                                        foto: selectedImages
+                                            .map((file) => file.name)
+                                            .toList(),
                                       ),
                                       status: "Não Iniciado",
                                     );

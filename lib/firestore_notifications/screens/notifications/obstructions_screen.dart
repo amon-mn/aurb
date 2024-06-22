@@ -99,9 +99,10 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
         setState(() {
           uploading = false;
           progress = 100.0;
-          // Incrementa o contador de imagens enviadas com sucesso
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
+          // Adiciona o nome do arquivo à lista de imagens selecionadas
+          selectedImages.add(file);
         });
       }
     });

@@ -98,9 +98,10 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
         setState(() {
           uploading = false;
           progress = 100.0;
-          // Incrementa o contador de imagens enviadas com sucesso
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
+          // Adiciona o nome do arquivo à lista de imagens selecionadas
+          selectedImages.add(file);
         });
       }
     });
@@ -509,6 +510,12 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                                     const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
                                 onTap: () {
+                                  String address = Provider.of<
+                                              NotificationLocationController>(
+                                          context,
+                                          listen: false)
+                                      .addressNotifier
+                                      .value;
                                   UserNotification notification =
                                       UserNotification(
                                     id: _notificationId,
@@ -520,10 +527,13 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
+                                      endereco: address,
+                                      foto: selectedImages
+                                          .map((file) => file.name)
+                                          .toList(),
                                     ),
                                     status: "Não Iniciado",
                                   );
-
                                   // Adicione a notificação utilizando o serviço de gerenciamento
                                   notificationService.addNotification(
                                       notification: notification);

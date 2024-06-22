@@ -1,6 +1,6 @@
 class Location {
   String? endereco;
-  String? foto;
+  List<String>? foto;
   double latitude;
   double longitude;
 

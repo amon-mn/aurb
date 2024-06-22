@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class PostosRepository extends ChangeNotifier {
   final List<Location> _locations = [
+    /*
     Location(
       endereco: 'R. João Negrão, 1072 - Rebouças - Centro, Curitiba - PR',
       foto:
@@ -25,6 +26,7 @@ class PostosRepository extends ChangeNotifier {
       latitude: -25.435260,
       longitude: -49.2620769,
     ),
+    */
   ];
 
   List<Location> get locations => _locations;
