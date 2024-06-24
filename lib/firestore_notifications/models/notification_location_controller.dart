@@ -42,8 +42,11 @@ class NotificationLocationController extends ChangeNotifier {
 
   updatePosition(LatLng position) {
     _newPosition = position;
+    lat = _newPosition.latitude;
+    long = _newPosition.longitude;
     print(
         "Nova posição atualizada: ${_newPosition.latitude}, ${_newPosition.longitude}");
+    _getAddressFromCoordinates(lat, long);
     notifyListeners();
   }
 

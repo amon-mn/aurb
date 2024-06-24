@@ -101,8 +101,6 @@ class _ObstructionsPageState extends State<ObstructionsPage> {
           progress = 100.0;
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
-          // Adiciona o nome do arquivo à lista de imagens selecionadas
-          selectedImages.add(file);
         });
       }
     });

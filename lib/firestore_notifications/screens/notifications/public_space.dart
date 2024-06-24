@@ -100,8 +100,6 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
           progress = 100.0;
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
-          // Adiciona o nome do arquivo à lista de imagens selecionadas
-          selectedImages.add(file);
         });
       }
     });
@@ -528,9 +526,6 @@ class _PublicSpacePageState extends State<PublicSpacePage> {
                                       latitude: _latNotification,
                                       longitude: _longNotification,
                                       endereco: address,
-                                      foto: selectedImages
-                                          .map((file) => file.name)
-                                          .toList(),
                                     ),
                                     status: "Não Iniciado",
                                   );

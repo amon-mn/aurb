@@ -103,8 +103,6 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
           progress = 100.0;
           int currentCount = numberOfImagesSelectedNotifier.value;
           numberOfImagesSelectedNotifier.value = currentCount + 1;
-          // Adiciona o nome do arquivo à lista de imagens selecionadas
-          selectedImages.add(file);
         });
       }
     });
@@ -515,50 +513,47 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                               flex: 1,
                               child: SizedBox(
                                 height: 40,
-                                child: MyButton(
-                                  colorButton:
-                                      const Color.fromARGB(255, 121, 182, 76),
-                                  textSize: 14,
-                                  onTap: () {
-                                    String address = Provider.of<
-                                                NotificationLocationController>(
-                                            context,
-                                            listen: false)
-                                        .addressNotifier
-                                        .value;
-                                    UserNotification notification =
-                                        UserNotification(
-                                      id: _notificationId,
-                                      tipo: widget.tipo,
-                                      descricao: _descriptionController.text,
-                                      natureza: selectedAcessibility.value,
-                                      risco: selectedRisco.value,
-                                      data: selectedDate,
-                                      loc: Location(
-                                        latitude: _latNotification,
-                                        longitude: _longNotification,
-                                        endereco: address,
-                                        foto: selectedImages
-                                            .map((file) => file.name)
-                                            .toList(),
-                                      ),
-                                      status: "Não Iniciado",
-                                    );
+                                child: Consumer<NotificationLocationController>(
+                                  builder: (context, controller, child) {
+                                    return MyButton(
+                                      colorButton: const Color.fromARGB(
+                                          255, 121, 182, 76),
+                                      textSize: 14,
+                                      onTap: () async {
+                                        String address =
+                                            controller.addressNotifier.value;
 
-                                    // Adicione a notificação utilizando o serviço de gerenciamento
-                                    notificationService.addNotification(
-                                        notification: notification);
-
-                                    // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
-                                    Navigator.pop(context);
-                                    showSnackBar(
-                                      context: context,
-                                      mensagem:
-                                          'Notificação enviada com sucesso.',
-                                      isErro: false,
+                                        UserNotification notification =
+                                            UserNotification(
+                                          id: _notificationId,
+                                          tipo: widget.tipo,
+                                          descricao:
+                                              _descriptionController.text,
+                                          natureza: selectedAcessibility.value,
+                                          risco: selectedRisco.value,
+                                          data: selectedDate,
+                                          loc: Location(
+                                            latitude: _latNotification,
+                                            longitude: _longNotification,
+                                            endereco: address,
+                                          ),
+                                          status: "Não Iniciado",
+                                        );
+                                        // Adicione a notificação utilizando o serviço de gerenciamento
+                                        notificationService.addNotification(
+                                            notification: notification);
+                                        // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
+                                        Navigator.pop(context);
+                                        showSnackBar(
+                                          context: context,
+                                          mensagem:
+                                              'Notificação enviada com sucesso.',
+                                          isErro: false,
+                                        );
+                                      },
+                                      textButton: 'Enviar',
                                     );
                                   },
-                                  textButton: 'Enviar',
                                 ),
                               ),
                             ),
