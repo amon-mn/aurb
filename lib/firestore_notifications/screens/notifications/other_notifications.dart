@@ -62,7 +62,8 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
 
   Future<void> upload(XFile file, String notificationId) async {
     isUploadingNotifier.value = true;
-    String ref = 'images/img-${DateTime.now().toString()}.jpeg';
+    String ref =
+        'images/img-${DateTime.now().toString()}notificationID-${notificationId}.jpeg';
     Reference storageRef = FirebaseStorage.instance.ref().child(ref);
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -492,9 +493,6 @@ class _OtherNotificationsPageState extends State<OtherNotificationsPage> {
                                       latitude: _latNotification,
                                       longitude: _longNotification,
                                       endereco: address,
-                                      foto: selectedImages
-                                          .map((file) => file.name)
-                                          .toList(),
                                     ),
                                     status: "Não Iniciado",
                                   );

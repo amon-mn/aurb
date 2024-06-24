@@ -51,7 +51,8 @@ class NotificationPage extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         UserNotification notification = snapshot.data![index];
-                        return _buildCard(context, notification); // Passe o contexto
+                        return _buildCard(
+                            context, notification); // Passe o contexto
                       },
                     );
                   }
@@ -64,13 +65,15 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCard(BuildContext context, UserNotification notification) { // Adicione o contexto aqui
+  Widget _buildCard(BuildContext context, UserNotification notification) {
+    // Adicione o contexto aqui
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailsNotificationPage(notification: notification),
+            builder: (context) =>
+                DetailsNotificationPage(notification: notification),
           ),
         );
       },

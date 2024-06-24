@@ -1,5 +1,6 @@
 import 'package:aurb/components/my_dropdown.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +32,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   late ValueNotifier<String> _selectedEmpresa;
   late ValueNotifier<String> _selectedLinha;
   String _selectedDate = '';
+  List<String> _imageUrls = [];
 
   final itemListRisco = [
     'Selecione',
@@ -95,6 +97,16 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
     _linhaController =
         TextEditingController(text: widget.notification.linha ?? '');
 
+    // Verificação de autenticação antes de carregar as imagens
+    if (FirebaseAuth.instance.currentUser != null) {
+      _loadImages();
+    } else {
+      // Usuário não autenticado, trate conforme necessário
+      print('Usuário não autenticado');
+      // Aqui você pode decidir o que fazer se o usuário não estiver autenticado,
+      // como mostrar uma mensagem ou redirecioná-lo para o login.
+    }
+
     // Verifica se o valor de empresa não está vazio para decidir se deve ser incluído na lista
     if (widget.notification.empresa != null &&
         widget.notification.empresa!.isNotEmpty) {
@@ -117,6 +129,35 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
       );
     } else {
       _selectedLinha = ValueNotifier<String>('Selecione');
+    }
+  }
+
+  Future<void> _loadImages() async {
+    try {
+      String notificationId = widget.notification.id;
+      final ListResult result =
+          await FirebaseStorage.instance.ref().child('images/').listAll();
+
+      List<String> imageUrls = [];
+      await Future.forEach(result.items, (Reference ref) async {
+        // Verifica se a imagem pertence à notificação específica
+        if (ref.name.contains(notificationId)) {
+          String url = await ref.getDownloadURL();
+          imageUrls.add(url);
+        }
+      });
+
+      setState(() {
+        _imageUrls = imageUrls;
+      });
+    } catch (e) {
+      print('Erro ao carregar imagens: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Erro ao carregar imagens: $e'),
+        ),
+      );
     }
   }
 
@@ -484,6 +525,34 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                       _buildNonEditableField(
                           'Número da Linha', widget.notification.linha ?? ''),
                     const SizedBox(height: 8),
+                    Text(
+                      'Imagens da Notificação',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _imageUrls.isNotEmpty
+                        ? GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 4.0,
+                              crossAxisSpacing: 4.0,
+                            ),
+                            itemCount: _imageUrls.length,
+                            itemBuilder: (context, index) {
+                              return Image.network(_imageUrls[index]);
+                            },
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text('Nenhuma imagem disponível'),
+                          ),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         ElevatedButton(
@@ -525,7 +594,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                     )
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
