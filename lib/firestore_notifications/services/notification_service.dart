@@ -18,14 +18,20 @@ class NotificationService {
   Future<List<UserNotification>> readNotifications() async {
     List<UserNotification> temp = [];
 
-    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
-        .collection('users')
-        .doc(userId)
-        .collection('notifications')
-        .get();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('notifications')
+          .get();
 
-    for (var doc in snapshot.docs) {
-      temp.add(UserNotification.fromMap(doc.data()));
+      for (var doc in snapshot.docs) {
+        temp.add(UserNotification.fromMap(doc.data()));
+      }
+    } catch (e) {
+      // Adiciona um log detalhado do erro
+      print('Erro ao carregar notificações: $e');
+      rethrow;
     }
 
     return temp;
