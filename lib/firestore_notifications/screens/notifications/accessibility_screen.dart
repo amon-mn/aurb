@@ -121,6 +121,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
   bool isMapFullScreen = false;
   double _latNotification = 0.0;
   double _longNotification = 0.0;
+  String _addressNotification = '';
   final _notificationId = const Uuid().v4();
 
   @override
@@ -304,6 +305,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                             return ValueListenableBuilder<String>(
                               valueListenable: controller.addressNotifier,
                               builder: (context, address, child) {
+                                _addressNotification =
+                                    address; // Atualiza o endereço constantemente
                                 return Text(
                                   address.isNotEmpty
                                       ? address
@@ -514,47 +517,39 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                               flex: 1,
                               child: SizedBox(
                                 height: 40,
-                                child: Consumer<NotificationLocationController>(
-                                  builder: (context, controller, child) {
-                                    return MyButton(
-                                      colorButton: const Color.fromARGB(
-                                          255, 121, 182, 76),
-                                      textSize: 14,
-                                      onTap: () async {
-                                        String address =
-                                            controller.addressNotifier.value;
-
-                                        UserNotification notification =
-                                            UserNotification(
-                                          id: _notificationId,
-                                          tipo: widget.tipo,
-                                          descricao:
-                                              _descriptionController.text,
-                                          natureza: selectedAcessibility.value,
-                                          risco: selectedRisco.value,
-                                          data: selectedDate,
-                                          loc: Location(
-                                            latitude: _latNotification,
-                                            longitude: _longNotification,
-                                            endereco: address,
-                                          ),
-                                          status: "Não Iniciado",
-                                        );
-                                        // Adicione a notificação utilizando o serviço de gerenciamento
-                                        notificationService.addNotification(
-                                            notification: notification);
-                                        // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
-                                        Navigator.pop(context);
-                                        showSnackBar(
-                                          context: context,
-                                          mensagem:
-                                              'Notificação enviada com sucesso.',
-                                          isErro: false,
-                                        );
-                                      },
-                                      textButton: 'Enviar',
+                                child: MyButton(
+                                  colorButton:
+                                      const Color.fromARGB(255, 121, 182, 76),
+                                  textSize: 14,
+                                  onTap: () async {
+                                    UserNotification notification =
+                                        UserNotification(
+                                      id: _notificationId,
+                                      tipo: widget.tipo,
+                                      descricao: _descriptionController.text,
+                                      natureza: selectedAcessibility.value,
+                                      risco: selectedRisco.value,
+                                      data: selectedDate,
+                                      loc: Location(
+                                        latitude: _latNotification,
+                                        longitude: _longNotification,
+                                        endereco: _addressNotification,
+                                      ),
+                                      status: "Não Iniciado",
+                                    );
+                                    // Adicione a notificação utilizando o serviço de gerenciamento
+                                    notificationService.addNotification(
+                                        notification: notification);
+                                    // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
+                                    Navigator.pop(context);
+                                    showSnackBar(
+                                      context: context,
+                                      mensagem:
+                                          'Notificação enviada com sucesso.',
+                                      isErro: false,
                                     );
                                   },
+                                  textButton: 'Enviar',
                                 ),
                               ),
                             ),

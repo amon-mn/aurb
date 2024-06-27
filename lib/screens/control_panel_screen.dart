@@ -42,50 +42,53 @@ class ControlPanelPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   height: MediaQuery.of(context).size.height / 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: FutureBuilder<List<UserNotification>>(
-                      future: _notificationService.readNotifications(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text("Error loading notifications"));
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return Center(child: Text("No notifications found"));
-                        }
+                  child: FutureBuilder<List<UserNotification>>(
+                    future: _notificationService.readNotifications(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                            child: Text("Error loading notifications"));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text("No notifications found"));
+                      }
 
-                        List<UserNotification> notifications = snapshot.data!;
-                        return GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(-3.0870, -60.0055),
-                            zoom: 12.0,
+                      List<UserNotification> notifications = snapshot.data!;
+                      Set<Marker> markers = _buildMarkers(notifications);
+                      List<String> legendTitles = [];
+
+                      // Filter out duplicate legend titles
+                      markers.forEach((marker) {
+                        if (!legendTitles.contains(marker.infoWindow.title!)) {
+                          legendTitles.add(marker.infoWindow.title!);
+                        }
+                      });
+
+                      return Stack(
+                        children: [
+                          GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(-3.0870, -60.0055),
+                              zoom: 12.0,
+                            ),
+                            markers: markers,
                           ),
-                          markers: _buildMarkers(notifications),
-                        );
-                      },
-                    ),
+                          Positioned(
+                            top: 16.0,
+                            right: 16.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: legendTitles.map((title) {
+                                return _buildLegend(title);
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildLegend("Sinalização", Colors.green),
-                  _buildLegend("Calçamento", Colors.orange),
-                  _buildLegend("Ruas e Avenidas", Colors.red),
-                  _buildLegend("Acessibilidade", Colors.blue),
-                  _buildLegend("Terminais de Onibus", Colors.purple),
-                  _buildLegend("Transporte Público", Colors.yellow),
-                  _buildLegend("Obras", Colors.brown),
-                  _buildLegend("Obstruções Temporárias", Colors.grey),
-                  _buildLegend("Uso do Espaço Público", Colors.cyan),
-                  _buildLegend("Outras Notificações", Colors.black),
-                ],
               ),
             ],
           ),
@@ -103,50 +106,10 @@ class ControlPanelPage extends StatelessWidget {
             LatLng(notification.loc!.latitude, notification.loc!.longitude);
 
         BitmapDescriptor icon;
+        Color markerColor = _getColorForNotificationType(notification.tipo);
 
-        switch (notification.tipo) {
-          case "Sinalização":
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueGreen);
-            break;
-          case "Calçamento":
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueOrange);
-            break;
-          case "Ruas e Avenidas":
-            icon =
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
-            break;
-          case "Acessibilidade":
-            icon =
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-            break;
-          case "Terminais de Onibus":
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueMagenta);
-            break;
-          case "Transporte Público":
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueYellow);
-            break;
-          case "Obras":
-            icon =
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
-            break;
-          case "Obstruções Temporárias":
-            icon =
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-            break;
-          case "Uso do Espaço Público":
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueAzure);
-            break;
-          case "Outras Notificações":
-          default:
-            icon = BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueViolet);
-            break;
-        }
+        icon =
+            BitmapDescriptor.defaultMarkerWithHue(_getHueForColor(markerColor));
 
         markers.add(
           Marker(
@@ -165,7 +128,60 @@ class ControlPanelPage extends StatelessWidget {
     return markers;
   }
 
-  Widget _buildLegend(String title, Color color) {
+  Color _getColorForNotificationType(String type) {
+    switch (type) {
+      case "Sinalização":
+        return Colors.green;
+      case "Calçamento":
+        return Colors.orange;
+      case "Ruas e Avenidas":
+        return Colors.red;
+      case "Acessibilidade":
+        return Colors.blue;
+      case "Terminais de Ônibus":
+        return Colors.purple;
+      case "Transporte Público":
+        return Colors.yellow;
+      case "Obras":
+        return Colors.pink;
+      case "Obstruções Temporárias":
+        return Colors.cyan;
+      case "Uso do Espaço Público":
+        return Colors.black;
+      case "Outras Notificações":
+      default:
+        return Colors.black;
+    }
+  }
+
+  double _getHueForColor(Color color) {
+    // Convert Color to Hue value for BitmapDescriptor
+    if (color == Colors.red) {
+      return BitmapDescriptor.hueRed;
+    } else if (color == Colors.blue) {
+      return BitmapDescriptor.hueBlue;
+    } else if (color == Colors.green) {
+      return BitmapDescriptor.hueGreen;
+    } else if (color == Colors.orange) {
+      return BitmapDescriptor.hueOrange;
+    } else if (color == Colors.yellow) {
+      return BitmapDescriptor.hueYellow;
+    } else if (color == Colors.purple) {
+      return BitmapDescriptor.hueViolet;
+    } else if (color == Colors.pink) {
+      return BitmapDescriptor.hueRose;
+    } else if (color == Colors.cyan) {
+      return BitmapDescriptor.hueCyan;
+    } else if (color == Colors.black) {
+      return BitmapDescriptor.hueAzure;
+    } else {
+      return BitmapDescriptor.hueAzure; // Default hue for unknown colors
+    }
+  }
+
+  Widget _buildLegend(String title) {
+    Color legendColor = _getColorForNotificationType(title);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Row(
@@ -173,7 +189,7 @@ class ControlPanelPage extends StatelessWidget {
           Container(
             width: 12,
             height: 12,
-            color: color,
+            color: legendColor,
           ),
           SizedBox(width: 4),
           Text(

@@ -9,6 +9,8 @@ class NotificationLocationController extends ChangeNotifier {
   double lat = 0.0;
   double long = 0.0;
   String error = '';
+  String lastAddress =
+      'Carregando endereço...'; // Variável secundária para armazenar o último endereço
   GoogleMapController? _mapsController;
   LatLng _newPosition = LatLng(0.0, 0.0);
   bool _disposed = false;
@@ -33,7 +35,7 @@ class NotificationLocationController extends ChangeNotifier {
       if (_mapsController != null && !_disposed) {
         _mapsController!.animateCamera(CameraUpdate.newLatLng(_newPosition));
       }
-      await _getAddressFromCoordinates(lat, long);
+      await _updateAddressFromCoordinates(lat, long);
     } catch (e) {
       error = e.toString();
       notifyListeners();
@@ -46,7 +48,7 @@ class NotificationLocationController extends ChangeNotifier {
     long = _newPosition.longitude;
     print(
         "Nova posição atualizada: ${_newPosition.latitude}, ${_newPosition.longitude}");
-    _getAddressFromCoordinates(lat, long);
+    _updateAddressFromCoordinates(lat, long);
     notifyListeners();
   }
 
@@ -54,7 +56,7 @@ class NotificationLocationController extends ChangeNotifier {
     lat = _newPosition.latitude;
     long = _newPosition.longitude;
     print("Posição final definida: $lat, $long");
-    _getAddressFromCoordinates(lat, long);
+    _updateAddressFromCoordinates(lat, long);
     notifyListeners();
   }
 
@@ -62,7 +64,7 @@ class NotificationLocationController extends ChangeNotifier {
     lat = position.latitude;
     long = position.longitude;
     print("Nova posição definida com LongPress: $lat, $long");
-    _getAddressFromCoordinates(lat, long);
+    _updateAddressFromCoordinates(lat, long);
     notifyListeners();
   }
 
@@ -89,7 +91,7 @@ class NotificationLocationController extends ChangeNotifier {
     return await Geolocator.getCurrentPosition();
   }
 
-  Future<void> _getAddressFromCoordinates(
+  Future<void> _updateAddressFromCoordinates(
       double latitude, double longitude) async {
     final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
     final url =
@@ -100,10 +102,14 @@ class NotificationLocationController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['results'].isNotEmpty) {
-          addressNotifier.value = data['results'][0]['formatted_address'];
-          print('Endereço encontrado: ${addressNotifier.value}');
+          String address = data['results'][0]['formatted_address'];
+          addressNotifier.value = address;
+          lastAddress = address; // Atualiza a variável secundária
+          print('Endereço encontrado: $address');
         } else {
           addressNotifier.value = 'Endereço não encontrado';
+          lastAddress =
+              'Endereço não encontrado'; // Atualiza a variável secundária
           print(addressNotifier.value);
         }
       } else {
@@ -111,7 +117,9 @@ class NotificationLocationController extends ChangeNotifier {
       }
     } catch (e) {
       addressNotifier.value = 'Erro ao obter endereço: $e';
-      print('Exception in _getAddressFromCoordinates: $e');
+      lastAddress =
+          'Erro ao obter endereço: $e'; // Atualiza a variável secundária
+      print('Exception in _updateAddressFromCoordinates: $e');
     }
   }
 

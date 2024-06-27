@@ -30,6 +30,7 @@ class _ConstructionPageState extends State<ConstructionPage> {
   NotificationService notificationService = NotificationService();
   double _latNotification = 0.0;
   double _longNotification = 0.0;
+  String _addressNotification = '';
   final TextEditingController _controller = TextEditingController();
 
   ValueNotifier<String> selectedConstruction =
@@ -295,6 +296,8 @@ class _ConstructionPageState extends State<ConstructionPage> {
                           return ValueListenableBuilder<String>(
                             valueListenable: controller.addressNotifier,
                             builder: (context, address, child) {
+                              _addressNotification =
+                                  address; // Atualiza o endereço constantemente
                               return Text(
                                 address.isNotEmpty
                                     ? address
@@ -507,25 +510,19 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                 colorButton:
                                     const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
-                                onTap: () {
-                                  String address = Provider.of<
-                                              NotificationLocationController>(
-                                          context,
-                                          listen: false)
-                                      .addressNotifier
-                                      .value;
+                                onTap: () async {
                                   UserNotification notification =
                                       UserNotification(
                                     id: _notificationId,
-                                    descricao: _controller.text,
                                     tipo: widget.tipo,
+                                    descricao: _controller.text,
                                     natureza: selectedConstruction.value,
                                     risco: selectedRisco.value,
                                     data: selectedDate,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
-                                      endereco: address,
+                                      endereco: _addressNotification,
                                     ),
                                     status: "Não Iniciado",
                                   );

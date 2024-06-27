@@ -30,6 +30,7 @@ class _SinalizationPageState extends State<SinalizationPage> {
   NotificationService notificationService = NotificationService();
   double _latNotification = 0.0;
   double _longNotification = 0.0;
+  String _addressNotification = '';
   ValueNotifier<String> selectedSinalization =
       ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedRisco = ValueNotifier<String>('Selecione');
@@ -301,6 +302,8 @@ class _SinalizationPageState extends State<SinalizationPage> {
                           return ValueListenableBuilder<String>(
                             valueListenable: controller.addressNotifier,
                             builder: (context, address, child) {
+                              _addressNotification =
+                                  address; // Atualiza o endereço constantemente
                               return Text(
                                 address.isNotEmpty
                                     ? address
@@ -513,33 +516,25 @@ class _SinalizationPageState extends State<SinalizationPage> {
                                 colorButton:
                                     const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
-                                onTap: () {
-                                  String address = Provider.of<
-                                              NotificationLocationController>(
-                                          context,
-                                          listen: false)
-                                      .addressNotifier
-                                      .value;
+                                onTap: () async {
                                   UserNotification notification =
                                       UserNotification(
                                     id: _notificationId,
-                                    descricao: _controller.text,
                                     tipo: widget.tipo,
+                                    descricao: _controller.text,
                                     natureza: selectedSinalization.value,
                                     risco: selectedRisco.value,
                                     data: selectedDate,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
-                                      endereco: address,
+                                      endereco: _addressNotification,
                                     ),
                                     status: "Não Iniciado",
                                   );
-
                                   // Adicione a notificação utilizando o serviço de gerenciamento
                                   notificationService.addNotification(
                                       notification: notification);
-
                                   // Feche a página e exiba um snackbar para indicar que a notificação foi enviada com sucesso
                                   Navigator.pop(context);
                                   showSnackBar(
