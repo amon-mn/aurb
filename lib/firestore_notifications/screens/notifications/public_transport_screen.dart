@@ -599,6 +599,8 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                                     natureza: selectedPT.value,
                                     risco: selectedRisco.value,
                                     data: selectedDate,
+                                    empresa: selectedEmpresa.value,
+                                    linha: selectedNumero.value,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,

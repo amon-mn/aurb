@@ -538,6 +538,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                     if (widget.notification.linha?.isNotEmpty ?? false)
                       _buildNonEditableField(
                           'Número da Linha', widget.notification.linha ?? ''),
+                    const SizedBox(height: 10),
                     Text(
                       "Localização",
                       style: const TextStyle(
