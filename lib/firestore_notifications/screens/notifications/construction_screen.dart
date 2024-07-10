@@ -511,6 +511,8 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                     const Color.fromARGB(255, 121, 182, 76),
                                 textSize: 14,
                                 onTap: () async {
+                                  Map<String, String> authorInfo =
+                                      await notificationService.getAuthorInfo();
                                   UserNotification notification =
                                       UserNotification(
                                     id: _notificationId,
@@ -519,11 +521,16 @@ class _ConstructionPageState extends State<ConstructionPage> {
                                     natureza: selectedConstruction.value,
                                     risco: selectedRisco.value,
                                     data: selectedDate,
+                                    authorName:
+                                        isSwitched ? '' : authorInfo['name']!,
+                                    authorCpf:
+                                        isSwitched ? '' : authorInfo['cpf']!,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
                                       endereco: _addressNotification,
                                     ),
+                                    isAnonymous: isSwitched,
                                     status: "Não Iniciado",
                                   );
                                   // Adicione a notificação utilizando o serviço de gerenciamento

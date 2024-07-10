@@ -1,4 +1,5 @@
 import 'package:aurb/authentication/screens/login_screen.dart';
+import 'package:aurb/authentication/screens/phone_number_screen.dart';
 import 'package:aurb/authentication/screens/register_screen.dart';
 import 'package:aurb/components/card.dart';
 import 'package:aurb/components/my_text_button.dart';
@@ -6,9 +7,7 @@ import 'package:aurb/components/traffic_lane.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({
-    super.key,
-  });
+  const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +81,12 @@ class WelcomeScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           MyTextButton(
                             onTap: () {
-                              // Use o Navigator para navegar para a página home.dart
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginScreen()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                              );
                             },
                             text: 'Entrar',
                             textSize: 36,
@@ -94,10 +94,12 @@ class WelcomeScreen extends StatelessWidget {
                           MyTextButton(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterScreen()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RegisterScreen(), // Atualize para a tela de registro de telefone
+                                ),
+                              );
                             },
                             text: 'Cadastrar',
                             textSize: 16,

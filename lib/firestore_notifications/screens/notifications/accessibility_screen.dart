@@ -78,7 +78,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
   Future<void> upload(XFile file, String notificationId) async {
     isUploadingNotifier.value = true;
     String ref =
-        'images/img-${DateTime.now().toString()}notificationID-${notificationId}.jpeg';
+        'images/img-${DateTime.now().toString()}notificationID-$notificationId.jpeg';
     Reference storageRef = FirebaseStorage.instance.ref().child(ref);
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -522,6 +522,9 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       const Color.fromARGB(255, 121, 182, 76),
                                   textSize: 14,
                                   onTap: () async {
+                                    Map<String, String> authorInfo =
+                                        await notificationService
+                                            .getAuthorInfo();
                                     UserNotification notification =
                                         UserNotification(
                                       id: _notificationId,
@@ -530,11 +533,16 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       natureza: selectedAcessibility.value,
                                       risco: selectedRisco.value,
                                       data: selectedDate,
+                                      authorName:
+                                          isSwitched ? '' : authorInfo['name']!,
+                                      authorCpf:
+                                          isSwitched ? '' : authorInfo['cpf']!,
                                       loc: Location(
                                         latitude: _latNotification,
                                         longitude: _longNotification,
                                         endereco: _addressNotification,
                                       ),
+                                      isAnonymous: isSwitched,
                                       status: "Não Iniciado",
                                     );
                                     // Adicione a notificação utilizando o serviço de gerenciamento

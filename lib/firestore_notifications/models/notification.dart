@@ -11,6 +11,9 @@ class UserNotification {
   String? linha;
   Location? loc;
   String? status = "Não Iniciado";
+  String? authorName;
+  String? authorCpf;
+  bool? isAnonymous;
 
   UserNotification({
     required this.id,
@@ -23,6 +26,9 @@ class UserNotification {
     this.empresa,
     this.linha,
     this.status,
+    this.authorName,
+    this.authorCpf,
+    this.isAnonymous,
   });
 
   UserNotification.fromMap(Map<String, dynamic> map)
@@ -35,7 +41,10 @@ class UserNotification {
         data = map['data'],
         empresa = map['empresa'],
         linha = map['linha'],
-        status = map['status'];
+        status = map['status'],
+        authorName = map['authorName'],
+        authorCpf = map['authorCpf'],
+        isAnonymous = map['isAnonymous'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -49,6 +58,9 @@ class UserNotification {
       "empresa": empresa ?? "",
       "linha": linha ?? "",
       "status": status,
+      "authorName": authorName ?? "",
+      "authorCpf": authorCpf ?? "",
+      "isAnonymous": isAnonymous ?? false,
     };
   }
 }

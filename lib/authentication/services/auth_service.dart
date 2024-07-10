@@ -60,8 +60,8 @@ class AuthService {
     required String state,
     required String city,
     required String street,
-    required String neighborhood,
     required String phone,
+    required String neighborhood,
     required String userType, // Adicionando o tipo de usuário
   }) async {
     try {
@@ -77,9 +77,10 @@ class AuthService {
         'city': city,
         'cep': cep,
         'street': street,
-        'neighborhood': neighborhood,
         'phone': phone,
+        'neighborhood': neighborhood,
         'userType': userType, // Adicionando o tipo de usuário
+        'profileCompleted': false, // Inicialmente definido como false
       };
 
       // Salvar informações personalizadas no Firebase Firestore
@@ -103,6 +104,39 @@ class AuthService {
     }
   }
 
+  // Método para marcar o perfil como completo
+  Future<void> markProfileAsCompleted(String userId) async {
+    try {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .update({'profileCompleted': true});
+    } catch (error) {
+      print("Erro ao marcar o perfil como completo: $error");
+      throw error;
+    }
+  }
+
+  Future<bool> isProfileComplete(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firebaseFirestore.collection('users').doc(userId).get();
+      User? user = _firebaseAuth.currentUser;
+
+      if (user != null) {
+        await user.reload();
+        bool isEmailVerified = user.emailVerified;
+        bool isPhoneVerified = userDoc.get('phone') != "";
+
+        return isEmailVerified && isPhoneVerified;
+      }
+      return false;
+    } catch (error) {
+      print("Erro ao verificar se o perfil está completo: $error");
+      return false;
+    }
+  }
+
   // Função de logout
   Future<String?> logout() async {
     try {
@@ -118,7 +152,7 @@ class AuthService {
     }
   }
 
-// Função para verificar se o usuario preencheu as informações de cadastro
+  // Função para verificar se o usuario preencheu as informações de cadastro
   Future<bool> hasAdditionalInfo(String userId) async {
     try {
       DocumentSnapshot userSnapshot =

@@ -207,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void signUserIn() async {
     String email = _emailController.text;
     String pass = _passwordController.text;
+    final User user = FirebaseAuth.instance.currentUser!;
 
     if (_formKey.currentState!.validate()) {
       try {
@@ -241,10 +242,15 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    HomeScreen(user: FirebaseAuth.instance.currentUser!),
+                builder: (context) => HomeScreen(user: user),
               ),
             );
+
+            // Verificar se o perfil está completo
+            bool isComplete = await authService.isProfileComplete(user.uid);
+            if (isComplete) {
+              await authService.markProfileAsCompleted(user.uid);
+            }
           }
         }
       } catch (e) {

@@ -12,6 +12,8 @@ class MyTextFieldWrapper extends StatefulWidget {
   final VoidCallback? onSuffixIconPressed;
   final ValueChanged<String>? onChanged;
   final String? initialValue;
+  final TextInputType? keyboardType;
+  final FocusNode? focusNode; // Novo parâmetro
 
   MyTextFieldWrapper({
     super.key,
@@ -25,6 +27,8 @@ class MyTextFieldWrapper extends StatefulWidget {
     this.onSuffixIconPressed,
     this.onChanged,
     this.initialValue,
+    this.keyboardType,
+    this.focusNode, // Inicializa o novo parâmetro
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -52,6 +56,8 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
             widget.inputFormatter != null ? [widget.inputFormatter!] : [],
         controller: widget.controller,
         obscureText: widget.obscureText,
+        keyboardType: widget.keyboardType,
+        focusNode: widget.focusNode, // Atribui o FocusNode
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.prefixIcon,

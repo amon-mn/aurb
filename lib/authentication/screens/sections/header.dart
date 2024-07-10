@@ -5,12 +5,15 @@ class Header extends StatelessWidget {
   final IconData? customIconLeft;
   final IconData? customIconRight;
   final Function()? customOnPressed;
+  final Function()? customOnPressedRight;
 
-  const Header(
-      {super.key,
-      this.customIconLeft,
-      this.customIconRight,
-      this.customOnPressed});
+  const Header({
+    super.key,
+    this.customIconLeft,
+    this.customIconRight,
+    this.customOnPressed,
+    this.customOnPressedRight,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +24,13 @@ class Header extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(
-              customIconLeft ??
-                  Icons
-                      .menu_rounded, // Usa o ícone personalizado ou o ícone padrão
+              customIconLeft ?? Icons.menu_rounded,
               color: Colors.black,
               size: 28,
             ),
             onPressed: customOnPressed ??
                 () {
-                  Scaffold.of(context)
-                      .openDrawer(); // Usa a função personalizada ou a função padrão
+                  Scaffold.of(context).openDrawer();
                 },
           ),
           Expanded(
@@ -95,13 +95,15 @@ class Header extends StatelessWidget {
                 color: Colors.black,
                 size: 28,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NotificationPage()),
-                );
-              },
+              onPressed: customOnPressedRight ??
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationPage(),
+                      ),
+                    );
+                  },
             ),
         ],
       ),

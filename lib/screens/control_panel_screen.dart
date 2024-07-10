@@ -1,8 +1,10 @@
+import 'package:aurb/firestore_notifications/models/notification_location_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
+import 'package:provider/provider.dart';
 
 class ControlPanelPage extends StatelessWidget {
   final NotificationService _notificationService = NotificationService();
@@ -11,9 +13,10 @@ class ControlPanelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return ChangeNotifierProvider(
+      create: (_) => NotificationLocationController(),
+      child: Scaffold(
+        body: SafeArea(
           child: Column(
             children: [
               Header(
@@ -22,72 +25,76 @@ class ControlPanelPage extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  "Painel de Análise da Mobilidade",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 8),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: FutureBuilder<List<UserNotification>>(
-                    future: _notificationService.readNotifications(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(
-                            child: Text("Error loading notifications"));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text("No notifications found"));
-                      }
-
-                      List<UserNotification> notifications = snapshot.data!;
-                      Set<Marker> markers = _buildMarkers(notifications);
-                      List<String> legendTitles = [];
-
-                      // Filter out duplicate legend titles
-                      markers.forEach((marker) {
-                        if (!legendTitles.contains(marker.infoWindow.title!)) {
-                          legendTitles.add(marker.infoWindow.title!);
+              Expanded(
+                child: Consumer<NotificationLocationController>(
+                  builder: (context, controller, child) {
+                    return FutureBuilder<List<UserNotification>>(
+                      future: _notificationService.readAllNotifications(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text("Error loading notifications"));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text("No notifications found"));
                         }
-                      });
 
-                      return Stack(
-                        children: [
-                          GoogleMap(
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(-3.0870, -60.0055),
-                              zoom: 12.0,
+                        List<UserNotification> notifications = snapshot.data!;
+                        Set<Marker> markers = _buildMarkers(notifications);
+
+                        return Stack(
+                          children: [
+                            GoogleMap(
+                              onMapCreated: controller.onMapCreated,
+                              initialCameraPosition: CameraPosition(
+                                target: LatLng(controller.lat, controller.long),
+                                zoom: 18.0,
+                              ),
+                              markers: markers,
+                              myLocationEnabled: true,
+                              myLocationButtonEnabled: true,
+                              zoomControlsEnabled: true,
+                              mapType: MapType.normal,
                             ),
-                            markers: markers,
-                          ),
-                          Positioned(
-                            top: 16.0,
-                            right: 16.0,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: legendTitles.map((title) {
-                                return _buildLegend(title);
-                              }).toList(),
+                            Positioned(
+                              top: 12.0,
+                              left: 16.0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showLegendPanel(context);
+                                },
+                                child: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.75),
+                                    borderRadius: BorderRadius.circular(2),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 1,
+                                        blurRadius: 0.5,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.all(8),
+                                  child: Icon(
+                                    Icons.legend_toggle,
+                                    color: Colors.black,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],
@@ -155,7 +162,6 @@ class ControlPanelPage extends StatelessWidget {
   }
 
   double _getHueForColor(Color color) {
-    // Convert Color to Hue value for BitmapDescriptor
     if (color == Colors.red) {
       return BitmapDescriptor.hueRed;
     } else if (color == Colors.blue) {
@@ -175,15 +181,37 @@ class ControlPanelPage extends StatelessWidget {
     } else if (color == Colors.black) {
       return BitmapDescriptor.hueAzure;
     } else {
-      return BitmapDescriptor.hueAzure; // Default hue for unknown colors
+      return BitmapDescriptor.hueAzure;
     }
+  }
+
+  void _showLegendPanel(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView(
+          children: [
+            _buildLegend("Sinalização"),
+            _buildLegend("Calçamento"),
+            _buildLegend("Ruas e Avenidas"),
+            _buildLegend("Acessibilidade"),
+            _buildLegend("Terminais de Ônibus"),
+            _buildLegend("Transporte Público"),
+            _buildLegend("Obras"),
+            _buildLegend("Obstruções Temporárias"),
+            _buildLegend("Uso do Espaço Público"),
+            _buildLegend("Outras Notificações"),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildLegend(String title) {
     Color legendColor = _getColorForNotificationType(title);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
         children: [
           Container(
@@ -191,10 +219,10 @@ class ControlPanelPage extends StatelessWidget {
             height: 12,
             color: legendColor,
           ),
-          SizedBox(width: 4),
+          SizedBox(width: 8),
           Text(
             title,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 16),
           ),
         ],
       ),
