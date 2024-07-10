@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aurb/firestore_notifications/models/notification.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:aurb/authentication/screens/sections/header.dart';
 import 'package:aurb/firestore_notifications/services/notification_service.dart';
@@ -31,6 +32,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   late ValueNotifier<String> _selectedRisco;
   late ValueNotifier<String> _selectedEmpresa;
   late ValueNotifier<String> _selectedLinha;
+  late CameraPosition _initialCameraPosition;
   String _selectedDate = '';
   List<String> _imageUrls = [];
 
@@ -76,6 +78,12 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
   @override
   void initState() {
     super.initState();
+    final location = widget.notification.loc;
+    _initialCameraPosition = CameraPosition(
+      target: LatLng(location?.latitude ?? 0.0, location?.longitude ?? 0.0),
+      zoom: 18,
+    );
+
     _statusController =
         TextEditingController(text: widget.notification.status ?? '');
     _tipoController = TextEditingController(text: widget.notification.tipo);
@@ -131,6 +139,8 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
       _selectedLinha = ValueNotifier<String>('Selecione');
     }
   }
+
+  void _onMapCreated(GoogleMapController controller) {}
 
   Future<void> _loadImages() async {
     try {
@@ -471,6 +481,8 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final location = widget.notification.loc;
+    final String address = location?.endereco ?? 'Endereço não disponível';
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -485,7 +497,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
               ),
               const SizedBox(height: 16),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -496,35 +508,71 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                         fontSize: 18,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField('Status da Notificação',
                         widget.notification.status ?? ''),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField(
                         'Tipo da Notificação', widget.notification.tipo),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField('Natureza da Notificação',
                         widget.notification.natureza ?? ''),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField(
                         'Avaliação de Risco', widget.notification.risco),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField(
                         'Data da Observação',
                         DateFormat('dd/MM/yyyy')
                             .format(DateTime.parse(widget.notification.data))),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _buildNonEditableField('Descrição da Observação',
                         widget.notification.descricao ?? ''),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
+                    _buildNonEditableField('Endereço', address),
+                    const SizedBox(height: 10),
                     if (widget.notification.empresa?.isNotEmpty ?? false)
                       _buildNonEditableField(
                           'Nome da Empresa', widget.notification.empresa ?? ''),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     if (widget.notification.linha?.isNotEmpty ?? false)
                       _buildNonEditableField(
                           'Número da Linha', widget.notification.linha ?? ''),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Localização",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            12.0), // Raio do arredondamento das bordas
+                        border: Border.all(
+                          color: Colors.grey, // Cor da borda
+                          width: 2.0, // Largura da borda em pixels
+                        ),
+                      ),
+                      height: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            12.0), // Raio do arredondamento das bordas
+                        child: GoogleMap(
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: _initialCameraPosition,
+                          markers: {
+                            Marker(
+                              markerId: MarkerId(widget.notification.id),
+                              position: LatLng(location?.latitude ?? 0.0,
+                                  location?.longitude ?? 0.0),
+                            ),
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     Text(
                       'Imagens da Notificação',
                       style: const TextStyle(
@@ -532,7 +580,7 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     _imageUrls.isNotEmpty
                         ? GridView.builder(
                             shrinkWrap: true,
@@ -549,52 +597,60 @@ class _DetailsNotificationPageState extends State<DetailsNotificationPage> {
                             },
                           )
                         : const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text('Nenhuma imagem disponível'),
+                            padding: EdgeInsets.all(4.0),
+                            child: Text('Nenhuma imagem registrada'),
                           ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: _openEditModal,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            minimumSize: Size(
-                                100, 30), // Aumenta o tamanho mínimo do botão
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12), // Ajusta o preenchimento interno
-                          ),
-                          child: Text(
-                            'Editar',
-                            style: TextStyle(
+                    const SizedBox(height: 24),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _openEditModal,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              minimumSize: Size(
+                                  100, 30), // Aumenta o tamanho mínimo do botão
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical:
+                                      12), // Ajusta o preenchimento interno
+                            ),
+                            child: Text(
+                              'Editar',
+                              style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16), // Cor do texto preto
+                                fontSize: 16,
+                              ), // Cor do texto preto
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: _deleteNotification,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            minimumSize: Size(
-                                100, 30), // Aumenta o tamanho mínimo do botão
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12), // Ajusta o preenchimento interno
-                          ),
-                          child: Text(
-                            'Excluir',
-                            style: TextStyle(
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: _deleteNotification,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              minimumSize: Size(
+                                  100, 30), // Aumenta o tamanho mínimo do botão
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical:
+                                      12), // Ajusta o preenchimento interno
+                            ),
+                            child: Text(
+                              'Excluir',
+                              style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16), // Cor do texto preto
+                                fontSize: 16,
+                              ), // Cor do texto preto
+                            ),
                           ),
-                        ),
-                      ],
-                    )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16), // Espaçamento após os botões
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

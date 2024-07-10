@@ -605,6 +605,8 @@ class _PublicTransportPageState extends State<PublicTransportPage> {
                                         isSwitched ? '' : authorInfo['name']!,
                                     authorCpf:
                                         isSwitched ? '' : authorInfo['cpf']!,
+                                    empresa: selectedEmpresa.value,
+                                    linha: selectedNumero.value,
                                     loc: Location(
                                       latitude: _latNotification,
                                       longitude: _longNotification,
