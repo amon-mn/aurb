@@ -30,6 +30,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Map<String, dynamic> _userData = {};
   String urlImage = 'lib/assets/perfil2.png';
 
+  final AuthService authService = AuthService();
+  final padding = const EdgeInsets.symmetric(horizontal: 20);
+
   @override
   void initState() {
     super.initState();
@@ -69,9 +72,35 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     }
   }
 
-  final padding = const EdgeInsets.symmetric(horizontal: 20);
+  Future<bool> _checkVerification() async {
+    bool isProfileComplete =
+        await authService.isProfileComplete(widget.user.uid);
+    if (!isProfileComplete) {
+      _showVerificationDialog();
+    }
+    return isProfileComplete;
+  }
 
-  final AuthService authService = AuthService();
+  void _showVerificationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Verificação necessária'),
+          content: const Text(
+              'Por favor, verifique seu e-mail e cadastre um telefone na página de perfil do usuário.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> handleLogout(BuildContext context) async {
     try {
@@ -286,7 +315,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     );
   }
 
-  void selectedItem(BuildContext context, int index) {
+  Future<void> selectedItem(BuildContext context, int index) async {
+    if (index < 10) {
+      bool isVerified = await _checkVerification();
+      if (!isVerified) return;
+    }
+
     Navigator.of(context).pop();
 
     switch (index) {
@@ -355,7 +389,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ));
         break;
       case 11:
-        () {};
+        // Handle account removal here if needed
         break;
       case 12:
         Navigator.of(context).push(MaterialPageRoute(

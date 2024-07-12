@@ -24,9 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  // ignore: unused_field
   bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,11 +203,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-// sign user in method
+  // sign user in method
   void signUserIn() async {
     String email = _emailController.text;
     String pass = _passwordController.text;
-    final User user = FirebaseAuth.instance.currentUser!;
 
     if (_formKey.currentState!.validate()) {
       try {
@@ -219,32 +218,41 @@ class _LoginScreenState extends State<LoginScreen> {
             await authService.loginUser(email: email, password: pass);
 
         if (erro != null) {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
           showSnackBar(context: context, mensagem: erro);
         } else {
           // Obtenha o ID do usuário atualmente autenticado
-          String userId = FirebaseAuth.instance.currentUser!.uid;
+          User user = FirebaseAuth.instance.currentUser!;
 
           // Verifique o userType do usuário atual
-          String userType = await getUserType(userId);
+          String userType = await getUserType(user.uid);
 
           if (userType == "ADM") {
             // Redirecione para a tela de super usuário (AdmPage).
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AdmPage(
-                  user: FirebaseAuth.instance.currentUser!,
+            if (mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AdmPage(
+                    user: user,
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           } else {
             // Redirecione para a tela regular do usuário (HomePage).
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(user: user),
-              ),
-            );
+            if (mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(user: user),
+                ),
+              );
+            }
 
             // Verificar se o perfil está completo
             bool isComplete = await authService.isProfileComplete(user.uid);
@@ -256,11 +264,18 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (e) {
         // Trate exceções, se necessário
         print("Erro durante o login: $e");
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         showSnackBar(context: context, mensagem: "Erro durante o login");
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }

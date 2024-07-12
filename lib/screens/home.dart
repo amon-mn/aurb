@@ -15,6 +15,8 @@ import 'package:aurb/firestore_notifications/screens/notifications/streets_scree
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:aurb/authentication/services/auth_service.dart';
+
 class HomeScreen extends StatefulWidget {
   final User user;
   const HomeScreen({super.key, required this.user});
@@ -24,6 +26,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final AuthService _authService = AuthService();
+
+  Future<bool> _checkVerification() async {
+    bool isProfileComplete =
+        await _authService.isProfileComplete(widget.user.uid);
+    if (!isProfileComplete) {
+      _showVerificationDialog();
+    }
+    return isProfileComplete;
+  }
+
+  void _showVerificationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Verificação necessária'),
+          content: const Text(
+              'Por favor, verifique seu e-mail e cadastre um telefone na página de perfil do usuário.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
@@ -48,12 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/sinalization.png',
                     title: 'Sinalização',
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SinalizationPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SinalizationPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 1) {
@@ -61,12 +97,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/sidewalk.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SidewalksPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SidewalksPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 2) {
@@ -74,12 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/street.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => StreetsPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => StreetsPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 3) {
@@ -87,12 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/accessibility.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AccessibilityPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AccessibilityPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 4) {
@@ -100,12 +142,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/bus_stop.png',
                     title: 'Terminais de Ônibus',
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BusTerminalPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BusTerminalPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 5) {
@@ -113,12 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/bus.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PublicTransportPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PublicTransportPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 6) {
@@ -126,12 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/asphalt.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ConstructionPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ConstructionPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 7) {
@@ -139,12 +187,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/traffic_guard.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ObstructionsPage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ObstructionsPage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 8) {
@@ -152,22 +202,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 return MenuCard(
                     imagePath: 'lib/assets/construction.png',
                     title: title,
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PublicSpacePage(
-                          tipo: title,
-                        ),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PublicSpacePage(
+                            tipo: title,
+                          ),
+                        ));
+                      }
                     });
               }
               if (index == 9) {
                 return MenuCard(
                     imagePath: 'lib/assets/traffic_accident.png',
                     title: 'Outras Notificações',
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const OtherNotificationsPage(),
-                      ));
+                    onTap: () async {
+                      if (await _checkVerification()) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const OtherNotificationsPage(),
+                        ));
+                      }
                     });
               }
               return null;
