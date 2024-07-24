@@ -525,6 +525,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                     Map<String, String> authorInfo =
                                         await notificationService
                                             .getAuthorInfo();
+                                    String userId =
+                                        await notificationService.getUserId();
                                     UserNotification notification =
                                         UserNotification(
                                       id: _notificationId,
@@ -537,6 +539,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                           isSwitched ? '' : authorInfo['name']!,
                                       authorCpf:
                                           isSwitched ? '' : authorInfo['cpf']!,
+                                      authorId: isSwitched ? '' : userId,
                                       loc: Location(
                                         latitude: _latNotification,
                                         longitude: _longNotification,

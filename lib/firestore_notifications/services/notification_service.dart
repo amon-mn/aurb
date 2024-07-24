@@ -50,6 +50,17 @@ class NotificationService {
     }
   }
 
+  Future<String> getUserId() async {
+    try {
+      User user = FirebaseAuth.instance.currentUser!;
+
+      return user.uid;
+    } catch (e) {
+      print('Erro ao obter o ID do Usuário');
+      rethrow;
+    }
+  }
+
   Future<void> removeNotification({required String notificationId}) async {
     return firestore
         .collection('users')
@@ -63,6 +74,16 @@ class NotificationService {
     return firestore
         .collection('users')
         .doc(userId)
+        .collection('notifications')
+        .doc(notification.id)
+        .update(notification.toMap());
+  }
+
+  Future<void> updateAllNotification(
+      String authorId, UserNotification notification) async {
+    return firestore
+        .collection('users')
+        .doc(authorId)
         .collection('notifications')
         .doc(notification.id)
         .update(notification.toMap());
