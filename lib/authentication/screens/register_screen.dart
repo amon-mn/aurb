@@ -25,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
+  final TextEditingController _cpfController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
@@ -37,6 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         name: _nameController.text,
         cep: _cepController.text,
         state: _stateController.text,
+        cpf: _cpfController.text,
         phone: "",
         city: _cityController.text,
         street: _streetController.text,
@@ -94,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String cep,
     required String state,
     required String city,
+    required String cpf,
     required String street,
     required String neighborhood,
     required String phone,
@@ -107,6 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         cep: cep,
         state: state,
         city: city,
+        cpf: cpf,
         street: street,
         neighborhood: neighborhood,
         phone: phone,
@@ -252,7 +256,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
+                          MyTextFieldWrapper(
+                            inputFormatter: MaskTextInputFormatter(
+                              mask: '###.###.###-##',
+                              filter: {"#": RegExp(r'[0-9]')},
+                              type: MaskAutoCompletionType.lazy,
+                            ),
+                            controller: _cpfController,
+                            hintText: 'CPF',
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "O CPF deve ser preenchido";
+                              }
+                              if (value.length != 14) {
+                                return "O CPF deve ter exatamente 11 dígitos";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 12),
                           MyTextFieldWrapper(
                             inputFormatter: MaskTextInputFormatter(
                               mask: '#####-###',
