@@ -176,54 +176,56 @@ class _AdmDetailsNotificationPageState
                 ),
               ),
               const SizedBox(height: 24),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: widget.notification.status == 'Em Processamento'
-                        ? _confirmCompleteOccurrence
-                        : _confirmStartOccurrence,
-                    child: Text(
-                      widget.notification.status == 'Em Processamento'
-                          ? 'Concluir Ocorrência'
-                          : 'Iniciar Ocorrência',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
+              if (widget.notification.status != 'Ocorrência Concluída')
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed:
                           widget.notification.status == 'Em Processamento'
-                              ? Colors.blue
-                              : Colors.amber,
+                              ? _confirmCompleteOccurrence
+                              : _confirmStartOccurrence,
+                      child: Text(
+                        widget.notification.status == 'Em Processamento'
+                            ? 'Concluir Ocorrência'
+                            : 'Iniciar Ocorrência',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            widget.notification.status == 'Em Processamento'
+                                ? Colors.blue
+                                : Colors.amber,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _editNotification,
-                        child: Text(
-                          'Editar',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _editNotification,
+                          child: Text(
+                            'Editar',
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green),
-                      ),
-                      const SizedBox(width: 16),
-                      ElevatedButton(
-                        onPressed: _confirmDelete,
-                        child: Text(
-                          'Excluir',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        const SizedBox(width: 16),
+                        ElevatedButton(
+                          onPressed: _confirmDelete,
+                          child: Text(
+                            'Excluir',
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
             ],
           ),
         ),

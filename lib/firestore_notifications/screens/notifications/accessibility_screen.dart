@@ -537,8 +537,8 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                                       data: selectedDate,
                                       authorName:
                                           isSwitched ? '' : authorInfo['name']!,
-                                      //authorCpf:
-                                      //isSwitched ? '' : authorInfo['cpf']!,
+                                      authorCpf:
+                                          isSwitched ? '' : authorInfo['cpf']!,
                                       authorId: isSwitched ? '' : userId,
                                       loc: Location(
                                         latitude: _latNotification,

@@ -41,11 +41,9 @@ class NotificationService {
       DocumentSnapshot userDoc =
           await firestore.collection('users').doc(userId).get();
       String authorName = userDoc['name'];
-      //String authorCpf = userDoc['cpf'];
+      String authorCpf = userDoc['cpf'];
 
-      return {
-        'name': authorName, /*'cpf': authorCpf*/
-      };
+      return {'name': authorName, 'cpf': authorCpf};
     } catch (e) {
       print('Erro ao obter informações do autor: $e');
       rethrow;
