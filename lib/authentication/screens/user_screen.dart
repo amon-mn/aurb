@@ -61,7 +61,6 @@ class _UserScreenState extends State<UserScreen> {
           urlImage = url;
         });
       } catch (e) {
-        // Caso o usuário não tenha foto de perfil
         setState(() {
           urlImage = 'lib/assets/perfil2.png';
         });
@@ -96,7 +95,7 @@ class _UserScreenState extends State<UserScreen> {
       setState(() {
         isPhoneVerified = userDoc.get('phone') != "";
       });
-      _updateProfileCompletion(); // Verifica após cada atualização
+      _updateProfileCompletion();
     }
   }
 
@@ -107,20 +106,18 @@ class _UserScreenState extends State<UserScreen> {
       setState(() {
         isEmailVerified = user.emailVerified;
       });
-      _updateProfileCompletion(); // Verifica após cada atualização
+      _updateProfileCompletion();
     }
   }
 
-  // Método para atualizar o estado de perfil completo
   void _updateProfileCompletion() {
     if (isPhoneVerified && isEmailVerified) {
-      _markProfileAsCompleted(); // Marca o perfil como completo
+      _markProfileAsCompleted();
     } else {
       print("Perfil incompleto");
     }
   }
 
-  // Método para marcar o perfil como completo
   void _markProfileAsCompleted() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -138,6 +135,20 @@ class _UserScreenState extends State<UserScreen> {
     await _checkEmailVerification();
   }
 
+  Future<void> _resendEmailVerification() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  Future<void> _verifyPhone() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegisterPhoneScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,8 +156,7 @@ class _UserScreenState extends State<UserScreen> {
         child: RefreshIndicator(
           onRefresh: _refresh,
           child: SingleChildScrollView(
-            physics:
-                const AlwaysScrollableScrollPhysics(), // Adicione isso para garantir que o refresh funcione mesmo quando o conteúdo não preencher a tela
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -156,12 +166,7 @@ class _UserScreenState extends State<UserScreen> {
                     Navigator.pop(context);
                   },
                   customIconRight: Icons.phone,
-                  customOnPressedRight: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegisterPhoneScreen()));
-                  },
+                  customOnPressedRight: _verifyPhone,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 24),
@@ -237,6 +242,8 @@ class _UserScreenState extends State<UserScreen> {
                     icon: Icons.check_circle,
                     text: "Verificação de e-mail",
                     iconColor: isEmailVerified ? Colors.green : Colors.grey,
+                    buttonIcon: Icons.email,
+                    onButtonPressed: _resendEmailVerification,
                   ),
                 ),
                 Padding(
@@ -245,6 +252,8 @@ class _UserScreenState extends State<UserScreen> {
                     icon: Icons.check_circle,
                     text: "Verificação de telefone",
                     iconColor: isPhoneVerified ? Colors.green : Colors.grey,
+                    buttonIcon: Icons.phone,
+                    onButtonPressed: _verifyPhone,
                   ),
                 ),
               ],
@@ -294,12 +303,16 @@ class RowWithIconAndText extends StatelessWidget {
   final IconData icon;
   final String text;
   final Color iconColor;
+  final IconData? buttonIcon;
+  final VoidCallback? onButtonPressed;
 
   const RowWithIconAndText({
     super.key,
     required this.icon,
     required this.text,
     this.iconColor = Colors.green,
+    this.buttonIcon,
+    this.onButtonPressed,
   });
 
   @override
@@ -319,6 +332,11 @@ class RowWithIconAndText extends StatelessWidget {
           text,
           style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
+        if (buttonIcon != null && onButtonPressed != null)
+          IconButton(
+            icon: Icon(buttonIcon, size: 16),
+            onPressed: onButtonPressed,
+          ),
       ],
     );
   }
