@@ -41,11 +41,24 @@ class NotificationService {
       DocumentSnapshot userDoc =
           await firestore.collection('users').doc(userId).get();
       String authorName = userDoc['name'];
-      String authorCpf = userDoc['cpf'];
+      //String authorCpf = userDoc['cpf'];
 
-      return {'name': authorName, 'cpf': authorCpf};
+      return {
+        'name': authorName, /*'cpf': authorCpf*/
+      };
     } catch (e) {
       print('Erro ao obter informações do autor: $e');
+      rethrow;
+    }
+  }
+
+  Future<String> getUserId() async {
+    try {
+      User user = FirebaseAuth.instance.currentUser!;
+
+      return user.uid;
+    } catch (e) {
+      print('Erro ao obter o ID do Usuário');
       rethrow;
     }
   }
@@ -63,6 +76,16 @@ class NotificationService {
     return firestore
         .collection('users')
         .doc(userId)
+        .collection('notifications')
+        .doc(notification.id)
+        .update(notification.toMap());
+  }
+
+  Future<void> updateAllNotification(
+      String authorId, UserNotification notification) async {
+    return firestore
+        .collection('users')
+        .doc(authorId)
         .collection('notifications')
         .doc(notification.id)
         .update(notification.toMap());

@@ -13,6 +13,7 @@ class UserNotification {
   String? status = "Não Iniciado";
   String? authorName;
   String? authorCpf;
+  String? authorId;
   bool? isAnonymous;
 
   UserNotification({
@@ -28,6 +29,7 @@ class UserNotification {
     this.status,
     this.authorName,
     this.authorCpf,
+    this.authorId,
     this.isAnonymous,
   });
 
@@ -44,6 +46,7 @@ class UserNotification {
         status = map['status'],
         authorName = map['authorName'],
         authorCpf = map['authorCpf'],
+        authorId = map['authorId'],
         isAnonymous = map['isAnonymous'];
 
   Map<String, dynamic> toMap() {
@@ -60,6 +63,7 @@ class UserNotification {
       "status": status,
       "authorName": authorName ?? "",
       "authorCpf": authorCpf ?? "",
+      "authorId": authorId ?? "",
       "isAnonymous": isAnonymous ?? false,
     };
   }
