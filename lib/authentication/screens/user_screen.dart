@@ -165,8 +165,6 @@ class _UserScreenState extends State<UserScreen> {
                   customOnPressed: () {
                     Navigator.pop(context);
                   },
-                  customIconRight: Icons.phone,
-                  customOnPressedRight: _verifyPhone,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 24),
@@ -242,8 +240,8 @@ class _UserScreenState extends State<UserScreen> {
                     icon: Icons.check_circle,
                     text: "Verificação de e-mail",
                     iconColor: isEmailVerified ? Colors.green : Colors.grey,
-                    buttonIcon: Icons.email,
-                    onButtonPressed: _resendEmailVerification,
+                    buttonIcon: isEmailVerified ? null : Icons.email,
+                    onButtonPressed: isEmailVerified ? null : _resendEmailVerification,
                   ),
                 ),
                 Padding(
@@ -252,8 +250,8 @@ class _UserScreenState extends State<UserScreen> {
                     icon: Icons.check_circle,
                     text: "Verificação de telefone",
                     iconColor: isPhoneVerified ? Colors.green : Colors.grey,
-                    buttonIcon: Icons.phone,
-                    onButtonPressed: _verifyPhone,
+                    buttonIcon: isPhoneVerified ? null : Icons.phone,
+                    onButtonPressed: isPhoneVerified ? null : _verifyPhone,
                   ),
                 ),
               ],
